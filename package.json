@@ -1,11 +1,12 @@
 {
-  "name": "server",
+  "name": "projetsi",
   "version": "1.0.0",
-  "description": "",
+  "description": "A web app for management of civil status records.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon server\\server.js"
+    "server": "nodemon server/server.js",
+    "client": "npm start --prefix client",
+    "start": "concurrently \"npm run server\" \"npm run client\" "
   },
   "keywords": [],
   "author": "",
@@ -15,5 +16,8 @@
     "joi": "^17.7.0",
     "mongoose": "^6.8.2",
     "nodemon": "^2.0.20"
+  },
+  "devDependencies": {
+    "concurrently": "^7.6.0"
   }
 }
