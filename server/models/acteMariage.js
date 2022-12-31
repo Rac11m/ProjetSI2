@@ -11,7 +11,7 @@ const acteMariageSchema = new mongoose.Schema({
   num_temoin1: { type: String, required: true },
   num_temoin2: { type: String, required: true },
   num_registre: { type: String, required: true },
-  matricule: { type: Number, required: true },
+  matricule: { type: String, required: true },
 });
 // Create the model for the ActeMariage collection
 const ActeMariage = mongoose.model("ActeMariage", acteMariageSchema);

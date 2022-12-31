@@ -12,7 +12,7 @@ const acteDecesSchema = new mongoose.Schema({
   heure_deces: { type: String, required: true },
   lieu_deces: { type: String, required: true },
   num_registre: { type: String, required: true },
-  matricule: { type: Number, required: true },
+  matricule: { type: String, required: true },
 });
 // Create the model for the ActeDeces collection
 const ActeDeces = mongoose.model("ActeDeces", acteDecesSchema);

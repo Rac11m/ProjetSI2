@@ -6,7 +6,7 @@ const bureauConsulatSchema = new mongoose.Schema({
   num_bureau: { type: String, required: true },
   nom_bureau: { type: String, required: true },
   pays: { type: String, required: true },
-  matricule_consul: { type: Number, required: true },
+  matricule_consul: { type: String, required: true },
 });
 
 // Create the model for the Bureau collection

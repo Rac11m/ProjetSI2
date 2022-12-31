@@ -3,7 +3,7 @@ const Joi = require("joi");
 
 // Define the schema for the Officier collection
 const officierSchema = new mongoose.Schema({
-  matricule: { type: Number, required: true },
+  matricule: { type: String, required: true },
   nom: { type: String, required: true },
   prenom: { type: String, required: true },
   date_prise_service: { type: Date, required: true },

@@ -10,7 +10,7 @@ const acteNaissanceSchema = new mongoose.Schema({
   num_acte_mariage: { type: String },
   num_act_deces: { type: String },
   num_registre: { type: String, required: true },
-  matricule: { type: Number, required: true },
+  matricule: { type: String, required: true },
 });
 
 // Create the model for the ActeNaissance collection

@@ -8,7 +8,7 @@ const bureauNationalSchema = new mongoose.Schema({
   nom_commune: { type: String, required: true },
   daïra: { type: String, required: true },
   wilaya: { type: String, required: true },
-  matricule_maire: { type: Number, required: true },
+  matricule_maire: { type: String, required: true },
 });
 // Create the model for the Bureau collection
 const BureauNational = mongoose.model("BureauNational", bureauNationalSchema);
