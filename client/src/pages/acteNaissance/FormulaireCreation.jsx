@@ -1,11 +1,20 @@
 import '@fontsource/roboto/500.css'
-import { TextField, Box, Typography, Button, Grid } from '@mui/material';
+import { TextField, Box, Typography, Button, Grid, MenuItem, InputLabel, FormControl, Select } from '@mui/material';
 import { Container } from '@mui/system';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker'
-import React from 'react'
-import './forms.css'
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { TimePicker } from '@mui/x-date-pickers/TimePicker';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider/LocalizationProvider';
+import React, { useState } from 'react'
+import './forms.css';
 
 function FormulaireCreation() {
+
+  const [dateValue, setDateValue] = useState(null);
+  const [timeValue, setTimeValue] = useState(null);
+  const [sexeValue, setSexeValue] = useState(null);
+
+
   return (
     <Container component="form" className='cadre' sx={{padding: "10px"}}>
 
@@ -123,35 +132,103 @@ function FormulaireCreation() {
             autoComplete="matricule"
             autoFocus
       />
+      <Grid container>
       <TextField
-        disabled
+        margin="normal"
+        required
+        fullWidth
         id="outlined-disabled"
-        label="Disabled"
-        defaultValue="Hello World"
+        label="Nom"
+        name="Nom"
+        autoFocus
       />
       <TextField
-        id="outlined-password-input"
-        label="Password"
-        type="password"
-        autoComplete="current-password"
+        margin="normal"
+        required
+        fullWidth
+        id="outlined-disabled"
+        label="Prenom"
+        name="Prenom"
+        autoFocus
+      />
+ <FormControl sx={{ m: 1, width: 200 }}>
+ <InputLabel id="demo-simple-select-label">Sexe</InputLabel>
+  <Select
+    required
+    labelId="demo-simple-select-label"
+    id="demo-simple-select"
+    value={sexeValue}
+    label="Sexe"
+    onChange={(event)=> {
+      setSexeValue(event.target.value);
+    }
+  }
+  >
+    <MenuItem value={'M'}>Male</MenuItem>
+    <MenuItem value={'F'}>Femelle</MenuItem>
+  </Select>
+    </FormControl>
+      <TextField
+        readOnly
+        id="outlined-disabled"
+        label="état matrimonial "
+        defaultValue="état matrimonial"
+      />
+        <TextField
+        readOnly
+        id="outlined-disabled"
+        label="Profession"
+        defaultValue="Profession"
+      />
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <DatePicker
+          label="Date Naissance"
+          value={dateValue}
+          onChange={(date) => {
+            setDateValue(date);
+          }}
+          renderInput={(params) => <TextField {...params} />}
+        />
+      </LocalizationProvider>
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <TimePicker
+          label="Heure Naissance"
+          value={timeValue}
+          onChange={(time) => {
+            setTimeValue(time);
+          }}
+          renderInput={(params) => <TextField {...params} />}
+        />
+      </LocalizationProvider>
+      <TextField
+        margin="normal"
+        required
+        fullWidth
+        id="outlined-disabled"
+        label="Lieu Naissance"
+        name="Lieu Naissance"
+        autoFocus
       />
       <TextField
-        id="outlined-read-only-input"
-        label="Read Only"
-        defaultValue="Hello World"
-        InputProps={{
-          readOnly: true,
-        }}
+        margin="normal"
+        required
+        fullWidth
+        id="outlined-disabled"
+        label="Commune Naissance"
+        name="Commune Naissance"
+        autoFocus
+       
       />
-      <Box marginBottom={10}>
-      <Button
-            type="button"
-            variant="contained"
-            style={{backgroundColor: '#00917C', float: 'right',right: '10px'}}
-            >
-            Search
-          </Button>
-            </Box>
+      <TextField
+      margin="normal"
+      required
+      fullWidth
+      id="outlined-disabled"
+      label="Wilaya Naissance"
+      name="Wilaya Naissance"
+      autoFocus
+    />
+      </Grid>
       <hr />
             </div>
             <div className='partie-Administration'>
