@@ -13,7 +13,7 @@ function FormulaireCreation() {
   const [dateValue, setDateValue] = useState(null);
   const [timeValue, setTimeValue] = useState(null);
   const [sexeValue, setSexeValue] = useState(null);
-
+  const [affiliationValue, setAffiliationValue] = useState(null); 
 
   return (
     <Container component="form" className='cadre' sx={{padding: "10px"}}>
@@ -74,15 +74,6 @@ function FormulaireCreation() {
         label="état matrimonial "
         defaultValue="état matrimonial"
       />
-      {/* <DatePicker
-          label="read-only"
-          readOnly
-          value={value}
-          onChange={(newValue) => {
-            setValue(newValue);
-          }}
-          renderInput={(params) => <TextField {...params} />}
-        /> */}
         <TextField
         readOnly
         id="outlined-disabled"
@@ -113,6 +104,29 @@ function FormulaireCreation() {
       label="Wilaya Naissance"
       defaultValue="ALGER"
     />
+      <TextField
+      readOnly
+      id="outlined-disabled"
+      label="Commune Résidence"
+      defaultValue="Dar El Beida"
+    />
+    <FormControl sx={{ m: 1, width: 260 }}>
+ <InputLabel id="demo-simple-select-label">Affiliation avec le nouveau né</InputLabel>
+  <Select
+    required
+    labelId="demo-simple-select-label"
+    id="demo-simple-select"
+    value={affiliationValue}
+    label="affiliation avec le nouveau né"
+    onChange={(event)=> {
+      setAffiliationValue(event.target.value);
+    }
+  }
+  >
+    <MenuItem value={'P'}>Parent</MenuItem>
+    <MenuItem value={'F'}>Tuteur</MenuItem>
+  </Select>
+    </FormControl>
       </Grid>
  
       <hr />
