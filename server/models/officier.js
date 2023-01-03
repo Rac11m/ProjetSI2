@@ -17,7 +17,16 @@ const officierSchema = new mongoose.Schema({
 const Officier = mongoose.model("Officier", officierSchema);
 
 function validateOfficier(officier) {
-  const schema = Joi.object({});
+  const schema = Joi.object({
+    matricule: string().min(5).max(255).required(),
+    email: string().min(5).max(255).required().email().trim(),
+    password: string().min(5).max(255).required(),
+    nom: string().min(3).max(255).required(),
+    prenom: string().min(3).max(255).required(),
+    date_prise_service: date().required(),
+    num_bureau: string().min(5).max(255).required(),
+    role: string().min(5).max(255).required(),
+  });
 
   return schema.validate(officier);
 }
