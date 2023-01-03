@@ -1,0 +1,7 @@
+{
+  "jwtPrivateKey": "1234",
+  "db": "mongodb://localhost/vidly",
+  "url": "http://localhost:3000",
+  "port": "3900",
+  "requiresAuth": true
+}
