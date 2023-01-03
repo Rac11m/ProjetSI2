@@ -1,27 +1,117 @@
-import React from 'react';
-import "mdb-react-ui-kit/dist/css/mdb.min.css";
-import {
-  MDBContainer,
-  MDBInput,
-  MDBCheckbox,
-  MDBBtn,
-}
-from 'mdb-react-ui-kit';
-function Login() {
+import React, { useState } from 'react';
+import {Button, Grid, Avatar, CssBaseline, TextField, FormControlLabel, Checkbox, Link, Box, Typography, Container, FormControl, InputLabel, Select, MenuItem} from '@mui/material';
+import {createTheme, ThemeProvider} from '@mui/material/styles';
+import AccountCircleIcon  from '@mui/icons-material/AccountCircle';
+import './login.css';
+
+const theme = createTheme();
+
+function Copyright(props) {
   return (
-    <MDBContainer className="p-3 my-5 d-flex flex-column w-50">
+    <Typography variant="body2" color="text.secondary" align="center" {...props}>
+      {'Copyright © '}
+      <Link color="inherit" href="https://www.interieur.gov.dz/index.php/fr/">
+      MICLAT
+      </Link>{' '}
+      {new Date().getFullYear()}
+      {'.'}
+    </Typography>
+  );
+}
 
-      <MDBInput wrapperClass='mb-4' label='Email address' id='form1' type='email'/>
-      <MDBInput wrapperClass='mb-4' label='Password' id='form2' type='password'/>
 
-      <div className="d-flex justify-content-between mx-3 mb-4">
-        <MDBCheckbox name='flexCheck' value='' id='flexCheckDefault' label='Remember me' />
-        <a href="!#">Forgot password?</a>
-      </div>
+function Login() {
 
-      <MDBBtn className="mb-4">Sign in</MDBBtn>
+  const [roleValue, setRoleValue] = useState(null);
 
-    </MDBContainer>
+  return (
+    <ThemeProvider theme={theme}>
+    <Container component="main" maxWidth="xs" >
+      <CssBaseline />
+      <Box
+       sx={{
+         marginTop: 8,
+         display: 'flex',
+        flexDirection: 'column',       
+        alignItems: 'center',
+      }} 
+      >
+        <Avatar  sx={{ m: 1, bgcolor: 'AppWorkspace'}}>
+          <AccountCircleIcon fontSize='large' style={{color: '#00917C'}} />
+        </Avatar>
+        <Typography component="h1" variant="h5">
+          Sign in
+        </Typography>
+        <Box component="form" noValidate sx={{ mt: 1,}}>
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            id="matricule"
+            label="Matricule"
+            name="matricule"
+            autoComplete="matricule"
+            autoFocus
+          />
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            name="password"
+            label="Password"
+            type="password"
+            id="password"
+            autoComplete="current-password"
+          />
+              <FormControl fullWidth margin='normal'>
+ <InputLabel id="demo-simple-select-label">Role</InputLabel>
+  <Select
+    required
+    labelId="demo-simple-select-label"
+    id="demo-simple-select"
+    value={roleValue}
+    label="Role"
+    onChange={(event)=> {
+      setRoleValue(event.target.value);
+    }
+  }
+  >
+    <MenuItem value={'admin'}>Admin</MenuItem>
+    <MenuItem value={'maire'}>Maire</MenuItem>
+    <MenuItem value={'officier'}>Officier</MenuItem>
+    <MenuItem value={'consulaire'}>Consulaire</MenuItem>
+  </Select>
+    </FormControl>
+          <FormControlLabel
+            control={<Checkbox value="remember" color="success" />}
+            label="Remember me"
+          />
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            sx={{ mt: 3, mb: 2 }}
+            style={{backgroundColor: '#00917C'}}
+          >
+            Sign In
+          </Button>
+          <Grid container>
+            <Grid item xs>
+              <Link href="#" variant="body2" underline='none'>
+                Forgot password?
+              </Link>
+            </Grid>
+            <Grid item>
+              <Link href="#" variant="body2" underline='none'>
+                {"Don't have an account? Sign Up"}
+              </Link>
+            </Grid>
+          </Grid>
+        </Box>
+      </Box>
+      <Copyright sx={{ mt: 8, mb: 4 }} />
+    </Container>
+ </ThemeProvider>
   );
 }
 
