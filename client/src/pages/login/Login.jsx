@@ -1,5 +1,5 @@
-import React from 'react';
-import {Button, Grid, Avatar, CssBaseline, TextField, FormControlLabel, Checkbox, Link, Box, Typography, Container} from '@mui/material';
+import React, { useState } from 'react';
+import {Button, Grid, Avatar, CssBaseline, TextField, FormControlLabel, Checkbox, Link, Box, Typography, Container, FormControl, InputLabel, Select, MenuItem} from '@mui/material';
 import {createTheme, ThemeProvider} from '@mui/material/styles';
 import AccountCircleIcon  from '@mui/icons-material/AccountCircle';
 import './login.css';
@@ -21,6 +21,9 @@ function Copyright(props) {
 
 
 function Login() {
+
+  const [roleValue, setRoleValue] = useState(null);
+
   return (
     <ThemeProvider theme={theme}>
     <Container component="main" maxWidth="xs" >
@@ -60,6 +63,25 @@ function Login() {
             id="password"
             autoComplete="current-password"
           />
+              <FormControl fullWidth margin='normal'>
+ <InputLabel id="demo-simple-select-label">Role</InputLabel>
+  <Select
+    required
+    labelId="demo-simple-select-label"
+    id="demo-simple-select"
+    value={roleValue}
+    label="Role"
+    onChange={(event)=> {
+      setRoleValue(event.target.value);
+    }
+  }
+  >
+    <MenuItem value={'admin'}>Admin</MenuItem>
+    <MenuItem value={'maire'}>Maire</MenuItem>
+    <MenuItem value={'officier'}>Officier</MenuItem>
+    <MenuItem value={'consulaire'}>Consulaire</MenuItem>
+  </Select>
+    </FormControl>
           <FormControlLabel
             control={<Checkbox value="remember" color="success" />}
             label="Remember me"
