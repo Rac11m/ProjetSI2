@@ -13,7 +13,11 @@ const bureauConsulatSchema = new mongoose.Schema({
 const BureauConsulat = mongoose.model("BureauConsulat", bureauConsulatSchema);
 
 function validateBureauConsulat(bureauConsulat) {
-  const schema = Joi.object({});
+  const schema = Joi.object({
+    nom_bureau: string().min(5).max(255).required(),
+    pays: string().min(5).max(255).required(),
+    matricule_consul: string().min(5).max(255).required(),
+  });
 
   return schema.validate(bureauConsulat);
 }

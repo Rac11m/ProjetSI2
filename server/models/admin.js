@@ -1,22 +1,23 @@
 const mongoose = require("mongoose");
 const Joi = require("joi");
+const { string } = require("joi");
 
-// Define the schema for the Consulaire collection
-const consulaireSchema = new mongoose.Schema({
-  matricule: { type: String, required: true },
+// Define the schema for the Admin collection
+const adminSchema = new mongoose.Schema({
+  matricule: { type: String, required: true, unique: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   nom: { type: String, required: true },
   prenom: { type: String, required: true },
   date_prise_service: { type: Date, required: true },
-  pays_de_rattachement: { type: String, required: true },
-  role: { type: String, default: "consulaire" },
+  num_bureau: { type: String, required: true },
+  role: { type: String, default: "admin" },
 });
 
-// Create the model for the Consulaire collection
-const Consulaire = mongoose.model("Consulaire", consulaireSchema);
+// Create the model for the Admin collection
+const Admin = mongoose.model("Admin", adminSchema);
 
-function validateConsulaire(consulaire) {
+function validateAdmin(admin) {
   const schema = Joi.object({
     matricule: string().min(5).max(255).required(),
     email: string().min(5).max(255).required().email().trim(),
@@ -24,12 +25,12 @@ function validateConsulaire(consulaire) {
     nom: string().min(3).max(255).required(),
     prenom: string().min(3).max(255).required(),
     date_prise_service: date().required(),
-    pays_de_rattachement: string().min(5).max(255).required(),
+    num_bureau: string().min(5).max(255).required(),
     role: string().min(5).max(255).required(),
   });
 
-  return schema.validate(consulaire);
+  return schema.validate(admin);
 }
 
-exports.Consulaire = Consulaire;
-exports.validateConsulaire = validateConsulaire;
+exports.Officier = Admin;
+exports.validateOfficier = validateAdmin;
