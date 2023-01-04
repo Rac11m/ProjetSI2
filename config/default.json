@@ -1,6 +1,6 @@
 {
   "jwtPrivateKey": "1234",
-  "db": "mongodb://localhost/vidly",
+  "db": "mongodb+srv://admin:1234@cluster-si2.3zcvtar.mongodb.net/?retryWrites=true&w=majority",
   "url": "http://localhost:3000",
   "port": "3900",
   "requiresAuth": true
