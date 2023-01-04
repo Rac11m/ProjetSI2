@@ -11,7 +11,8 @@ const config = require("config");
 router.post("/", async (req, res) => {
   //validate the fields
   const result = validate(req.body);
-  if (!result) return res.status(400).send(result.error.details[0].message);
+  if (result.error)
+    return res.status(400).send(result.error.details[0].message);
 
   //search for the user in the database
   const user = await Login.findOne({ matricule: req.body.matricule });
