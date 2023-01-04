@@ -18,14 +18,14 @@ const ActeMariage = mongoose.model("ActeMariage", acteMariageSchema);
 
 function validateActeMariage(acteMariage) {
   const schema = Joi.object({
-    date_mariage: date().required(),
-    lieu_mariage: string().min(5).max(255).required(),
-    num_homme: string().min(5).max(255).required(),
-    num_femme: string().min(5).max(255).required(),
-    num_temoin1: string().min(5).max(255).required(),
-    num_temoin2: string().min(5).max(255).required(),
-    num_registre: string().min(5).max(255).required(),
-    matricule: string().min(5).max(255).required(),
+    date_mariage: Joi.date().required(),
+    lieu_mariage: Joi.string().min(5).max(255).required(),
+    num_homme: Joi.string().min(5).max(255).required(),
+    num_femme: Joi.string().min(5).max(255).required(),
+    num_temoin1: Joi.string().min(5).max(255).required(),
+    num_temoin2: Joi.string().min(5).max(255).required(),
+    num_registre: Joi.string().min(5).max(255).required(),
+    matricule: Joi.string().min(5).max(255).required(),
   });
 
   return schema.validate(acteMariage);

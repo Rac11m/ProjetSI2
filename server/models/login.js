@@ -13,9 +13,9 @@ const Login = mongoose.model("Login", loginSchema);
 
 function validateLogin(login) {
   const schema = Joi.object({
-    matricule: string().min(5).max(255).required(),
-    password: string().min(5).max(255).required(),
-    role: string().min(5).max(255).required(),
+    matricule: Joi.string().min(5).max(255).required(),
+    password: Joi.string().min(5).max(255).required(),
+    role: Joi.string().min(5).max(255).required(),
   });
 
   return schema.validate(login);

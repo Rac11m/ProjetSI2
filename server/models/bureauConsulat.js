@@ -14,9 +14,9 @@ const BureauConsulat = mongoose.model("BureauConsulat", bureauConsulatSchema);
 
 function validateBureauConsulat(bureauConsulat) {
   const schema = Joi.object({
-    nom_bureau: string().min(5).max(255).required(),
-    pays: string().min(5).max(255).required(),
-    matricule_consul: string().min(5).max(255).required(),
+    nom_bureau: Joi.string().min(5).max(255).required(),
+    pays: Joi.string().min(5).max(255).required(),
+    matricule_consul: Joi.string().min(5).max(255).required(),
   });
 
   return schema.validate(bureauConsulat);

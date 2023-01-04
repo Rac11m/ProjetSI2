@@ -15,11 +15,11 @@ const BureauNational = mongoose.model("BureauNational", bureauNationalSchema);
 
 function validateBureauNational(bureauNational) {
   const schema = Joi.object({
-    nom_bureau: string().min(5).max(255).required(),
-    nom_bureau: string().min(5).max(255).required(),
-    daira: string().min(5).max(255).required(),
-    wilaya: string().min(5).max(255).required(),
-    matricule_maire: string().min(5).max(255).required(),
+    nom_bureau: Joi.string().min(5).max(255).required(),
+    nom_bureau: Joi.string().min(5).max(255).required(),
+    daira: Joi.string().min(5).max(255).required(),
+    wilaya: Joi.string().min(5).max(255).required(),
+    matricule_maire: Joi.string().min(5).max(255).required(),
   });
 
   return schema.validate(bureauNational);

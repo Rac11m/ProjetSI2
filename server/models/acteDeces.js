@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 const Joi = require("joi");
-const { date } = require("joi");
 
 // Define the schema for the ActeDeces collection
 const acteDecesSchema = new mongoose.Schema({
@@ -20,15 +19,15 @@ const ActeDeces = mongoose.model("ActeDeces", acteDecesSchema);
 
 function validateActeDeces(acteDeces) {
   const schema = Joi.object({
-    num_declarant: string().min(5).max(255).required(),
-    date_declaration: date().required(),
-    num_acte_naissance: string().min(5).max(255).required(),
-    num_personne: string().min(5).max(255).required(),
-    date_deces: date().required(),
-    heure_deces: string().min(5).max(255).required(),
-    lieu_deces: string().min(5).max(255).required(),
-    num_registre: string().min(5).max(255).required(),
-    matricule: string().min(5).max(255).required(),
+    num_declarant: Joi.string().min(5).max(255).required(),
+    date_declaration: Joi.date().required(),
+    num_acte_naissance: Joi.string().min(5).max(255).required(),
+    num_personne: Joi.string().min(5).max(255).required(),
+    date_deces: Joi.date().required(),
+    heure_deces: Joi.string().min(5).max(255).required(),
+    lieu_deces: Joi.string().min(5).max(255).required(),
+    num_registre: Joi.string().min(5).max(255).required(),
+    matricule: Joi.string().min(5).max(255).required(),
   });
 
   return schema.validate(acteDeces);

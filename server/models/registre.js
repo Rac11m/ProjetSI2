@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 const Joi = require("joi");
-const { date } = require("joi");
 
 // Define the schema for the Registre collection
 const registreSchema = new mongoose.Schema({
@@ -14,8 +13,8 @@ const Registre = mongoose.model("Registre", registreSchema);
 
 function validateRegiste(registre) {
   const schema = Joi.object({
-    annee_registre: date().required(),
-    num_bureau: string().min(5).max(255).required(),
+    annee_registre: Joi.date().required(),
+    num_bureau: Joi.string().min(5).max(255).required(),
   });
 
   return schema.validate(registre);

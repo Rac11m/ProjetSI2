@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 const Joi = require("joi");
-const { string } = require("joi");
 
 // Define the schema for the Personne collection
 const personneSchema = new mongoose.Schema({
@@ -26,20 +25,20 @@ const Personne = mongoose.model("Personne", personneSchema);
 
 function validatePersonne(personne) {
   const schema = Joi.object({
-    num_identifiant_national: string().min(5).max(255).required(),
-    nom: string().min(3).max(255).required(),
-    prenom: string().min(3).max(255).required(),
-    sexe: string().min(3).max(10).required(),
-    date_naissance: date().required(),
-    heure_naissance: string().min(5).max(255).required(),
-    vile_naissance: string().min(5).max(255).required(),
-    pays_naissance: string().min(5).max(255).required(),
-    etat_matrimonial: string().min(5).max(255).required(),
-    conjoint: string().min(3).max(255),
+    num_identifiant_national: Joi.string().min(5).max(255).required(),
+    nom: Joi.string().min(3).max(255).required(),
+    prenom: Joi.string().min(3).max(255).required(),
+    sexe: Joi.string().min(3).max(10).required(),
+    date_naissance: Joi.date().required(),
+    heure_naissance: Joi.string().min(5).max(255).required(),
+    vile_naissance: Joi.string().min(5).max(255).required(),
+    pays_naissance: Joi.string().min(5).max(255).required(),
+    etat_matrimonial: Joi.string().min(5).max(255).required(),
+    conjoint: Joi.string().min(3).max(255),
     commune_residence: string().min(3).max(255).required(),
-    num_pere: string().min(5).max(255).required(),
-    num_mere: string().min(5).max(255).required(),
-    profession: string().min(5).max(255).required(),
+    num_pere: Joi.string().min(5).max(255).required(),
+    num_mere: Joi.string().min(5).max(255).required(),
+    profession: Joi.string().min(5).max(255).required(),
   });
 
   return schema.validate(personne);
