@@ -3,7 +3,9 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Login from "./pages/login/Login";
 import Main from "./pages/main/Main";
 import Settings from "./pages/settings/Settings";
-import FormulaireCreation from "./pages/acteNaissance/FormulaireCreation";
+import FormulaireCreationAN from "./pages/acteNaissance/FormulaireCreationAN";
+import FormulaireCreationAM from "./pages/acteMariage/FormulaireCreationAM";
+import FormulaireCreationAD from "./pages/acteDeces/FormulaireCreationAD";
 import CreateUser from "./pages/createUser/CreateUser";
 function App() {
   return (
@@ -14,7 +16,15 @@ function App() {
             <Route path="/" element={<Login />} />
             <Route
               path="/creationactenaissance"
-              element={<FormulaireCreation />}
+              element={<FormulaireCreationAN />}
+            />
+            <Route
+              path="/creationactemariage"
+              element={<FormulaireCreationAM />}
+            />
+            <Route
+              path="/creationactedeces"
+              element={<FormulaireCreationAD />}
             />
             <Route path="/createUser" element={<CreateUser />} />
             <Route path="/Main" element={<Main />} />
