@@ -7,6 +7,7 @@ import FormulaireCreationAN from "./pages/acteNaissance/FormulaireCreationAN";
 import FormulaireCreationAM from "./pages/acteMariage/FormulaireCreationAM";
 import FormulaireCreationAD from "./pages/acteDeces/FormulaireCreationAD";
 import CreateUser from "./pages/createUser/CreateUser";
+import Navbar from "./Navbar";
 function App() {
   return (
     <>
@@ -29,6 +30,7 @@ function App() {
             <Route path="/createUser" element={<CreateUser />} />
             <Route path="/Main" element={<Main />} />
             <Route path="/Settings" element={<Settings />} />
+            <Route path="/navbar" element={<Navbar />} />
           </Routes>
         </div>
       </Router>
