@@ -1,5 +1,11 @@
-import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useLocation,
+  useNavigate,
+} from "react-router-dom";
 import Login from "./pages/login/Login";
 import Main from "./pages/main/Main";
 import Settings from "./pages/settings/Settings";
@@ -8,7 +14,23 @@ import FormulaireCreationAM from "./pages/acteMariage/FormulaireCreationAM";
 import FormulaireCreationAD from "./pages/acteDeces/FormulaireCreationAD";
 import CreateUser from "./pages/createUser/CreateUser";
 import Navbar from "./Navbar";
+import jwtDecode from "jwt-decode";
 function App() {
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    try {
+      const jwt = localStorage.getItem("token");
+      const decoded = jwtDecode(jwt);
+      setUser(decoded);
+    } catch (error) {}
+  }, []);
+
+  const { pathname } = useLocation();
+  const id = pathname.substring(8, pathname.length);
+
+  const navigate = useNavigate();
+
   return (
     <>
       <Router>
