@@ -33,7 +33,9 @@ router.post("/", async (req, res) => {
     },
     jwtPrivateKey
   );
-  res.header("x-auth-token", token).send();
+  res
+    .header("x-auth-token", token)
+    .send({ matricule: user.matricule, role: user.role });
 });
 
 function validateNewUser(user) {

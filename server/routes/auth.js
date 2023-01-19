@@ -4,7 +4,7 @@ const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcrypt");
 const Joi = require("joi");
-const { Login } = require("../models/login");
+const { User } = require("../models/user");
 const jwt = require("jsonwebtoken");
 const config = require("config");
 
@@ -15,8 +15,8 @@ router.post("/", async (req, res) => {
     return res.status(400).send(result.error.details[0].message);
 
   //search for the user in the database
-  const user = await Login.findOne({ matricule: req.body.matricule });
-  if (!user) return res.status(400).send("matricule ou mot de passe invalide.");
+  const user = await User.findOne({ matricule: req.body.matricule });
+  if (!user) return res.status(400).send("matricule ou mot de passe invalide");
 
   //Encode the password
   const validPassword = await bcrypt.compare(req.body.password, user.password);
@@ -32,7 +32,7 @@ router.post("/", async (req, res) => {
     },
     jwtPrivateKey
   );
-  return token;
+  res.send(token);
 });
 
 function validate(req) {
