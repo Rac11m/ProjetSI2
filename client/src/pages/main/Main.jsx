@@ -1,46 +1,57 @@
-import React from 'react'
-import {Button, Container, ButtonGroup, Box} from '@mui/material'
-
+import React from "react";
+import { Button, Container, ButtonGroup, Box } from "@mui/material";
 
 function Main() {
-
   const buttons = [
-      <Button variant='contained'>Consulter Les Actes</Button>,
-      <Button variant='contained'>Creation nouveau acte</Button>,
-      <Button variant='contained'>Mise a jour nouveau acte</Button>
-  ]
+    <Button
+      variant="contained"
+      size="large"
+      sx={{ backgroundColor: "#00917C" }}>
+      Consulter Les Actes
+    </Button>,
+    <Button
+      variant="contained"
+      size="large"
+      sx={{ backgroundColor: "#00917C" }}>
+      Creation nouveau acte
+    </Button>,
+    <Button
+      variant="contained"
+      size="large"
+      sx={{ backgroundColor: "#00917C" }}>
+      Mise a jour nouveau acte
+    </Button>,
+  ];
 
   return (
-    <Container component='main'>
-     <Box sx={{display: 'flex',
-     '& > *': {
-          m: 1,
-        },
-      }}>
-       <ButtonGroup
-        orientation="vertical"
-        aria-label="vertical outlined button group"
-      >
-        {buttons}
-      </ButtonGroup>
+    <Container component="main">
+      <Box
+        sx={{
+          display: "flex",
+          "& > *": {
+            m: 6,
+          },
+        }}>
+        <ButtonGroup
+          orientation="vertical"
+          aria-label="vertical outlined button group">
+          {buttons}
+        </ButtonGroup>
 
-      <ButtonGroup
-        orientation="vertical"
-        aria-label="vertical outlined button group"
-      >
-        {buttons}
-      </ButtonGroup>
-     
-      <ButtonGroup
-        orientation="vertical"
-        aria-label="vertical outlined button group"
-        >
-        {buttons}
-      </ButtonGroup>
-     
-        </Box>
+        <ButtonGroup
+          orientation="vertical"
+          aria-label="vertical outlined button group">
+          {buttons}
+        </ButtonGroup>
+
+        <ButtonGroup
+          orientation="vertical"
+          aria-label="vertical outlined button group">
+          {buttons}
+        </ButtonGroup>
+      </Box>
     </Container>
-  )
+  );
 }
 
-export default Main
+export default Main;
