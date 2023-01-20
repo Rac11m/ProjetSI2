@@ -5,6 +5,7 @@ const actesNaissances = require("../routes/actesNaissances");
 const actesMariage = require("../routes/actesMariage");
 const actesDeces = require("../routes/actesDeces");
 const personnes = require("../routes/personnes");
+const officiers = require("../routes/officiers");
 
 module.exports = function (app) {
   app.use(express.json());
@@ -14,4 +15,5 @@ module.exports = function (app) {
   app.use("/api/actesMariage", actesMariage);
   app.use("/api/actesDeces", actesDeces);
   app.use("/api/personnes", personnes);
+  app.use("/api/officiers", officiers);
 };
