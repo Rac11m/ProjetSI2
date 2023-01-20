@@ -5,12 +5,12 @@ const { Personne, validatePersonne } = require("../models/personne");
 // GET 1 Personne
 router.get("/:id", async (req, res) => {
   const { id: num_identifiant_national } = req.params;
-  const acte = await Personne.findOne({
+  const personne = await Personne.findOne({
     num_identifiant_national: num_identifiant_national,
   });
-  if (!acte) return res.status(404).send("Personne n'existe pas.");
+  if (!personne) return res.status(404).send("Personne n'existe pas.");
 
-  res.send(acte);
+  res.send(personne);
 });
 
 // POST Personne
@@ -19,34 +19,34 @@ router.post("/", async (req, res) => {
   if (result.error)
     return res.status(400).send(result.error.details[0].message);
 
-  let acte = await Personne.findOne({
+  let personne = await Personne.findOne({
     num_identifiant_national: req.body.num_identifiant_national,
   });
-  if (acte) return res.status(400).send("Cette Personne deja existe");
+  if (personne) return res.status(400).send("Cette Personne deja existe");
 
-  acte = new Personne({ ...req.body });
-  acte.save();
+  personne = new Personne({ ...req.body });
+  personne.save();
 
-  res.send(acte);
+  res.send(personne);
 });
 
 // PUT Personne
 router.put("/:id", async (req, res) => {
-  // modify acte by num_personne.
+  // modify personne by num_personne.
   const { id: num_identifiant_national } = req.params;
-  // we send all the fields of Act and validate them.
+  // we send all the fields of personne and validate them.
   const result = validatePersonne(req.body);
   if (result.error)
     return res.status(400).send(result.error.details[0].message);
 
-  const acte = await Personne.findOneAndUpdate(
+  const personne = await Personne.findOneAndUpdate(
     { num_identifiant_national: num_identifiant_national },
     { ...req.body },
     { new: true }
   );
-  if (!acte) return res.status(404).send("Cette Personne n'existe pas");
+  if (!personne) return res.status(404).send("Cette Personne n'existe pas");
 
-  res.send(acte);
+  res.send(personne);
 });
 
 module.exports = router;
