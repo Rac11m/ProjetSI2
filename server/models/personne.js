@@ -12,11 +12,10 @@ const personneSchema = new mongoose.Schema({
   vile_naissance: { type: String, required: true },
   pays_naissance: { type: String, required: true },
   etat_matrimonial: { type: String, required: true },
-  conjoint: { type: String },
   commune_residence: { type: String, required: true },
-  num_pere: { type: String },
-  num_mere: { type: String },
-  profession: { type: String, required: false },
+  num_pere: { type: String, required: true },
+  num_mere: { type: String, required: true },
+  profession: { type: String, default: "" },
 });
 // NIN : starts from 100000000000000000
 
@@ -34,11 +33,10 @@ function validatePersonne(personne) {
     vile_naissance: Joi.string().min(5).max(255).required(),
     pays_naissance: Joi.string().min(5).max(255).required(),
     etat_matrimonial: Joi.string().min(5).max(255).required(),
-    conjoint: Joi.string().min(3).max(255),
-    commune_residence: string().min(3).max(255).required(),
+    commune_residence: Joi.string().min(3).max(255).required(),
     num_pere: Joi.string().min(5).max(255).required(),
     num_mere: Joi.string().min(5).max(255).required(),
-    profession: Joi.string().min(5).max(255).required(),
+    profession: Joi.string().min(5).max(255),
   });
 
   return schema.validate(personne);
