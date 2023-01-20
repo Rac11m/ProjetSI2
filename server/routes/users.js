@@ -4,12 +4,12 @@ const jwt = require("jsonwebtoken");
 const Joi = require("joi");
 const bcrypt = require("bcrypt");
 const config = require("config");
-const { User } = require("../models/user");
+const { User, validateUser } = require("../models/user");
 
 // Create a new user {Admin, Officier, Maire ou Consulaire}
 router.post("/", async (req, res) => {
   // Validate the fields.
-  const result = validateNewUser(req.body);
+  const result = validateUser(req.body);
   if (result.error)
     return res.status(400).send(result.error.details[0].message);
 
@@ -37,21 +37,5 @@ router.post("/", async (req, res) => {
     .header("x-auth-token", token)
     .send({ matricule: user.matricule, role: user.role });
 });
-
-function validateNewUser(user) {
-  const Schema = Joi.object({
-    matricule: Joi.string().min(5).max(255).required(),
-    email: Joi.string().min(5).max(255).required().email().trim(),
-    password: Joi.string().min(5).max(255).required(),
-    nom: Joi.string().min(3).max(255).required(),
-    prenom: Joi.string().min(3).max(255).required(),
-    date_prise_service: Joi.date().required(),
-    num_bureau: Joi.string().min(5).max(255),
-    pays_de_rattachement: Joi.string().min(5).max(255),
-    role: Joi.string().min(5).max(255).required(),
-  });
-
-  return Schema.validate(user);
-}
 
 module.exports = router;
