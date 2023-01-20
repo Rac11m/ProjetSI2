@@ -5,7 +5,7 @@ const { User } = require("../models/user");
 // GET All Officiers
 router.get("/", async (req, res) => {
   const user = await User.find({ role: "officier" });
-  if (user.length === 0) return res.status(404).send("y a pas Officier.");
+  if (user.length === 0) return res.status(404).send("y a pas d'Officiers.");
 
   res.send(user);
 });
