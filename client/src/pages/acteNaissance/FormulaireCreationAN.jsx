@@ -60,64 +60,74 @@ function FormulaireCreation() {
             {/* </Box> */}
             <Grid container>
               <TextField
+                margin="normal"
+                fullWidth
                 readOnly
                 id="nom_declarant"
                 label="Nom"
-                defaultValue="Nom"
               />
               <TextField
+                margin="normal"
+                fullWidth
                 readOnly
                 id="prenom_declarant"
                 label="Prenom"
-                defaultValue="Prenom"
               />
               <TextField
+                margin="normal"
+                fullWidth
                 readOnly
                 id="sexe_declarant"
                 label="Sexe"
-                defaultValue="Sexe"
               />
               <TextField
+                margin="normal"
+                fullWidth
                 readOnly
                 id="etatM_declarant"
                 label="état matrimonial "
-                defaultValue="état matrimonial"
               />
               <TextField
+                margin="normal"
+                fullWidth
                 readOnly
                 id="profession_declarant"
                 label="Profession"
-                defaultValue="Profession"
               />
               <TextField
+                margin="normal"
+                fullWidth
                 readOnly
                 id="dateN_declarant"
                 label="Date Naissance"
-                defaultValue="12/12/2002"
               />
               <TextField
+                margin="normal"
+                fullWidth
                 readOnly
                 id="lieuN_declarant"
                 label="Lieu Naissance"
-                defaultValue="Hôpital IBN ZIRI"
               />
               <TextField
+                margin="normal"
+                fullWidth
                 readOnly
                 id="communeN_declarant"
                 label="Commune Naissance"
-                defaultValue="EL-HAMMAMET"
               />
               <TextField
+                margin="normal"
+                fullWidth
                 readOnly
                 id="wilayaN_declarant"
                 label="Wilaya Naissance"
-                defaultValue="ALGER"
               />
               <TextField
+                margin="normal"
+                fullWidth
                 readOnly
                 id="CommuneR_declarant"
                 label="Commune Résidence"
-                defaultValue="Dar El Beida"
               />
               <FormControl sx={{ m: 1, width: 260 }}>
                 <InputLabel id="affiliation_label">

@@ -1,11 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  useLocation,
-  useNavigate,
-} from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Login from "./pages/login/Login";
 import Main from "./pages/main/Main";
 import Settings from "./pages/settings/Settings";
@@ -25,11 +19,6 @@ function App() {
       setUser(decoded);
     } catch (error) {}
   }, []);
-
-  const { pathname } = useLocation();
-  const id = pathname.substring(8, pathname.length);
-
-  const navigate = useNavigate();
 
   return (
     <>
