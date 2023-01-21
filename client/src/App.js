@@ -41,7 +41,6 @@ function App() {
             <Route path="/createUser" element={<CreateUser />} />
             <Route path="/Main" element={<Main />} />
             <Route path="/Settings" element={<Settings />} />
-            <Route path="/navbar" element={<Navbar />} />
           </Routes>
         </div>
       </Router>

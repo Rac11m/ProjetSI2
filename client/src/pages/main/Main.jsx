@@ -1,5 +1,6 @@
 import React from "react";
 import { Button, Container, ButtonGroup, Box } from "@mui/material";
+import Navbar from "../../Navbar";
 
 function Main() {
   const buttons = [
@@ -24,33 +25,36 @@ function Main() {
   ];
 
   return (
-    <Container component="main">
-      <Box
-        sx={{
-          display: "flex",
-          "& > *": {
-            m: 6,
-          },
-        }}>
-        <ButtonGroup
-          orientation="vertical"
-          aria-label="vertical outlined button group">
-          {buttons}
-        </ButtonGroup>
+    <>
+      <Navbar />
+      <Container component="main">
+        <Box
+          sx={{
+            display: "flex",
+            "& > *": {
+              m: 6,
+            },
+          }}>
+          <ButtonGroup
+            orientation="vertical"
+            aria-label="vertical outlined button group">
+            {buttons}
+          </ButtonGroup>
 
-        <ButtonGroup
-          orientation="vertical"
-          aria-label="vertical outlined button group">
-          {buttons}
-        </ButtonGroup>
+          <ButtonGroup
+            orientation="vertical"
+            aria-label="vertical outlined button group">
+            {buttons}
+          </ButtonGroup>
 
-        <ButtonGroup
-          orientation="vertical"
-          aria-label="vertical outlined button group">
-          {buttons}
-        </ButtonGroup>
-      </Box>
-    </Container>
+          <ButtonGroup
+            orientation="vertical"
+            aria-label="vertical outlined button group">
+            {buttons}
+          </ButtonGroup>
+        </Box>
+      </Container>
+    </>
   );
 }
 
