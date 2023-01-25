@@ -3,6 +3,8 @@ import logger from "./logService";
 import { toast } from "react-toastify";
 import jwtDecode from "jwt-decode";
 
+axios.defaults.baseURL = "http://localhost:5000/";
+
 axios.interceptors.response.use(null, (error) => {
   const expectedError =
     error.response &&
