@@ -19,7 +19,7 @@ import React, { useState } from "react";
 import "./forms.css";
 import Navbar from "../../Navbar";
 
-function FormulaireCreation() {
+const FormulaireCreation = () => {
   const [dateValue, setDateValue] = useState(null);
   const [timeValue, setTimeValue] = useState(null);
   const [sexeValue, setSexeValue] = useState(null);
@@ -35,7 +35,8 @@ function FormulaireCreation() {
             "& .MuiTextField-root": { m: 1, width: "25ch" },
           }}
           noValidate
-          autoComplete="off">
+          autoComplete="off"
+        >
           <div className="partie-declarant">
             <Typography variant="h5" gutterBottom style={{ marginTop: "5px" }}>
               Partie Declarant
@@ -54,7 +55,8 @@ function FormulaireCreation() {
             <Button
               type="button"
               variant="contained"
-              style={{ backgroundColor: "#00917C", top: "15px" }}>
+              style={{ backgroundColor: "#00917C", top: "15px" }}
+            >
               Search
             </Button>
             {/* </Box> */}
@@ -131,7 +133,8 @@ function FormulaireCreation() {
                   label="affiliation avec le nouveau né"
                   onChange={(event) => {
                     setAffiliationValue(event.target.value);
-                  }}>
+                  }}
+                >
                   <MenuItem value={"P"}>Parent</MenuItem>
                   <MenuItem value={"F"}>Tuteur</MenuItem>
                 </Select>
@@ -184,7 +187,8 @@ function FormulaireCreation() {
                   label="Sexe"
                   onChange={(event) => {
                     setSexeValue(event.target.value);
-                  }}>
+                  }}
+                >
                   <MenuItem value={"M"}>Male</MenuItem>
                   <MenuItem value={"F"}>Femelle</MenuItem>
                 </Select>
@@ -283,7 +287,8 @@ function FormulaireCreation() {
                   backgroundColor: "#00917C",
                   float: "right",
                   right: "10px",
-                }}>
+                }}
+              >
                 Create
               </Button>
             </Box>
@@ -292,6 +297,6 @@ function FormulaireCreation() {
       </Container>
     </>
   );
-}
+};
 
 export default FormulaireCreation;
