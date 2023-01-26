@@ -3,19 +3,25 @@ import { Box, Button, TextField } from "@mui/material";
 import React from "react";
 import { useState } from "react";
 import http from "../../services/httpService";
-import { Document, Page, View, Text, PDFViewer } from "@react-pdf/renderer";
+// import { Document, Page, View, Text, PDFViewer } from "@react-pdf/renderer";
 
 function ConsulterAN() {
   const [nin, setNin] = useState(null);
   const [acte, setActe] = useState(null);
+  const [personne, setPersonne] = useState(null);
 
   const searchActeNaissance = async (nin) => {
     const result = await http.get(`api/actesNaissance/${nin}`);
     setActe(result.data);
     console.log(acte);
+    getPersonne();
   };
 
-  const getPersonne = () => {};
+  const getPersonne = async () => {
+    const result = await http.get(`api/personnes/${acte.num_personne}`);
+    setPersonne(result.data);
+    console.log(personne);
+  };
 
   return (
     <>
@@ -50,13 +56,14 @@ function ConsulterAN() {
             variant="contained"
             style={{ backgroundColor: "#00917C", top: "15px" }}
             onClick={(e) => {
+              e.preventDefault();
               searchActeNaissance(nin);
             }}>
             Search
           </Button>
         </Box>
       </Container>
-      <Container
+      {/* <Container
         component="form"
         className="cadre"
         sx={{ padding: "10px", marginTop: "100px", paddingBottom: "2%" }}>
@@ -76,7 +83,7 @@ function ConsulterAN() {
             </Page>
           </Document>
         </Box>
-      </Container>
+      </Container> */}
     </>
   );
 }

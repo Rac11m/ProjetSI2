@@ -9,8 +9,8 @@ const userSchema = new mongoose.Schema({
   nom: { type: String, required: true },
   prenom: { type: String, required: true },
   date_prise_service: { type: Date, required: true },
-  num_bureau: { type: String, required: true },
-  pays_de_rattachement: { type: String },
+  num_bureau: { type: String, required: false },
+  pays_de_rattachement: { type: String, required: false },
   role: { type: String, enum: ["admin", "maire", "officier", "consulaire"] },
 });
 
@@ -25,8 +25,8 @@ function validateUser(user) {
     nom: Joi.string().min(3).max(255).required(),
     prenom: Joi.string().min(3).max(255).required(),
     date_prise_service: Joi.date().required(),
-    num_bureau: Joi.string().min(5).max(255),
-    pays_de_rattachement: Joi.string().min(5).max(255),
+    num_bureau: Joi.string().max(255),
+    pays_de_rattachement: Joi.string().max(255),
     role: Joi.string().min(5).max(255).required(),
   });
 
