@@ -25,5 +25,5 @@ function validateBureauNational(bureauNational) {
   return schema.validate(bureauNational);
 }
 
-exports.bureauNational = bureauNational;
+exports.BureauNational = BureauNational;
 exports.validateBureauNational = validateBureauNational;
