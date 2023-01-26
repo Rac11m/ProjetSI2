@@ -6,6 +6,8 @@ const acteNaissanceSchema = new mongoose.Schema({
   // num_acte_naissance: { type: String, required: true },   => _id
   date_declaration: { type: Date, required: true },
   num_personne: { type: String, required: true },
+  num_pere: { type: String, required: true },
+  num_mere: { type: String, required: true },
   num_declarant: { type: String, required: true },
   num_acte_mariage: { type: String },
   num_acte_deces: { type: String },
