@@ -23,6 +23,8 @@ function validateActeNaissance(acteNaissance) {
   const schema = Joi.object({
     date_declaration: Joi.date().required(),
     num_personne: Joi.string().min(5).max(255).required(),
+    num_pere: Joi.string().min(5).max(255).required(),
+    num_mere: Joi.string().min(5).max(255).required(),
     num_declarant: Joi.string().min(5).max(255).required(),
     num_acte_mariage: Joi.string().min(5).max(255),
     num_acte_deces: Joi.string().min(5).max(255),
