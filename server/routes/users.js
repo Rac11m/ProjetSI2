@@ -37,4 +37,14 @@ router.post("/", async (req, res) => {
     .send({ matricule: user.matricule, role: user.role });
 });
 
+router.get("/:id", async (req, res) => {
+  const { id: matricule } = req.params;
+  const user = await User.findOne({
+    matricule: matricule,
+  });
+  if (!user) return res.status(404).send("Fonctionnaire n'existe pas.");
+
+  res.send(user);
+});
+
 module.exports = router;

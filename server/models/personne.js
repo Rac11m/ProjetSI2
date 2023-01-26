@@ -13,11 +13,11 @@ const personneSchema = new mongoose.Schema({
   commune_naissance: { type: String, required: true },
   wilaya_naissance: { type: String, required: true },
   pays_naissance: { type: String, required: true },
-  etat_matrimonial: { type: String, required: true },
+  etat_matrimonial: { type: String, default: " " },
   commune_residence: { type: String, required: true },
   num_pere: { type: String, required: true },
   num_mere: { type: String, required: true },
-  profession: { type: String, default: "" },
+  profession: { type: String, default: " " },
 });
 // NIN : starts from 100000000000000000
 
@@ -31,12 +31,12 @@ function validatePersonne(personne) {
     prenom: Joi.string().min(3).max(255).required(),
     sexe: Joi.string().min(3).max(10).required(),
     date_naissance: Joi.date().required(),
-    heure_naissance: Joi.string().min(5).max(255).required(),
+    heure_naissance: Joi.string().max(255).required(),
     lieu_naissance: Joi.string().min(5).max(255).required(),
     commune_naissance: Joi.string().min(5).max(255).required(),
     wilaya_naissance: Joi.string().min(5).max(255).required(),
     pays_naissance: Joi.string().min(5).max(255).required(),
-    etat_matrimonial: Joi.min(5).max(255),
+    etat_matrimonial: Joi.string().max(255),
     commune_residence: Joi.string().min(3).max(255).required(),
     num_pere: Joi.string().min(5).max(255).required(),
     num_mere: Joi.string().min(5).max(255).required(),

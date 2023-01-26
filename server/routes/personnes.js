@@ -4,6 +4,7 @@ const auth = require("../middleware/auth");
 const { Personne, validatePersonne } = require("../models/personne");
 
 // GET 1 Personne
+
 router.get("/:id", auth, async (req, res) => {
   const { id: num_identifiant_national } = req.params;
   const personne = await Personne.findOne({

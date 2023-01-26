@@ -4,7 +4,11 @@ import React from "react";
 import { useState } from "react";
 import http from "../../services/httpService";
 
+<<<<<<< HEAD
 function ConsulterAN({ user }) {
+=======
+function ConsulterAM() {
+>>>>>>> 977aae7f0af35f08d90bf3d947f9d6453397e05f
   const [nin, setNin] = useState(null);
   const [acte, setActe] = useState(null);
   const [personnes, setPersonnes] = useState({
@@ -82,4 +86,4 @@ function ConsulterAN({ user }) {
   );
 }
 
-export default ConsulterAN;
+export default ConsulterAM;

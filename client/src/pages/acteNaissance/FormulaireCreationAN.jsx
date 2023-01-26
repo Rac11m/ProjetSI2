@@ -19,68 +19,92 @@ import React, { useState } from "react";
 import "./forms.css";
 import Navbar from "../../Navbar";
 import http from "../../services/httpService";
+import moment from "moment";
 
-const FormulaireCreation = () => {
+const FormulaireCreation = ({ Matricule, numBureau, Pays }) => {
   const [dateValue, setDateValue] = useState(null);
   const [timeValue, setTimeValue] = useState(null);
   const [sexeValue, setSexeValue] = useState("");
   const [affiliationValue, setAffiliationValue] = useState(null);
   const [nindeclarant, setNindeclarant] = useState(null);
-  const [nouveauNe, setNouveauNe] = useState(null);
+
+  let nouveauNeObjet = {
+    num_identifiant_national: "1000000004",
+    nom: "",
+    prenom: "",
+    sexe: "",
+    date_naissance: "",
+    heure_naissance: "",
+    lieu_naissance: "",
+    commune_naissance: "",
+    wilaya_naissance: "",
+    pays_naissance: "",
+    etat_matrimonial: " ",
+    commune_residence: "",
+    num_pere: "",
+    num_mere: "",
+  };
+  const [nouveauNe, setNouveauNe] = useState(nouveauNeObjet);
+
   const DeclarantVide = {
-    nom: "Nom",
-    prenom: "Prenom",
-    sexe: "Sexe",
-    etat_matrimonial: "etat matrimonial",
-    profession: "profession",
-    date_naissance: "date naissance",
-    lieu_naissance: "lieu naissance",
-    commune_naissance: "commune naissance",
-    wilaya_naissance: "wilaya naissance",
-    commune_residence: "commune residence",
+    commune_naissance: "",
+    commune_residence: "",
+    date_naissance: "",
+    etat_matrimonial: "",
+    heure_naissance: "",
+    lieu_naissance: "",
+    nom: "",
+    num_identifiant_national: "",
+    num_mere: "",
+    num_pere: "",
+    pays_naissance: "",
+    prenom: "",
+    profession: "",
+    sexe: "",
+    wilaya_naissance: "",
   };
   const [declarant, setDeclarant] = useState(DeclarantVide);
+
+  const officierObjet = {
+    matricule: "30000",
+    num_bureau: "16000",
+  };
 
   const ActeNaissObjet = {
     date_declaration: "",
     num_personne: "",
+    num_pere: "",
+    num_mere: "",
     num_declarant: "",
-    num_acte_mariage: null,
-    num_acte_deces: null,
-    num_registre: "",
-    matricule: "",
-  };
-
-  const nouveauNeObjet = {
-    num_identifiant_national: "11115555",
-    nom: "nsss",
-    prenom: "ssss",
-    sexe: "sexeValue",
-    date_naissance: "2002-12-15",
-    heure_naissance: "timeValue",
-    lieu_naissance: "alger",
-    commune_naissance: "a;lger",
-    wilaya_naissance: "algers",
-    pays_naissance: "Algerie",
-    etat_matrimonial: null,
-    profession: null,
-  };
-
-  const officierObjet = {
-    matricule: "",
+    num_acte_mariage: " ",
+    num_acte_deces: " ",
     num_bureau: "",
+    matricule: "",
   };
 
   const sendActeNaissance = async (acte) => {
-    acte.date_declaration = Date.now();
-    acte.num_personne = Math.random();
+    acte.date_declaration = moment(new Date()).format("YYYY-MM-DD");
+    acte.num_personne = nouveauNeObjet.num_identifiant_national;
     acte.num_declarant = nindeclarant;
-    acte.num_registre = 12;
+    acte.num_pere = nouveauNe.num_pere;
+    acte.num_mere = nouveauNe.num_mere;
     acte.matricule = officierObjet.matricule;
+    acte.num_bureau = officierObjet.num_bureau;
     return await http.post("api/actesNaissance", acte);
   };
-  const sendNouveauNe = async (nouveauNe) => {
-    return await http.post("api/personnes", nouveauNe);
+
+  const sendNouveauNe = async () => {
+    const pere = await http.get(`api/personnes/${nouveauNeObjet.num_pere}`);
+    nouveauNeObjet.commune_residence = pere.data.commune_residence;
+    setNouveauNe((prevElement) => {
+      return {
+        ...prevElement,
+        commune_residence: nouveauNeObjet.commune_residence,
+      };
+    });
+    nouveauNeObjet.pays_naissance = "Algerie";
+    nouveauNeObjet.etat_matrimonial = " ";
+    return await http.post("api/personnes", nouveauNeObjet);
   };
   const searchDeclarant = async (nin) => {
     const result = await http.get(`api/personnes/${nin}`);
@@ -92,7 +116,6 @@ const FormulaireCreation = () => {
       <Navbar />
       <Container component="form" className="cadre" sx={{ padding: "10px" }}>
         <Box
-          component="form"
           sx={{
             "& .MuiTextField-root": { m: 1, width: "25ch" },
           }}
@@ -212,13 +235,13 @@ const FormulaireCreation = () => {
                   required
                   labelId="affiliation_label"
                   id="affliation_declarant"
-                  value={affiliationValue}
+                  value={affiliationValue || ""}
                   label="affiliation avec le nouveau né"
                   onChange={(event) => {
                     setAffiliationValue(event.target.value);
                   }}>
-                  <MenuItem value={"P"}>Parent</MenuItem>
-                  <MenuItem value={"F"}>Tuteur</MenuItem>
+                  <MenuItem value={"parent"}>Parent</MenuItem>
+                  <MenuItem value={"tuteur"}>Tuteur</MenuItem>
                 </Select>
               </FormControl>
             </Grid>
@@ -237,8 +260,8 @@ const FormulaireCreation = () => {
               fullWidth
               id="nin_newborn"
               label="NIN"
-              name="matricule"
-              autoComplete="matricule"
+              name="nin"
+              autoComplete="nin"
               autoFocus
             />
             <Grid container>
@@ -251,7 +274,13 @@ const FormulaireCreation = () => {
                 name="Nom"
                 onChange={(e) => {
                   nouveauNeObjet.nom = e.target.value;
-                  setNouveauNe(nouveauNeObjet);
+                  setNouveauNe((pervUser) => {
+                    return {
+                      ...pervUser,
+                      nom: nouveauNeObjet.nom,
+                    };
+                  });
+                  console.log(nouveauNeObjet.nom);
                 }}
                 autoFocus
               />
@@ -265,7 +294,13 @@ const FormulaireCreation = () => {
                 autoFocus
                 onChange={(e) => {
                   nouveauNeObjet.prenom = e.target.value;
-                  setNouveauNe(nouveauNeObjet);
+                  setNouveauNe((pervUser) => {
+                    return {
+                      ...pervUser,
+                      prenom: nouveauNeObjet.prenom,
+                    };
+                  });
+                  console.log(nouveauNeObjet.prenom);
                 }}
               />
               <FormControl sx={{ m: 1, width: 200 }}>
@@ -274,36 +309,40 @@ const FormulaireCreation = () => {
                   required
                   labelId="sexe_label"
                   id="sexe_newborn"
-                  value={sexeValue}
+                  value={sexeValue || ""}
                   label="Sexe"
                   onChange={(e) => {
                     setSexeValue(e.target.value);
-                    console.log(sexeValue);
+                    nouveauNeObjet.sexe = e.target.value;
+                    setNouveauNe((pervUser) => {
+                      return {
+                        ...pervUser,
+                        sexe: nouveauNeObjet.sexe,
+                      };
+                    });
+                    console.log(nouveauNeObjet.sexe);
                   }}>
                   <MenuItem value={"homme"}>Homme</MenuItem>
                   <MenuItem value={"femme"}>Femme</MenuItem>
                 </Select>
               </FormControl>
-              <TextField
-                disabled
-                id="etatM_newborn"
-                label="état matrimonial "
-                value={null}
-                defaultValue="NULL"
-              />
-              <TextField
-                disabled
-                id="profession_newborn"
-                label="Profession"
-                value={null}
-                defaultValue="NULL"
-              />
+
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DatePicker
                   label="Date Naissance"
-                  value={dateValue}
+                  value={dateValue || undefined}
                   onChange={(date) => {
                     setDateValue(date);
+                    nouveauNeObjet.date_naissance = moment(date.$d).format(
+                      "YYYY-MM-DD"
+                    );
+                    setNouveauNe((pervUser) => {
+                      return {
+                        ...pervUser,
+                        date_naissance: nouveauNeObjet.date_naissance,
+                      };
+                    });
+                    console.log(nouveauNeObjet.date_naissance);
                   }}
                   renderInput={(params) => <TextField {...params} />}
                 />
@@ -311,9 +350,19 @@ const FormulaireCreation = () => {
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <TimePicker
                   label="Heure Naissance"
-                  value={timeValue}
+                  value={timeValue || undefined}
                   onChange={(time) => {
                     setTimeValue(time);
+                    nouveauNeObjet.heure_naissance = moment(time.$d).format(
+                      "h:mm"
+                    );
+                    setNouveauNe((pervUser) => {
+                      return {
+                        ...pervUser,
+                        heure_naissance: nouveauNeObjet.heure_naissance,
+                      };
+                    });
+                    console.log(nouveauNeObjet.heure_naissance);
                   }}
                   renderInput={(params) => <TextField {...params} />}
                 />
@@ -328,6 +377,13 @@ const FormulaireCreation = () => {
                 autoFocus
                 onChange={(e) => {
                   nouveauNeObjet.lieu_naissance = e.target.value;
+                  setNouveauNe((pervUser) => {
+                    return {
+                      ...pervUser,
+                      lieu_naissance: nouveauNeObjet.lieu_naissance,
+                    };
+                  });
+                  console.log(nouveauNeObjet.lieu_naissance);
                 }}
               />
               <TextField
@@ -340,6 +396,13 @@ const FormulaireCreation = () => {
                 autoFocus
                 onChange={(e) => {
                   nouveauNeObjet.commune_naissance = e.target.value;
+                  setNouveauNe((pervUser) => {
+                    return {
+                      ...pervUser,
+                      commune_naissance: nouveauNeObjet.commune_naissance,
+                    };
+                  });
+                  console.log(nouveauNeObjet.commune_naissance);
                 }}
               />
               <TextField
@@ -352,7 +415,13 @@ const FormulaireCreation = () => {
                 autoFocus
                 onChange={(e) => {
                   nouveauNeObjet.wilaya_naissance = e.target.value;
-                  console.log(nouveauNeObjet);
+                  setNouveauNe((pervUser) => {
+                    return {
+                      ...pervUser,
+                      wilaya_naissance: nouveauNeObjet.wilaya_naissance,
+                    };
+                  });
+                  console.log(nouveauNeObjet.wilaya_naissance);
                 }}
               />
               <Grid>
@@ -364,6 +433,16 @@ const FormulaireCreation = () => {
                   label="NIN Pere"
                   name="NIN Pere"
                   autoFocus
+                  onChange={(e) => {
+                    nouveauNeObjet.num_pere = e.target.value;
+                    setNouveauNe((pervUser) => {
+                      return {
+                        ...pervUser,
+                        num_pere: nouveauNeObjet.num_pere,
+                      };
+                    });
+                    console.log(nouveauNeObjet.num_pere);
+                  }}
                 />
                 <TextField
                   margin="normal"
@@ -383,23 +462,7 @@ const FormulaireCreation = () => {
                   name="Prenom Pere"
                   autoFocus
                 />
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DatePicker
-                    label="Date Naissance Pere"
-                    value={dateValue}
-                    onChange={(date) => {
-                      setDateValue(date);
-                    }}
-                    renderInput={(params) => <TextField {...params} />}
-                  />
-                </LocalizationProvider>
-                <TextField
-                  margin="normal"
-                  required
-                  fullWidth
-                  id="lieu_naisspere"
-                  label="lieu naissance Pere"
-                />
+
                 <TextField
                   margin="normal"
                   required
@@ -427,6 +490,16 @@ const FormulaireCreation = () => {
                 label="NIN Mere"
                 name="NIN Mere"
                 autoFocus
+                onChange={(e) => {
+                  nouveauNeObjet.num_mere = e.target.value;
+                  setNouveauNe((pervUser) => {
+                    return {
+                      ...pervUser,
+                      num_mere: nouveauNeObjet.num_mere,
+                    };
+                  });
+                  console.log(nouveauNeObjet.num_mere);
+                }}
               />
               <TextField
                 margin="normal"
@@ -446,23 +519,7 @@ const FormulaireCreation = () => {
                 name="Prenom Mere"
                 autoFocus
               />
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DatePicker
-                  label="Date Naissance Mere"
-                  value={dateValue}
-                  onChange={(date) => {
-                    setDateValue(date);
-                  }}
-                  renderInput={(params) => <TextField {...params} />}
-                />
-              </LocalizationProvider>
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                id="lieu_naissmere"
-                label="lieu naissance Mere"
-              />
+
               <TextField
                 margin="normal"
                 required
@@ -490,8 +547,8 @@ const FormulaireCreation = () => {
             </Typography>
             <TextField
               margin="normal"
-              required
-              fullWidth
+              disabled
+              value={Matricule || ""}
               id="matricule"
               label="Matricule"
               name="matricule"
@@ -502,8 +559,9 @@ const FormulaireCreation = () => {
             />
             <TextField
               margin="normal"
-              required
+              disabled
               fullWidth
+              value={numBureau || ""}
               id="numBureau"
               label="Num Bureau"
               name="numbureau"
@@ -522,7 +580,12 @@ const FormulaireCreation = () => {
                   right: "10px",
                 }}
                 onClick={(e) => {
-                  sendNouveauNe(nouveauNeObjet);
+                  nouveauNeObjet = nouveauNe;
+                  sendNouveauNe();
+                  //console.log(nouveauNeObjet);
+                  //setNouveauNe(nouveauNeObjet);
+
+                  sendActeNaissance(ActeNaissObjet);
                 }}>
                 Create
               </Button>
