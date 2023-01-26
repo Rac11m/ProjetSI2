@@ -1,9 +1,10 @@
 const express = require("express");
 const router = express.Router();
+const auth = require("../middleware/auth");
 const { Personne, validatePersonne } = require("../models/personne");
 
 // GET 1 Personne
-router.get("/:id", async (req, res) => {
+router.get("/:id", auth, async (req, res) => {
   const { id: num_identifiant_national } = req.params;
   const personne = await Personne.findOne({
     num_identifiant_national: num_identifiant_national,
@@ -14,7 +15,7 @@ router.get("/:id", async (req, res) => {
 });
 
 // POST Personne
-router.post("/", async (req, res) => {
+router.post("/", auth, async (req, res) => {
   const result = validatePersonne(req.body);
   if (result.error)
     return res.status(400).send(result.error.details[0].message);
@@ -31,7 +32,7 @@ router.post("/", async (req, res) => {
 });
 
 // PUT Personne
-router.put("/:id", async (req, res) => {
+router.put("/:id", auth, async (req, res) => {
   // modify personne by num_personne.
   const { id: num_identifiant_national } = req.params;
   // we send all the fields of personne and validate them.
