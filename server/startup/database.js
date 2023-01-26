@@ -6,5 +6,6 @@ module.exports = function () {
   mongoose
     .set("strictQuery", true)
     .connect(db)
-    .then(() => console.log(`Connection established with ${db}`));
+    .then(() => console.log(`Connection established with ${db}`))
+    .catch((err) => console.log(err));
 };
