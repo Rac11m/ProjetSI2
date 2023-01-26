@@ -355,6 +355,132 @@ const FormulaireCreation = () => {
                   console.log(nouveauNeObjet);
                 }}
               />
+              <Grid>
+                <TextField
+                  margin="normal"
+                  required
+                  fullWidth
+                  id="nin_pere"
+                  label="NIN Pere"
+                  name="NIN Pere"
+                  autoFocus
+                />
+                <TextField
+                  margin="normal"
+                  required
+                  fullWidth
+                  id="nom_pere"
+                  label="Nom Pere"
+                  name="Nom Pere"
+                  autoFocus
+                />
+                <TextField
+                  margin="normal"
+                  required
+                  fullWidth
+                  id="prenom_pere"
+                  label="Prenom Pere"
+                  name="Prenom Pere"
+                  autoFocus
+                />
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DatePicker
+                    label="Date Naissance Pere"
+                    value={dateValue}
+                    onChange={(date) => {
+                      setDateValue(date);
+                    }}
+                    renderInput={(params) => <TextField {...params} />}
+                  />
+                </LocalizationProvider>
+                <TextField
+                  margin="normal"
+                  required
+                  fullWidth
+                  id="lieu_naisspere"
+                  label="lieu naissance Pere"
+                />
+                <TextField
+                  margin="normal"
+                  required
+                  fullWidth
+                  id="prenom_gperepaternel"
+                  label="Prenom Grand-Pere Paternel"
+                  name="Prenom Grand-Pere Paternel"
+                  autoFocus
+                />
+                <TextField
+                  margin="normal"
+                  required
+                  fullWidth
+                  id="prenom_gmerepaternel"
+                  label="Prenom Grand-Mere Paternel"
+                  name="Prenom Grand-Mere Paternel"
+                  autoFocus
+                />
+              </Grid>
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                id="nin_mere"
+                label="NIN Mere"
+                name="NIN Mere"
+                autoFocus
+              />
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                id="nom_mere"
+                label="Nom Mere"
+                name="Nom Mere"
+                autoFocus
+              />
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                id="prenom_mere"
+                label="Prenom Mere"
+                name="Prenom Mere"
+                autoFocus
+              />
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DatePicker
+                  label="Date Naissance Mere"
+                  value={dateValue}
+                  onChange={(date) => {
+                    setDateValue(date);
+                  }}
+                  renderInput={(params) => <TextField {...params} />}
+                />
+              </LocalizationProvider>
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                id="lieu_naissmere"
+                label="lieu naissance Mere"
+              />
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                id="prenom_gperematernel"
+                label="Prenom Grand-Pere Maternel"
+                name="Prenom Grand-Pere Maternel"
+                autoFocus
+              />
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                id="prenom_gmerematernel"
+                label="Prenom Grand-Mere Maternel"
+                name="Prenom Grand-Mere Maternel"
+                autoFocus
+              />
             </Grid>
             <hr />
           </div>
