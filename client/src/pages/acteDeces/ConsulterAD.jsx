@@ -4,7 +4,7 @@ import React from "react";
 import { useState } from "react";
 import http from "../../services/httpService";
 
-function ConsulterAN() {
+function ConsulterAD() {
   const [nin, setNin] = useState(null);
   const [acte, setActe] = useState(null);
   const [personnes, setPersonnes] = useState({
@@ -16,10 +16,10 @@ function ConsulterAN() {
   const searchActeDeces = async (nin) => {
     const result = await http.get(`api/actesDeces/${nin}`);
     if (result) {
-      getPersonnes(result);
-      console.log(result);
       setActe(result.data);
+      getPersonnes(result);
     }
+    console.log(acte);
   };
 
   const getPersonnes = async (result) => {
@@ -27,9 +27,10 @@ function ConsulterAN() {
       `api/personnes/${result.data.num_declarant}`
     );
     const defunt = await http.get(`api/personnes/${result.data.num_personne}`);
-    // const fonctionnaire = await http.get(`api/users/${result.data.matricule}`);
-    setPersonnes({ declarant, defunt });
-    console.log({ declarant, defunt });
+    const fonctionnaire = await http.get(`api/users/${result.data.matricule}`);
+    // console.log({ declarant, defunt, fonctionnaire });
+    setPersonnes({ declarant, defunt, fonctionnaire });
+    console.log(personnes);
   };
 
   return (
@@ -69,4 +70,4 @@ function ConsulterAN() {
   );
 }
 
-export default ConsulterAN;
+export default ConsulterAD;

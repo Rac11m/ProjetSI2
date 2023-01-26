@@ -4,7 +4,7 @@ import React from "react";
 import { useState } from "react";
 import http from "../../services/httpService";
 
-function ConsulterAN() {
+function ConsulterAM() {
   const [nin, setNin] = useState(null);
   const [acte, setActe] = useState(null);
   const [personnes, setPersonnes] = useState({
@@ -71,4 +71,4 @@ function ConsulterAN() {
   );
 }
 
-export default ConsulterAN;
+export default ConsulterAM;

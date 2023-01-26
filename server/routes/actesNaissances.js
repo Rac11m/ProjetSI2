@@ -33,6 +33,7 @@ router.post("/", auth, async (req, res) => {
 });
 
 // PUT Acte naissance
+
 router.put("/:id", auth, async (req, res) => {
   // modify acte by num_personne.
   const { id: num_personne } = req.params;
