@@ -32,7 +32,7 @@ router.post("/", async (req, res) => {
     },
     jwtPrivateKey
   );
-  res.send(token);
+  res.header("x-auth-token", token).send(token);
 });
 
 function validate(req) {

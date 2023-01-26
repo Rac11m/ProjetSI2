@@ -1,9 +1,10 @@
 const express = require("express");
 const router = express.Router();
+const auth = require("../middleware/auth");
 const { ActeMariage, validateActeMariage } = require("../models/acteMariage");
 
 // GET 1 Acte mariage
-router.get("/:id", async (req, res) => {
+router.get("/:id", auth, async (req, res) => {
   const { id } = req.params;
   const acte = await ActeMariage.findOne({
     $or: [{ num_homme: id }, { num_femme: id }],
@@ -14,7 +15,7 @@ router.get("/:id", async (req, res) => {
 });
 
 // POST Acte mariage
-router.post("/", async (req, res) => {
+router.post("/", auth, async (req, res) => {
   const result = validateActeMariage(req.body);
   if (result.error)
     return res.status(400).send(result.error.details[0].message);
@@ -31,7 +32,7 @@ router.post("/", async (req, res) => {
 });
 
 // PUT Acte mariage
-router.put("/:id", async (req, res) => {
+router.put("/:id", auth, async (req, res) => {
   // modify acte by num_personne.
   const { id } = req.params;
   // we send all the fields of Act and validate them.

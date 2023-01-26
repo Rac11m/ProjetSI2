@@ -1,9 +1,10 @@
 const express = require("express");
 const router = express.Router();
+const auth = require("../middleware/auth");
 const { ActeDeces, validateActeDeces } = require("../models/acteDeces");
 
 // GET 1 Acte deces
-router.get("/:id", async (req, res) => {
+router.get("/:id", auth, async (req, res) => {
   const { id: num_personne } = req.params;
   const acte = await ActeDeces.findOne({ num_personne: num_personne });
   if (!acte) return res.status(404).send("Acte n'existe pas.");
@@ -12,7 +13,7 @@ router.get("/:id", async (req, res) => {
 });
 
 // POST Acte deces
-router.post("/", async (req, res) => {
+router.post("/", auth, async (req, res) => {
   const result = validateActeDeces(req.body);
   if (result.error)
     return res.status(400).send(result.error.details[0].message);
@@ -27,7 +28,7 @@ router.post("/", async (req, res) => {
 });
 
 // PUT Acte deces
-router.put("/:id", async (req, res) => {
+router.put("/:id", auth, async (req, res) => {
   // modify acte by num_personne.
   const { id: num_personne } = req.params;
   // we send all the fields of Act and validate them.
