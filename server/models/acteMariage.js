@@ -10,7 +10,8 @@ const acteMariageSchema = new mongoose.Schema({
   num_femme: { type: String, required: true },
   num_temoin1: { type: String, required: true },
   num_temoin2: { type: String, required: true },
-  num_registre: { type: String, required: true },
+  num_registre: { type: String, default: 1 },
+  num_bureau: { type: String, required: true },
   matricule: { type: String, required: true },
 });
 // Create the model for the ActeMariage collection
@@ -24,7 +25,7 @@ function validateActeMariage(acteMariage) {
     num_femme: Joi.string().min(5).max(255).required(),
     num_temoin1: Joi.string().min(5).max(255).required(),
     num_temoin2: Joi.string().min(5).max(255).required(),
-    num_registre: Joi.string().min(5).max(255).required(),
+    num_bureau: Joi.string().min(5).max(255).required(),
     matricule: Joi.string().min(5).max(255).required(),
   });
 

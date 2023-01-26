@@ -11,7 +11,8 @@ const acteDecesSchema = new mongoose.Schema({
   date_deces: { type: Date, required: true },
   heure_deces: { type: String, required: true },
   lieu_deces: { type: String, required: true },
-  num_registre: { type: String, required: true },
+  num_registre: { type: String, default: 2 },
+  num_bureau: { type: String, required: true },
   matricule: { type: String, required: true },
 });
 // Create the model for the ActeDeces collection
@@ -26,7 +27,7 @@ function validateActeDeces(acteDeces) {
     date_deces: Joi.date().required(),
     heure_deces: Joi.string().min(5).max(255).required(),
     lieu_deces: Joi.string().min(5).max(255).required(),
-    num_registre: Joi.string().min(5).max(255).required(),
+    num_bureau: Joi.string().min(5).max(255).required(),
     matricule: Joi.string().min(5).max(255).required(),
   });
 

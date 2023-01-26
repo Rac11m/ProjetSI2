@@ -9,7 +9,8 @@ const acteNaissanceSchema = new mongoose.Schema({
   num_declarant: { type: String, required: true },
   num_acte_mariage: { type: String },
   num_acte_deces: { type: String },
-  num_registre: { type: String, required: true },
+  num_registre: { type: String, default: 0 },
+  num_bureau: { type: String, required: true },
   matricule: { type: String, required: true },
 });
 
@@ -23,7 +24,7 @@ function validateActeNaissance(acteNaissance) {
     num_declarant: Joi.string().min(5).max(255).required(),
     num_acte_mariage: Joi.string().min(5).max(255),
     num_acte_deces: Joi.string().min(5).max(255),
-    num_registre: Joi.string().min(5).max(255).required(),
+    num_bureau: Joi.string().min(5).max(255).required(),
     matricule: Joi.string().min(5).max(255).required(),
   });
 
