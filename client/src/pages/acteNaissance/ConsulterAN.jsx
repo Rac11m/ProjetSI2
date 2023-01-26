@@ -12,15 +12,17 @@ function ConsulterAN() {
 
   const searchActeNaissance = async (nin) => {
     const result = await http.get(`api/actesNaissance/${nin}`);
-    setActe(result.data);
-    console.log(acte);
-    getPersonne();
+    if (result) {
+      getPersonne(result);
+      console.log(result.data);
+      setActe(result.data);
+    }
   };
 
-  const getPersonne = async () => {
-    const result = await http.get(`api/personnes/${acte.num_personne}`);
-    setPersonne(result.data);
-    console.log(personne);
+  const getPersonne = async (result) => {
+    const pers = await http.get(`api/personnes/${result.data.num_personne}`);
+    setPersonne(pers.data);
+    console.log(pers.data);
   };
 
   return (

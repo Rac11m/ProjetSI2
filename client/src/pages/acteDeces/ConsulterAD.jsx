@@ -7,20 +7,34 @@ import http from "../../services/httpService";
 function ConsulterAN() {
   const [nin, setNin] = useState(null);
   const [acte, setActe] = useState(null);
+  const [personnes, setPersonnes] = useState({
+    declarant: null,
+    defunt: null,
+    fonctionnaire: null,
+  });
 
   const searchActeDeces = async (nin) => {
     const result = await http.get(`api/actesDeces/${nin}`);
-    setActe(result.data);
-    console.log(acte);
+    if (result) {
+      getPersonnes(result);
+      console.log(result);
+      setActe(result.data);
+    }
+  };
+
+  const getPersonnes = async (result) => {
+    const declarant = await http.get(
+      `api/personnes/${result.data.num_declarant}`
+    );
+    const defunt = await http.get(`api/personnes/${result.data.num_personne}`);
+    // const fonctionnaire = await http.get(`api/users/${result.data.matricule}`);
+    setPersonnes({ declarant, defunt });
+    console.log({ declarant, defunt });
   };
 
   return (
-    <Container
-      component="form"
-      className="cadre"
-      sx={{ padding: "10px", paddingBottom: "2%" }}>
+    <Container className="cadre" sx={{ padding: "10px", paddingBottom: "2%" }}>
       <Box
-        component="form"
         sx={{
           "& .MuiTextField-root": { m: 1 },
         }}
