@@ -26,11 +26,9 @@ function ConsulterAN() {
   return (
     <>
       <Container
-        component="form"
         className="cadre"
         sx={{ padding: "10px", paddingBottom: "2%" }}>
         <Box
-          component="form"
           sx={{
             "& .MuiTextField-root": { m: 1 },
           }}
