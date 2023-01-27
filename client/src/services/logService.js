@@ -18,7 +18,9 @@ function log(error) {
   console.log(error);
 }
 
-export default {
+const exportedObject = {
   init,
   log,
 };
+
+export default exportedObject;

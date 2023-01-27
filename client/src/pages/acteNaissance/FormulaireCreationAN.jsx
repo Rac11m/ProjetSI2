@@ -27,6 +27,23 @@ const FormulaireCreation = ({ user }) => {
   const [sexeValue, setSexeValue] = useState("");
   const [affiliationValue, setAffiliationValue] = useState(null);
   const [nindeclarant, setNindeclarant] = useState(null);
+  const [responseAN, setResponseAN] = useState(null);
+  const [responseNouveaNe, setResponseNouveauNe] = useState(null);
+
+  const parent = {
+    num_identifiant_national: "",
+    nom: "",
+    prenom: "",
+    num_pere: "",
+    num_mere: "",
+  };
+
+  const [pere, setPere] = useState(parent);
+  const [mere, setMere] = useState(parent);
+  const [Gperep, setGPerep] = useState(parent);
+  const [Gmerep, setGmerep] = useState(parent);
+  const [Gperem, setGPerem] = useState(parent);
+  const [Gmerem, setGmerem] = useState(parent);
 
   const token = localStorage.getItem("token");
   const config = {
@@ -45,7 +62,6 @@ const FormulaireCreation = ({ user }) => {
     lieu_naissance: "",
     commune_naissance: "",
     wilaya_naissance: "",
-    pays_naissance: "",
     etat_matrimonial: " ",
     commune_residence: "",
     num_pere: "",
@@ -54,13 +70,18 @@ const FormulaireCreation = ({ user }) => {
 
   const [nouveauNe, setNouveauNe] = useState(nouveauNeObjet);
   const getNouveuNeeNIN = async () => {
-    let { data } = await http.get("api/personnes/", config);
-    let { count } = data;
-    count += 10000000000000000;
-    count = String(count);
-    setNouveauNe((prev) => {
-      return { ...prev, num_identifiant_national: count };
-    });
+    try {
+      let { data } = await http.get("api/personnes/", config);
+      let { count } = data;
+      count += 1000000000;
+      count = String(count);
+      setNouveauNe((prev) => {
+        return { ...prev, num_identifiant_national: count };
+      });
+      console.log(count);
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   const DeclarantVide = {
@@ -82,11 +103,6 @@ const FormulaireCreation = ({ user }) => {
   };
   const [declarant, setDeclarant] = useState(DeclarantVide);
 
-  const officierObjet = {
-    matricule: "30000",
-    num_bureau: "16000",
-  };
-
   const ActeNaissObjet = {
     date_declaration: "",
     num_personne: "",
@@ -100,37 +116,73 @@ const FormulaireCreation = ({ user }) => {
   };
 
   const sendActeNaissance = async (acte) => {
-    acte.date_declaration = moment(new Date()).format("YYYY-MM-DD");
-    acte.num_personne = nouveauNeObjet.num_identifiant_national;
-    acte.num_declarant = nindeclarant;
-    acte.num_pere = nouveauNe.num_pere;
-    acte.num_mere = nouveauNe.num_mere;
-    acte.matricule = officierObjet.matricule;
-    acte.num_bureau = officierObjet.num_bureau;
-    return await http.post("api/actesNaissance", acte, config);
+    try {
+      acte.date_declaration = moment(new Date()).format("YYYY-MM-DD");
+      acte.num_personne = nouveauNeObjet.num_identifiant_national;
+      acte.num_declarant = nindeclarant;
+      acte.num_pere = nouveauNe.num_pere;
+      acte.num_mere = nouveauNe.num_mere;
+      acte.matricule = user.matricule;
+      acte.num_bureau = user.num_bureau;
+      const resp = await http.post("api/actesNaissance", acte, config);
+      setResponseAN(resp);
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   const sendNouveauNe = async () => {
-    const pere = await http.get(
-      `api/personnes/${nouveauNeObjet.num_pere}`,
-      config
-    );
-    nouveauNeObjet.commune_residence = pere.data.commune_residence;
-    setNouveauNe((prevElement) => {
-      return {
-        ...prevElement,
-        commune_residence: nouveauNeObjet.commune_residence,
-      };
-    });
-    nouveauNeObjet.pays_naissance = "Algerie";
-    nouveauNeObjet.etat_matrimonial = " ";
-    return await http.post("api/personnes", nouveauNeObjet, config);
+    try {
+      const pere = await http.get(
+        `api/personnes/${nouveauNeObjet.num_pere}`,
+        config
+      );
+      nouveauNeObjet.commune_residence = pere.data.commune_residence;
+      setNouveauNe((prevElement) => {
+        return {
+          ...prevElement,
+          commune_residence: nouveauNeObjet.commune_residence,
+        };
+      });
+      nouveauNeObjet.pays_naissance = "Algerie";
+      nouveauNeObjet.etat_matrimonial = " ";
+      const resp = await http.post("api/personnes", nouveauNeObjet, config);
+      setResponseNouveauNe(resp);
+    } catch (e) {
+      console.log(e);
+    }
   };
+
   const searchDeclarant = async (nin) => {
     const result = await http.get(`api/personnes/${nin}`, config);
     setDeclarant(result.data);
     console.log(declarant);
   };
+  const searchParent = async (nin, affil) => {
+    try {
+      const result = await http.get(`api/personnes/${nin}`, config);
+      if (affil === "pere") {
+        setPere(result.data);
+        searchParent(result.data.num_pere, "gperep");
+        searchParent(result.data.num_mere, "gmerep");
+      } else if (affil === "mere") {
+        setMere(result.data);
+        searchParent(result.data.num_pere, "gperem");
+        searchParent(result.data.num_mere, "gmerem");
+      } else if (affil === "gperep") {
+        setGPerep(result.data);
+      } else if (affil === "gmerep") {
+        setGmerep(result.data);
+      } else if (affil === "gperem") {
+        setGPerem(result.data);
+      } else if (affil === "gmerem") {
+        setGmerem(result.data);
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   return (
     <>
       {user && (
@@ -221,7 +273,9 @@ const FormulaireCreation = ({ user }) => {
                     readOnly
                     id="dateN_declarant"
                     //label="Date Naissance"
-                    value={declarant.date_naissance}
+                    value={moment(declarant.date_naissance).format(
+                      "DD-MM-YYYY"
+                    )}
                   />
                   <TextField
                     margin="normal"
@@ -483,100 +537,129 @@ const FormulaireCreation = ({ user }) => {
                         console.log(nouveauNeObjet.num_pere);
                       }}
                     />
+
+                    <Button
+                      type="button"
+                      variant="contained"
+                      style={{
+                        backgroundColor: "#00917C",
+                        top: "15px",
+                      }}
+                      onClick={() => {
+                        searchParent(nouveauNe.num_pere, "pere");
+                        // searchParent(pere.num_pere, "gperep");
+                        // searchParent(pere.num_mere, "gmerep");
+                      }}>
+                      Search
+                    </Button>
+                    <Grid>
+                      <TextField
+                        margin="normal"
+                        required
+                        fullWidth
+                        id="nom_pere"
+                        label="Nom Pere"
+                        name="Nom Pere"
+                        value={pere.nom}
+                      />
+                      <TextField
+                        margin="normal"
+                        required
+                        fullWidth
+                        id="prenom_pere"
+                        label="Prenom Pere"
+                        name="Prenom Pere"
+                        value={pere.prenom}
+                      />
+
+                      <TextField
+                        margin="normal"
+                        required
+                        fullWidth
+                        id="prenom_gperepaternel"
+                        label="Prenom Grand-Pere Paternel"
+                        name="Prenom Grand-Pere Paternel"
+                        value={Gperep.prenom}
+                      />
+                      <TextField
+                        margin="normal"
+                        required
+                        fullWidth
+                        id="prenom_gmerepaternel"
+                        label="Prenom Grand-Mere Paternel"
+                        name="Prenom Grand-Mere Paternel"
+                        value={`${Gmerep.nom} ${Gmerep.prenom}`}
+                      />
+                    </Grid>
+                  </Grid>
+                  <Grid>
                     <TextField
                       margin="normal"
                       required
                       fullWidth
-                      id="nom_pere"
-                      label="Nom Pere"
-                      name="Nom Pere"
+                      id="nin_mere"
+                      label="NIN Mere"
+                      name="NIN Mere"
                       autoFocus
+                      onChange={(e) => {
+                        nouveauNeObjet.num_mere = e.target.value;
+                        setNouveauNe((pervUser) => {
+                          return {
+                            ...pervUser,
+                            num_mere: nouveauNeObjet.num_mere,
+                          };
+                        });
+                        console.log(nouveauNeObjet.num_mere);
+                      }}
+                    />
+                    <Button
+                      type="button"
+                      variant="contained"
+                      style={{
+                        backgroundColor: "#00917C",
+                        top: "15px",
+                      }}
+                      onClick={() => {
+                        searchParent(nouveauNe.num_mere, "mere");
+                      }}>
+                      Search
+                    </Button>
+                    <TextField
+                      margin="normal"
+                      required
+                      fullWidth
+                      id="nom_mere"
+                      label="Nom Mere"
+                      value={mere.nom}
                     />
                     <TextField
                       margin="normal"
                       required
                       fullWidth
-                      id="prenom_pere"
-                      label="Prenom Pere"
-                      name="Prenom Pere"
-                      autoFocus
+                      id="prenom_mere"
+                      label="Prenom Mere"
+                      value={mere.prenom}
                     />
 
                     <TextField
                       margin="normal"
                       required
                       fullWidth
-                      id="prenom_gperepaternel"
-                      label="Prenom Grand-Pere Paternel"
-                      name="Prenom Grand-Pere Paternel"
-                      autoFocus
+                      id="prenom_gperematernel"
+                      label="Prenom Grand-Pere Maternel"
+                      name="Prenom Grand-Pere Maternel"
+                      value={Gperem.nom}
                     />
                     <TextField
                       margin="normal"
                       required
                       fullWidth
-                      id="prenom_gmerepaternel"
-                      label="Prenom Grand-Mere Paternel"
-                      name="Prenom Grand-Mere Paternel"
-                      autoFocus
+                      id="prenom_gmerematernel"
+                      label="Prenom Grand-Mere Maternel"
+                      name="Prenom Grand-Mere Maternel"
+                      value={`${Gmerem.nom} ${Gmerem.prenom} `}
                     />
                   </Grid>
-                  <TextField
-                    margin="normal"
-                    required
-                    fullWidth
-                    id="nin_mere"
-                    label="NIN Mere"
-                    name="NIN Mere"
-                    autoFocus
-                    onChange={(e) => {
-                      nouveauNeObjet.num_mere = e.target.value;
-                      setNouveauNe((pervUser) => {
-                        return {
-                          ...pervUser,
-                          num_mere: nouveauNeObjet.num_mere,
-                        };
-                      });
-                      console.log(nouveauNeObjet.num_mere);
-                    }}
-                  />
-                  <TextField
-                    margin="normal"
-                    required
-                    fullWidth
-                    id="nom_mere"
-                    label="Nom Mere"
-                    name="Nom Mere"
-                    autoFocus
-                  />
-                  <TextField
-                    margin="normal"
-                    required
-                    fullWidth
-                    id="prenom_mere"
-                    label="Prenom Mere"
-                    name="Prenom Mere"
-                    autoFocus
-                  />
-
-                  <TextField
-                    margin="normal"
-                    required
-                    fullWidth
-                    id="prenom_gperematernel"
-                    label="Prenom Grand-Pere Maternel"
-                    name="Prenom Grand-Pere Maternel"
-                    autoFocus
-                  />
-                  <TextField
-                    margin="normal"
-                    required
-                    fullWidth
-                    id="prenom_gmerematernel"
-                    label="Prenom Grand-Mere Maternel"
-                    name="Prenom Grand-Mere Maternel"
-                    autoFocus
-                  />
                 </Grid>
                 <hr />
               </div>
@@ -605,7 +688,7 @@ const FormulaireCreation = ({ user }) => {
                   label="Num Bureau"
                   name="numbureau"
                   onClick={() => {
-                    console.log(user);
+                    console.log(user.matricule);
                   }}
                 />
                 <Box marginBottom={10}>
@@ -620,15 +703,13 @@ const FormulaireCreation = ({ user }) => {
                     onClick={(e) => {
                       nouveauNeObjet = nouveauNe;
                       sendNouveauNe();
-                      //console.log(nouveauNeObjet);
-                      //setNouveauNe(nouveauNeObjet);
-
                       sendActeNaissance(ActeNaissObjet);
                     }}>
                     Create
                   </Button>
                 </Box>
               </div>
+              {responseAN && responseNouveaNe ? <p></p> : <p></p>}
             </Box>
           </Container>
         </>

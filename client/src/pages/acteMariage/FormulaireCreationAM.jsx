@@ -3,13 +3,19 @@ import { TextField, Box, Typography, Button, Grid } from "@mui/material";
 import { Container } from "@mui/system";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider/LocalizationProvider";
 import React, { useState } from "react";
 import "../acteNaissance/forms.css";
 import Navbar from "../../Navbar";
 import moment from "moment";
 import http from "../../services/httpService";
+
+const token = localStorage.getItem("token");
+const config = {
+  headers: {
+    Authorization: `${token}`,
+  },
+};
 
 function FormulaireCreation({ user }) {
   let acteMariage = {
@@ -22,16 +28,12 @@ function FormulaireCreation({ user }) {
     num_bureau: "",
     matricule: "",
   };
-  let officierObjet = {
-    matricule: "",
-    num_bureau: "",
-  };
 
   let personneObjet = {
     commune_naissance: "",
     commune_residence: "",
     date_naissance: "",
-    etat_matrimonial: "",
+    etat_matrimonial: "marié(e)",
     heure_naissance: "",
     lieu_naissance: "",
     nom: "",
@@ -40,7 +42,7 @@ function FormulaireCreation({ user }) {
     num_pere: "",
     pays_naissance: "",
     prenom: "",
-    profession: "",
+    profession: " ",
     sexe: "",
     wilaya_naissance: "",
   };
@@ -51,16 +53,21 @@ function FormulaireCreation({ user }) {
   const [temoin2, setTemoin2] = useState(personneObjet);
   const [dateValue, setDateValue] = useState(null);
   const [acte, setActe] = useState(acteMariage);
-
-  const token = localStorage.getItem("token");
-  const config = {
-    headers: {
-      Authorization: `${token}`,
-    },
-  };
+  const [responseAM, setresponseAM] = useState(null);
 
   const sendActeMariage = async (acte) => {
-    return await http.post("api/actesMariage", acte, config);
+    try {
+      acte.num_bureau = user.num_bureau;
+      acte.matricule = user.matricule;
+      changerEtatMatrimonial(epoux);
+      changerEtatMatrimonial(epouse);
+      const resp = await http.post("api/actesMariage", acte, config);
+      setresponseAM(resp);
+      changerActeNaissanceMariage(epoux.num_identifiant_national);
+      changerActeNaissanceMariage(epouse.num_identifiant_national);
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   const searchEpoux = async (nin) => {
@@ -72,9 +79,29 @@ function FormulaireCreation({ user }) {
     }
   };
 
-  // const changerEtatMatrimonial = asynce (nin) => {
-  //    return await http.put(`/api/personnes/${nin}`,....);
-  // }
+  const changerActeNaissanceMariage = async (nin) => {
+    try {
+      const result = await http.get(`api/actesNaissance/${nin}`, config);
+      delete result.data._id;
+      delete result.data.__v;
+      delete result.data.num_registre;
+      result.data.num_acte_mariage = responseAM.data._id;
+      return await http.put(`/api/actesNaissance/${nin}`, result.data, config);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const changerEtatMatrimonial = async (personne) => {
+    delete personne._id;
+    delete personne.__v;
+    personne.etat_matrimonial = "marié(e)";
+    return await http.put(
+      `/api/personnes/${personne.num_identifiant_national}`,
+      personne,
+      config
+    );
+  };
 
   const searchEpouse = async (nin) => {
     try {
@@ -104,21 +131,18 @@ function FormulaireCreation({ user }) {
           <Container
             component="form"
             className="cadre"
-            sx={{ padding: "10px" }}
-          >
+            sx={{ padding: "10px" }}>
             <Box
               sx={{
                 "& .MuiTextField-root": { m: 1, width: "25ch" },
               }}
               noValidate
-              autoComplete="off"
-            >
+              autoComplete="off">
               <div className="partie-mariage">
                 <Typography
                   variant="h5"
                   gutterBottom
-                  style={{ marginTop: "5px" }}
-                >
+                  style={{ marginTop: "5px" }}>
                   Partie Mariage
                 </Typography>
                 <Grid container>
@@ -169,8 +193,7 @@ function FormulaireCreation({ user }) {
                 <Typography
                   variant="h5"
                   gutterBottom
-                  style={{ marginTop: "5px" }}
-                >
+                  style={{ marginTop: "5px" }}>
                   Partie Mariées
                 </Typography>
                 <Grid container id={"Partie_epoux"}>
@@ -198,8 +221,7 @@ function FormulaireCreation({ user }) {
                     type="button"
                     variant="contained"
                     style={{ backgroundColor: "#00917C", top: "1px" }}
-                    onClick={() => searchEpoux(acte.num_homme)}
-                  >
+                    onClick={() => searchEpoux(acte.num_homme)}>
                     Search
                   </Button>
                   <Grid>
@@ -301,8 +323,7 @@ function FormulaireCreation({ user }) {
                     type="button"
                     variant="contained"
                     style={{ backgroundColor: "#00917C", top: "1px" }}
-                    onClick={() => searchEpouse(acte.num_femme)}
-                  >
+                    onClick={() => searchEpouse(acte.num_femme)}>
                     Search
                   </Button>
                   <Grid>
@@ -379,8 +400,7 @@ function FormulaireCreation({ user }) {
                 <Typography
                   variant="h5"
                   gutterBottom
-                  style={{ marginTop: "5px" }}
-                >
+                  style={{ marginTop: "5px" }}>
                   Partie Témoins
                 </Typography>
                 <Grid container id={"temoin1"}>
@@ -412,8 +432,7 @@ function FormulaireCreation({ user }) {
                       top: "10px",
                       height: "50px",
                     }}
-                    onClick={() => searchTemoin(acte.num_temoin1, "temoin1")}
-                  >
+                    onClick={() => searchTemoin(acte.num_temoin1, "temoin1")}>
                     Search
                   </Button>
                   <TextField
@@ -462,8 +481,7 @@ function FormulaireCreation({ user }) {
                       top: "10px",
                       height: "50px",
                     }}
-                    onClick={() => searchTemoin(acte.num_temoin2, "temoin2")}
-                  >
+                    onClick={() => searchTemoin(acte.num_temoin2, "temoin2")}>
                     Search
                   </Button>
                   <TextField
@@ -490,46 +508,28 @@ function FormulaireCreation({ user }) {
                 <Typography
                   variant="h5"
                   gutterBottom
-                  style={{ marginTop: "5px" }}
-                >
+                  style={{ marginTop: "5px" }}>
                   Partie Administration
                 </Typography>
                 <TextField
                   margin="normal"
-                  required
-                  fullWidth
+                  disabled
+                  value={user?.matricule || ""}
                   id="matricule"
                   label="Matricule"
                   name="matricule"
                   autoFocus
-                  onChange={(e) => {
-                    acteMariage.matricule = e.target.value;
-                    setActe((prevElement) => {
-                      return {
-                        ...prevElement,
-                        matricule: acteMariage.matricule,
-                      };
-                    });
-                    console.log(acteMariage.matricule);
-                  }}
                 />
                 <TextField
                   margin="normal"
-                  required
+                  disabled
                   fullWidth
+                  value={user?.num_bureau || ""}
                   id="numBureau"
                   label="Num Bureau"
                   name="numbureau"
-                  autoFocus
-                  onChange={(e) => {
-                    acteMariage.num_bureau = e.target.value;
-                    setActe((prevElement) => {
-                      return {
-                        ...prevElement,
-                        num_bureau: acteMariage.num_bureau,
-                      };
-                    });
-                    console.log(acteMariage.num_bureau);
+                  onClick={() => {
+                    console.log(user.matricule);
                   }}
                 />
                 <Box marginBottom={10}>
@@ -541,8 +541,7 @@ function FormulaireCreation({ user }) {
                       float: "right",
                       right: "10px",
                     }}
-                    onClick={() => sendActeMariage(acte)}
-                  >
+                    onClick={() => sendActeMariage(acte)}>
                     Create
                   </Button>
                 </Box>

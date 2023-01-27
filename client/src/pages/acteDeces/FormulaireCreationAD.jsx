@@ -21,6 +21,12 @@ import Navbar from "../../Navbar";
 import moment from "moment";
 import http from "../../services/httpService";
 
+const token = localStorage.getItem("token");
+const config = {
+  headers: {
+    Authorization: `${token}`,
+  },
+};
 function FormulaireCreation({ user }) {
   const [dateValue, setDateValue] = useState(null);
   const [timeValue, setTimeValue] = useState(null);
@@ -57,18 +63,19 @@ function FormulaireCreation({ user }) {
 
   const [declarant, setDeclarant] = useState(PersonneObjet);
   const [defunt, setDefunt] = useState(PersonneObjet);
-
+  const [responseAD, setresponseAD] = useState(null);
   const [acte, setActe] = useState(acteDeces);
 
-  const token = localStorage.getItem("token");
-  const config = {
-    headers: {
-      Authorization: `${token}`,
-    },
-  };
-
   const sendActeDeces = async (acte) => {
-    return await http.post("api/actesDeces", acte, config);
+    try {
+      acte.num_bureau = user.num_bureau;
+      acte.matricule = user.matricule;
+      const res = await http.post("api/actesDeces", acte, config);
+      setresponseAD(res);
+      searchNumActeNaissanceDefunt(acte.num_personne);
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   const searchDeclarant = async (nin) => {
@@ -99,6 +106,11 @@ function FormulaireCreation({ user }) {
           num_acte_naissance: result.data._id,
         };
       });
+      delete result.data._id;
+      delete result.data.__v;
+      delete result.data.num_registre;
+      result.data.num_acte_deces = responseAD.data._id;
+      return await http.put(`/api/actesNaissance/${nin}`, result.data, config);
     } catch (e) {
       console.log(e);
     }
@@ -112,21 +124,18 @@ function FormulaireCreation({ user }) {
           <Container
             component="form"
             className="cadre"
-            sx={{ padding: "10px" }}
-          >
+            sx={{ padding: "10px" }}>
             <Box
               sx={{
                 "& .MuiTextField-root": { m: 1, width: "25ch" },
               }}
               noValidate
-              autoComplete="off"
-            >
+              autoComplete="off">
               <div className="partie-declarant">
                 <Typography
                   variant="h5"
                   gutterBottom
-                  style={{ marginTop: "5px" }}
-                >
+                  style={{ marginTop: "5px" }}>
                   Partie Declarant
                 </Typography>
                 <TextField
@@ -160,8 +169,7 @@ function FormulaireCreation({ user }) {
                   style={{ backgroundColor: "#00917C", top: "15px" }}
                   onClick={() =>
                     searchDeclarant(declarant.num_identifiant_national)
-                  }
-                >
+                  }>
                   Search
                 </Button>
                 {/* </Box> */}
@@ -259,8 +267,7 @@ function FormulaireCreation({ user }) {
                       label="affiliation avec le défunt"
                       onChange={(event) => {
                         setAffiliationValue(event.target.value);
-                      }}
-                    >
+                      }}>
                       <MenuItem value={"ascendant_direct"}>
                         Ascendant direct
                       </MenuItem>
@@ -282,8 +289,7 @@ function FormulaireCreation({ user }) {
                 <Typography
                   variant="h5"
                   gutterBottom
-                  style={{ marginTop: "5px" }}
-                >
+                  style={{ marginTop: "5px" }}>
                   Partie Défunt
                 </Typography>
                 <TextField
@@ -316,8 +322,7 @@ function FormulaireCreation({ user }) {
                     top: "10px",
                     height: "50px",
                   }}
-                  onClick={() => searchDefunt(defunt.num_identifiant_national)}
-                >
+                  onClick={() => searchDefunt(defunt.num_identifiant_national)}>
                   Search
                 </Button>
                 <Grid container>
@@ -434,44 +439,28 @@ function FormulaireCreation({ user }) {
                 <Typography
                   variant="h5"
                   gutterBottom
-                  style={{ marginTop: "5px" }}
-                >
+                  style={{ marginTop: "5px" }}>
                   Partie Administration
                 </Typography>
                 <TextField
                   margin="normal"
-                  required
-                  fullWidth
+                  disabled
+                  value={user?.matricule || ""}
                   id="matricule"
                   label="Matricule"
                   name="matricule"
-                  onChange={(e) => {
-                    acteDeces.matricule = e.target.value;
-                    setActe((prevElement) => {
-                      return {
-                        ...prevElement,
-                        matricule: acteDeces.matricule,
-                      };
-                    });
-                    console.log(acteDeces.matricule);
-                  }}
+                  autoFocus
                 />
                 <TextField
                   margin="normal"
-                  required
+                  disabled
                   fullWidth
+                  value={user?.num_bureau || ""}
                   id="numBureau"
                   label="Num Bureau"
                   name="numbureau"
-                  onChange={(e) => {
-                    acteDeces.num_bureau = e.target.value;
-                    setActe((prevElement) => {
-                      return {
-                        ...prevElement,
-                        num_bureau: acteDeces.num_bureau,
-                      };
-                    });
-                    console.log(acteDeces.num_bureau);
+                  onClick={() => {
+                    console.log(user.matricule);
                   }}
                 />
                 <Box marginBottom={10}>
@@ -483,8 +472,7 @@ function FormulaireCreation({ user }) {
                       float: "right",
                       right: "10px",
                     }}
-                    onClick={() => sendActeDeces(acte)}
-                  >
+                    onClick={() => sendActeDeces(acte)}>
                     Create
                   </Button>
                 </Box>

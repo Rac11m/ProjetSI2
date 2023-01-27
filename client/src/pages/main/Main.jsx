@@ -8,24 +8,21 @@ const Main = ({ user }) => {
       key={0}
       variant="contained"
       size="large"
-      sx={{ backgroundColor: "#00917C" }}
-    >
+      sx={{ backgroundColor: "#00917C" }}>
       Consulter Les Actes
     </Button>,
     <Button
       key={1}
       variant="contained"
       size="large"
-      sx={{ backgroundColor: "#00917C" }}
-    >
+      sx={{ backgroundColor: "#00917C" }}>
       Creation nouveau acte
     </Button>,
     <Button
       key={2}
       variant="contained"
       size="large"
-      sx={{ backgroundColor: "#00917C" }}
-    >
+      sx={{ backgroundColor: "#00917C" }}>
       Mise a jour nouveau acte
     </Button>,
   ];
@@ -34,7 +31,7 @@ const Main = ({ user }) => {
     <>
       {user && (
         <>
-          <Navbar />
+          <Navbar user={user} />
           <Container component="main">
             <Box
               sx={{
@@ -42,26 +39,22 @@ const Main = ({ user }) => {
                 "& > *": {
                   m: 6,
                 },
-              }}
-            >
+              }}>
               <ButtonGroup
                 orientation="vertical"
-                aria-label="vertical outlined button group"
-              >
+                aria-label="vertical outlined button group">
                 {buttons}
               </ButtonGroup>
 
               <ButtonGroup
                 orientation="vertical"
-                aria-label="vertical outlined button group"
-              >
+                aria-label="vertical outlined button group">
                 {buttons}
               </ButtonGroup>
 
               <ButtonGroup
                 orientation="vertical"
-                aria-label="vertical outlined button group"
-              >
+                aria-label="vertical outlined button group">
                 {buttons}
               </ButtonGroup>
             </Box>

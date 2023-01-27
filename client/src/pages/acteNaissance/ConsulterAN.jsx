@@ -3,16 +3,7 @@ import { Box, Button, TextField } from "@mui/material";
 import React from "react";
 import { useState } from "react";
 import http from "../../services/httpService";
-import {
-  Document,
-  Page,
-  View,
-  Text,
-  PDFViewer,
-  StyleSheet,
-  Font,
-  PDFDownloadLink,
-} from "@react-pdf/renderer";
+import { Document, Page, Text, StyleSheet, Font } from "@react-pdf/renderer";
 import moment from "moment";
 
 const styles = StyleSheet.create({
@@ -108,7 +99,7 @@ function ConsulterAN({ user }) {
 
   const [nin, setNin] = useState(null);
   const [acte, setActe] = useState(acteObjet);
-  const [commune, setCommune] = useState(null);
+  // const [commune, setCommune] = useState(null);
   const [personne, setPersonne] = useState(personneObjet);
   const [pere, setPere] = useState(personneObjet);
   const [mere, setMere] = useState(personneObjet);
@@ -135,15 +126,15 @@ function ConsulterAN({ user }) {
     }
   };
 
-  const getNomCommune = async (numbureau) => {
-    try {
-      const comm = await http.post(`api/bureauNationnal/${numbureau}`, config);
-      console.log(comm);
-      //setCommune(comm.data);
-    } catch (e) {
-      console.log(e);
-    }
-  };
+  // const getNomCommune = async (numbureau) => {
+  //   try {
+  //     const comm = await http.post(`api/bureauNationnal/${numbureau}`, config);
+  //     console.log(comm);
+  //     //setCommune(comm.data);
+  //   } catch (e) {
+  //     console.log(e);
+  //   }
+  // };
 
   const getDeclarant = async (numDeclarant) => {
     try {
@@ -315,7 +306,7 @@ function ConsulterAN({ user }) {
             </Text>
             <Text style={styles.text}>
               <span style={{ position: "absolute", left: "50%" }}>
-                a : {acte.num_bureau} {commune}
+                a : {acte.num_bureau} {/* {commune} */}
               </span>
             </Text>
             <br />
@@ -328,7 +319,7 @@ function ConsulterAN({ user }) {
               Lecture faite, on signes avec Nous :
               {`${officier.nom} ${officier.prenom}`}
               Officier d'Etat Civil a la commune, {officier.num_bureau}{" "}
-              {commune}
+              {/* {commune} */}
             </Text>
             <br />
             <Text style={styles.text}>
@@ -339,7 +330,7 @@ function ConsulterAN({ user }) {
             <div
               style={{ position: "absolute", right: "10px", bottom: "10px" }}>
               <Text style={styles.text}>
-                Fait a : {acte.num_bureau} {commune} le{" "}
+                Fait a : {acte.num_bureau} {/* {commune} */} {"  "} le{" "}
                 {moment(acte.date_declaration).format("DD-MM-YYYY")}
               </Text>
               <br />

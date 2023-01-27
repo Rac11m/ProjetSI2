@@ -12,7 +12,7 @@ const personneSchema = new mongoose.Schema({
   lieu_naissance: { type: String, required: true },
   commune_naissance: { type: String, required: true },
   wilaya_naissance: { type: String, required: true },
-  pays_naissance: { type: String, required: true },
+  pays_naissance: { type: String, default: "Algerie", required: true },
   etat_matrimonial: { type: String, default: " " },
   commune_residence: { type: String, required: true },
   num_pere: { type: String, required: true },
@@ -38,9 +38,9 @@ function validatePersonne(personne) {
     pays_naissance: Joi.string().min(5).max(255).required(),
     etat_matrimonial: Joi.string().max(255),
     commune_residence: Joi.string().min(3).max(255).required(),
-    num_pere: Joi.string().min(5).max(255).required(),
-    num_mere: Joi.string().min(5).max(255).required(),
-    profession: Joi.string().min(5).max(255),
+    num_pere: Joi.string().min(1).max(255).required(),
+    num_mere: Joi.string().min(1).max(255).required(),
+    profession: Joi.string().max(255),
   });
 
   return schema.validate(personne);

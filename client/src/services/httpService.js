@@ -31,10 +31,11 @@ export function getCurrentUser() {
   }
 }
 
-export default {
+const exportedObject = {
   get: axios.get,
   post: axios.post,
   put: axios.put,
   delete: axios.delete,
   setJwt,
 };
+export default exportedObject;

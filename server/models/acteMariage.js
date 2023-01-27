@@ -23,8 +23,8 @@ function validateActeMariage(acteMariage) {
     lieu_mariage: Joi.string().min(5).max(255).required(),
     num_homme: Joi.string().min(5).max(255).required(),
     num_femme: Joi.string().min(5).max(255).required(),
-    num_temoin1: Joi.string().min(5).max(255).required(),
-    num_temoin2: Joi.string().min(5).max(255).required(),
+    num_temoin1: Joi.string().min(1).max(255).required(),
+    num_temoin2: Joi.string().min(1).max(255).required(),
     num_bureau: Joi.string().min(5).max(255).required(),
     matricule: Joi.string().min(5).max(255).required(),
   });
