@@ -1,12 +1,9 @@
 import React, { useState } from "react";
 import {
   Button,
-  Grid,
   Avatar,
   CssBaseline,
   TextField,
-  FormControlLabel,
-  Checkbox,
   Link,
   Box,
   Typography,
@@ -15,6 +12,7 @@ import {
   InputLabel,
   Select,
   MenuItem,
+  Alert,
 } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
@@ -23,6 +21,12 @@ import "./login.css";
 
 const Login = () => {
   const [user, setUser] = useState(null);
+  const [error, setError] = useState(null);
+
+  const [matricule, setMatricule] = useState(null);
+  const [password, setPassword] = useState(null);
+  const [role, setRole] = useState(null);
+
   const theme = createTheme();
 
   const Copyright = (props) => {
@@ -44,9 +48,15 @@ const Login = () => {
   };
 
   const loginUser = async () => {
-    const { data: jwt } = await http.post("api/auth", user);
-    localStorage.setItem("token", jwt);
-    if (user) window.location = "/";
+    try {
+      const { data: jwt } = await http.post("api/auth", user);
+      localStorage.setItem("token", jwt);
+      window.location = "/";
+    } catch (ex) {
+      if (ex.response && ex.response.status === 400) {
+        setError(ex.response.data);
+      }
+    }
   };
 
   return (
@@ -77,11 +87,14 @@ const Login = () => {
               name="matricule"
               autoComplete="matricule"
               autoFocus
-              onChange={(e) =>
+              onChange={(e) => {
                 setUser((prev) => {
                   return { ...prev, matricule: e.target.value };
-                })
-              }
+                });
+                setMatricule((prev) => {
+                  return { ...prev, matricule: e.target.value };
+                });
+              }}
             />
             <TextField
               margin="normal"
@@ -92,11 +105,14 @@ const Login = () => {
               type="password"
               id="password"
               autoComplete="current-password"
-              onChange={(e) =>
+              onChange={(e) => {
                 setUser((prev) => {
                   return { ...prev, password: e.target.value };
-                })
-              }
+                });
+                setPassword((prev) => {
+                  return { ...prev, password: e.target.value };
+                });
+              }}
             />
             <FormControl fullWidth margin="normal">
               <InputLabel id="demo-simple-select-label">Role</InputLabel>
@@ -106,11 +122,14 @@ const Login = () => {
                 id="demo-simple-select"
                 value={user?.role || ""}
                 label="Role"
-                onChange={(e) =>
+                onChange={(e) => {
                   setUser((prev) => {
                     return { ...prev, role: e.target.value };
-                  })
-                }
+                  });
+                  setRole((prev) => {
+                    return { ...prev, role: e.target.value };
+                  });
+                }}
               >
                 <MenuItem value={"admin"}>Admin</MenuItem>
                 <MenuItem value={"maire"}>Maire</MenuItem>
@@ -118,26 +137,25 @@ const Login = () => {
                 <MenuItem value={"consulaire"}>Consulaire</MenuItem>
               </Select>
             </FormControl>
-            <FormControlLabel
-              control={<Checkbox value="remember" color="success" />}
-              label="Se souvenir de moi"
-            />
+            {error && (
+              <Alert
+                variant="outlined"
+                severity="warning"
+                style={{ height: "80px" }}
+              >
+                {<p>matricule ou mot de passe ou role est incorrecte.</p>}
+              </Alert>
+            )}
             <Button
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
               style={{ backgroundColor: "#00917C" }}
               onClick={() => loginUser()}
+              disabled={!(matricule && password && role)}
             >
               Se connecter
             </Button>
-            <Grid container>
-              <Grid item xs>
-                <Link href="#" variant="body2" underline="none">
-                  Mot de passe oublier?
-                </Link>
-              </Grid>
-            </Grid>
           </Box>
         </Box>
         <Copyright sx={{ mt: 8, mb: 4 }} />
