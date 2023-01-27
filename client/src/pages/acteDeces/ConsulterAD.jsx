@@ -54,16 +54,13 @@ function ConsulterAD({ user }) {
           <Container
             component="form"
             className="cadre"
-            sx={{ padding: "10px", paddingBottom: "2%" }}
-          >
+            sx={{ padding: "10px", paddingBottom: "2%" }}>
             <Box
-              component="form"
               sx={{
                 "& .MuiTextField-root": { m: 1 },
               }}
               noValidate
-              autoComplete="off"
-            >
+              autoComplete="off">
               <TextField
                 margin="normal"
                 required
@@ -85,8 +82,7 @@ function ConsulterAD({ user }) {
                 style={{ backgroundColor: "#00917C", top: "15px" }}
                 onClick={(e) => {
                   searchActeDeces(nin);
-                }}
-              >
+                }}>
                 Search
               </Button>
             </Box>

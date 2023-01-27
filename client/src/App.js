@@ -24,7 +24,7 @@ function App() {
       const decoded = jwtDecode(jwt);
       setUser(decoded);
     } catch (error) {}
-  }, []);
+  }, [navigate]);
 
   return (
     <div className="container">

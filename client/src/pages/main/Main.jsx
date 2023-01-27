@@ -1,31 +1,11 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { Button, Container, ButtonGroup, Box } from "@mui/material";
 import Navbar from "../../Navbar";
+import bannergov from "../../media/banner-site-web-gov.png";
 
 const Main = ({ user }) => {
-  const buttons = [
-    <Button
-      key={0}
-      variant="contained"
-      size="large"
-      sx={{ backgroundColor: "#00917C" }}>
-      Consulter Les Actes
-    </Button>,
-    <Button
-      key={1}
-      variant="contained"
-      size="large"
-      sx={{ backgroundColor: "#00917C" }}>
-      Creation nouveau acte
-    </Button>,
-    <Button
-      key={2}
-      variant="contained"
-      size="large"
-      sx={{ backgroundColor: "#00917C" }}>
-      Mise a jour nouveau acte
-    </Button>,
-  ];
+  const navigateHook = useNavigate();
 
   return (
     <>
@@ -43,21 +23,85 @@ const Main = ({ user }) => {
               <ButtonGroup
                 orientation="vertical"
                 aria-label="vertical outlined button group">
-                {buttons}
+                <Button
+                  variant="contained"
+                  size="large"
+                  sx={{ backgroundColor: "#00917C" }}
+                  onClick={() => navigateHook("/consulterAN")}>
+                  Consulter Les Actes de Naissances
+                </Button>
+                <Button
+                  variant="contained"
+                  size="large"
+                  sx={{ backgroundColor: "#00917C" }}
+                  onClick={() => navigateHook("/creationactenaissance")}>
+                  Creation nouveau acte de naissance
+                </Button>
+                <Button
+                  key={2}
+                  variant="contained"
+                  size="large"
+                  sx={{ backgroundColor: "#00917C" }}>
+                  Mise a jour acte de naissance
+                </Button>
               </ButtonGroup>
 
               <ButtonGroup
                 orientation="vertical"
                 aria-label="vertical outlined button group">
-                {buttons}
+                <Button
+                  variant="contained"
+                  size="large"
+                  sx={{ backgroundColor: "#00917C" }}
+                  onClick={() => navigateHook("/consulterAM")}>
+                  Consulter Les Actes de mariages
+                </Button>
+                <Button
+                  key={1}
+                  variant="contained"
+                  size="large"
+                  sx={{ backgroundColor: "#00917C" }}
+                  onClick={() => navigateHook("/creationactemariage")}>
+                  Creation Nouveau acte de mariage
+                </Button>
+                <Button
+                  key={2}
+                  variant="contained"
+                  size="large"
+                  sx={{ backgroundColor: "#00917C" }}>
+                  Mise a jour acte de mariage
+                </Button>{" "}
               </ButtonGroup>
 
               <ButtonGroup
                 orientation="vertical"
                 aria-label="vertical outlined button group">
-                {buttons}
+                <Button
+                  key={0}
+                  variant="contained"
+                  size="large"
+                  sx={{ backgroundColor: "#00917C" }}
+                  onClick={() => navigateHook("/consulterAD")}>
+                  Consulter Les Actes de dÉcÈs
+                </Button>
+                <Button
+                  key={1}
+                  variant="contained"
+                  size="large"
+                  sx={{ backgroundColor: "#00917C" }}
+                  onClick={() => navigateHook("/creationactedeces")}>
+                  Creation nouveau acte de dÉcÈs
+                </Button>
+                <Button
+                  key={2}
+                  variant="contained"
+                  size="large"
+                  sx={{ backgroundColor: "#00917C" }}>
+                  Mise a jour acte de dÉcÈs
+                </Button>{" "}
               </ButtonGroup>
             </Box>
+            <img width={"100%"} src={bannergov} alt="banner-gov" />
           </Container>
         </>
       )}

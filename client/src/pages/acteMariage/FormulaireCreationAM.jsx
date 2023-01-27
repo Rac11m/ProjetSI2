@@ -127,7 +127,7 @@ function FormulaireCreation({ user }) {
     <>
       {user && (
         <>
-          <Navbar />
+          <Navbar user={user} />
           <Container
             component="form"
             className="cadre"

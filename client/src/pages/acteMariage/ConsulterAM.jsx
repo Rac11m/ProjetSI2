@@ -61,15 +61,13 @@ function ConsulterAM({ user }) {
         <>
           <Container
             className="cadre"
-            sx={{ padding: "10px", paddingBottom: "2%" }}
-          >
+            sx={{ padding: "10px", paddingBottom: "2%" }}>
             <Box
               sx={{
                 "& .MuiTextField-root": { m: 1 },
               }}
               noValidate
-              autoComplete="off"
-            >
+              autoComplete="off">
               <TextField
                 margin="normal"
                 required
@@ -91,8 +89,8 @@ function ConsulterAM({ user }) {
                 style={{ backgroundColor: "#00917C", top: "15px" }}
                 onClick={(e) => {
                   searchActeMariage(nin);
-                }}
-              >
+                  console.log(acte);
+                }}>
                 Search
               </Button>
             </Box>
