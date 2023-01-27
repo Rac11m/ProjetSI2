@@ -29,12 +29,17 @@ router.post("/", async (req, res) => {
     {
       matricule: req.body.matricule,
       role: req.body.role,
+      num_bureau: req.body.num_bureau,
+      pays_de_rattachement: req.body.pays_de_rattachement,
     },
     jwtPrivateKey
   );
-  res
-    .header("x-auth-token", token)
-    .send({ matricule: user.matricule, role: user.role });
+  res.header("x-auth-token", token).send({
+    matricule: user.matricule,
+    role: user.role,
+    num_bureau: user.num_bureau,
+    pays_de_rattachement: user.pays_de_rattachement,
+  });
 });
 
 router.get("/:id", async (req, res) => {

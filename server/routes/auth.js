@@ -32,6 +32,8 @@ router.post("/", async (req, res) => {
     {
       matricule: req.body.matricule,
       role: req.body.role,
+      num_bureau: user.num_bureau,
+      pays_de_rattachement: user.pays_de_rattachement,
     },
     jwtPrivateKey
   );
