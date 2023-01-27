@@ -3,7 +3,7 @@ const Joi = require("joi");
 
 // Define the schema for the Registre collection
 const registreSchema = new mongoose.Schema({
-  nom_registre: { type: String, required: true },
+  num_registre: { type: String, required: true, enum: [0, 1, 2] },
   annee_registre: { type: Date, required: true },
   num_bureau: { type: String, required: true },
 });

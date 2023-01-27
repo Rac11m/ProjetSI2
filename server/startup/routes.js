@@ -7,6 +7,9 @@ const actesDeces = require("../routes/actesDeces");
 const personnes = require("../routes/personnes");
 const officiers = require("../routes/officiers");
 const consulaires = require("../routes/Consulaires");
+const bureauxNationaux = require("../routes/bureauxNational");
+const bureauxConsulaires = require("../routes/bureauxConsulaire");
+const registres = require("../routes/registres");
 
 module.exports = function (app) {
   app.use(express.json());
@@ -18,4 +21,7 @@ module.exports = function (app) {
   app.use("/api/personnes", personnes);
   app.use("/api/officiers", officiers);
   app.use("/api/consulaires", consulaires);
+  app.use("/api/bureauxNationaux", bureauxNationaux);
+  app.use("/api/bureauxConsulaires", bureauxConsulaires);
+  app.use("/api/registres", registres);
 };

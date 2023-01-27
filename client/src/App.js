@@ -11,6 +11,7 @@ import jwtDecode from "jwt-decode";
 import ConsulterAN from "./pages/acteNaissance/ConsulterAN";
 import ConsulterAM from "./pages/acteMariage/ConsulterAM";
 import ConsulterAD from "./pages/acteDeces/ConsulterAD";
+import NotFound from "./pages/notFound/NotFound";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -47,6 +48,7 @@ function App() {
         <Route path="/createUser" element={<CreateUser user={user} />} />
         <Route path="/login" element={<Login />} />
         <Route path="/settings" element={<Settings user={user} />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </div>
   );
