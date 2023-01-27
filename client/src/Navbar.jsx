@@ -22,7 +22,7 @@ const settings = ["Profile", "Account", "Dashboard", "Logout"];
 function Navbar() {
   let navigate = useNavigate();
   const routeChange = () => {
-    let path = `/main`;
+    let path = `/`;
     navigate(path);
   };
   const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -44,10 +44,17 @@ function Navbar() {
     setAnchorElUser(null);
   };
 
+  const navigateHook = useNavigate();
+  const logOut = () => {
+    localStorage.removeItem("token");
+    navigateHook("/login");
+  };
+
   return (
     <AppBar
       position="static"
-      sx={{ backgroundColor: "#00917C", marginBottom: "1.5em" }}>
+      sx={{ backgroundColor: "#00917C", marginBottom: "1.5em" }}
+    >
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <div onClick={routeChange}>
@@ -66,7 +73,8 @@ function Navbar() {
               letterSpacing: ".3rem",
               color: "inherit",
               textDecoration: "none",
-            }}>
+            }}
+          >
             HOME
           </Typography>
 
@@ -77,7 +85,8 @@ function Navbar() {
               aria-controls="menu-appbar"
               aria-haspopup="true"
               onClick={handleOpenNavMenu}
-              color="inherit">
+              color="inherit"
+            >
               <MenuIcon />
             </IconButton>
 
@@ -97,7 +106,8 @@ function Navbar() {
               onClose={handleCloseNavMenu}
               sx={{
                 display: { xs: "block", md: "none" },
-              }}>
+              }}
+            >
               {pages.map((page) => (
                 <MenuItem key={page} onClick={handleCloseNavMenu}>
                   <Typography textAlign={"center"}>{page}</Typography>
@@ -111,7 +121,8 @@ function Navbar() {
                 key={page}
                 onClick={handleCloseNavMenu}
                 href={`/${page}`}
-                sx={{ my: 2, color: "white", display: "block" }}>
+                sx={{ my: 2, color: "white", display: "block" }}
+              >
                 {page}
               </Button>
             ))}
@@ -137,13 +148,22 @@ function Navbar() {
                 horizontal: "right",
               }}
               open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}>
+              onClose={handleCloseUserMenu}
+            >
               {settings.map((setting) => (
                 <MenuItem key={setting} onClick={handleCloseUserMenu}>
                   <Typography textAlign="center">{setting}</Typography>
                 </MenuItem>
               ))}
             </Menu>
+            <Button
+              type="button"
+              variant="contained"
+              style={{ backgroundColor: "#bababa", left: "10px" }}
+              onClick={() => logOut()}
+            >
+              LOGOUT
+            </Button>
           </Box>
         </Toolbar>
       </Container>
