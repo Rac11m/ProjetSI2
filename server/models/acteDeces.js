@@ -25,7 +25,7 @@ function validateActeDeces(acteDeces) {
     num_acte_naissance: Joi.string().min(5).max(255).required(),
     num_personne: Joi.string().min(5).max(255).required(),
     date_deces: Joi.date().required(),
-    heure_deces: Joi.string().min(5).max(255).required(),
+    heure_deces: Joi.string().max(255).required(),
     lieu_deces: Joi.string().min(5).max(255).required(),
     num_bureau: Joi.string().min(5).max(255).required(),
     matricule: Joi.string().min(5).max(255).required(),
