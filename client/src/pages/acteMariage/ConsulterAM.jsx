@@ -4,11 +4,7 @@ import React from "react";
 import { useState } from "react";
 import http from "../../services/httpService";
 
-<<<<<<< HEAD
-function ConsulterAN({ user }) {
-=======
-function ConsulterAM() {
->>>>>>> 977aae7f0af35f08d90bf3d947f9d6453397e05f
+function ConsulterAM({ user }) {
   const [nin, setNin] = useState(null);
   const [acte, setActe] = useState(null);
   const [personnes, setPersonnes] = useState({
@@ -19,21 +15,42 @@ function ConsulterAM() {
     fonctionnaire: null,
   });
 
+  const token = localStorage.getItem("token");
+  const config = {
+    headers: {
+      Authorization: `${token}`,
+    },
+  };
+
   const searchActeMariage = async (nin) => {
-    const result = await http.get(`api/actesMariage/${nin}`);
+    const result = await http.get(`api/actesMariage/${nin}`, config);
     if (result) {
       getPersonnes(result);
-      console.log(result);
       setActe(result.data);
     }
   };
 
   const getPersonnes = async (result) => {
-    const homme = await http.get(`api/personnes/${result.data.num_homme}`);
-    const femme = await http.get(`api/personnes/${result.data.num_femme}`);
-    const temoin1 = await http.get(`api/personnes/${result.data.num_temoin1}`);
-    const temoin2 = await http.get(`api/personnes/${result.data.num_temoin2}`);
-    const fonctionnaire = await http.get(`api/users/${result.data.matricule}`);
+    const homme = await http.get(
+      `api/personnes/${result.data.num_homme}`,
+      config
+    );
+    const femme = await http.get(
+      `api/personnes/${result.data.num_femme}`,
+      config
+    );
+    const temoin1 = await http.get(
+      `api/personnes/${result.data.num_temoin1}`,
+      config
+    );
+    const temoin2 = await http.get(
+      `api/personnes/${result.data.num_temoin2}`,
+      config
+    );
+    const fonctionnaire = await http.get(
+      `api/users/${result.data.matricule}`,
+      config
+    );
     setPersonnes({ homme, femme, temoin1, temoin2, fonctionnaire });
     console.log(personnes);
   };

@@ -1,9 +1,15 @@
-import React from 'react'
+import React from "react";
 
-function Settings() {
+function Settings({ user }) {
   return (
-    <div>Settings</div>
-  )
+    <>
+      {user && (
+        <>
+          <div>Settings</div>
+        </>
+      )}
+    </>
+  );
 }
 
-export default Settings
+export default Settings;

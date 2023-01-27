@@ -1,5 +1,3 @@
-// Route to establish the login.
-
 const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcrypt");
@@ -8,6 +6,7 @@ const { User } = require("../models/user");
 const jwt = require("jsonwebtoken");
 const config = require("config");
 
+// Route to establish the login.
 router.post("/", async (req, res) => {
   //validate the fields
   const result = validate(req.body);
@@ -16,12 +15,16 @@ router.post("/", async (req, res) => {
 
   //search for the user in the database
   const user = await User.findOne({ matricule: req.body.matricule });
-  if (!user) return res.status(400).send("matricule ou mot de passe invalide");
+  if (!user)
+    return res.status(400).send("matricule ou mot de passe ou role invalide");
 
   //Encode the password
   const validPassword = await bcrypt.compare(req.body.password, user.password);
   if (!validPassword)
-    return res.status(404).send("matricule ou mot de passe invalide.");
+    return res.status(404).send("matricule ou mot de passe ou role invalide.");
+
+  if (req.body.role !== user.role)
+    return res.status(404).send("matricule ou mot de passe ou role invalide.");
 
   //Generate the JsonWebToken
   const jwtPrivateKey = config.get("jwtPrivateKey");

@@ -3,6 +3,7 @@ import { Box, Button, TextField } from "@mui/material";
 import React from "react";
 import { useState } from "react";
 import http from "../../services/httpService";
+import axios from "axios";
 // import { Document, Page, View, Text, PDFViewer } from "@react-pdf/renderer";
 
 function ConsulterAN({ user }) {
@@ -10,19 +11,30 @@ function ConsulterAN({ user }) {
   const [acte, setActe] = useState(null);
   const [personne, setPersonne] = useState(null);
 
+  const token = localStorage.getItem("token");
+  const config = {
+    headers: {
+      Authorization: `${token}`,
+    },
+  };
+
   const searchActeNaissance = async (nin) => {
-    const result = await http.get(`api/actesNaissance/${nin}`);
-    if (result) {
-      getPersonne(result);
-      console.log(result.data);
-      setActe(result.data);
+    const { data } = await http.get(
+      `http://localhost:5000/api/actesNaissance/${nin}`,
+      config
+    );
+    if (data) {
+      getPersonne(data);
+      setActe(data);
     }
   };
 
   const getPersonne = async (result) => {
-    const pers = await http.get(`api/personnes/${result.data.num_personne}`);
-    setPersonne(pers.data);
-    console.log(pers.data);
+    const { data } = await http.get(
+      `api/personnes/${result.num_personne}`,
+      config
+    );
+    setPersonne(data);
   };
 
   return (

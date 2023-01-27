@@ -18,29 +18,36 @@ import {
 } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import http from "../../services/httpService";
 import "./login.css";
 
-const theme = createTheme();
+const Login = () => {
+  const [user, setUser] = useState(null);
+  const theme = createTheme();
 
-function Copyright(props) {
-  return (
-    <Typography
-      variant="body2"
-      color="text.secondary"
-      align="center"
-      {...props}>
-      {"Copyright © "}
-      <Link color="inherit" href="https://www.interieur.gov.dz/index.php/fr/">
-        MICLAT
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-}
+  const Copyright = (props) => {
+    return (
+      <Typography
+        variant="body2"
+        color="text.secondary"
+        align="center"
+        {...props}
+      >
+        {"Copyright © "}
+        <Link color="inherit" href="https://www.interieur.gov.dz/index.php/fr/">
+          MICLAT
+        </Link>{" "}
+        {new Date().getFullYear()}
+        {"."}
+      </Typography>
+    );
+  };
 
-function Login() {
-  const [roleValue, setRoleValue] = useState(null);
+  const loginUser = async () => {
+    const { data: jwt } = await http.post("api/auth", user);
+    localStorage.setItem("token", jwt);
+    if (user) window.location = "/";
+  };
 
   return (
     <ThemeProvider theme={theme}>
@@ -52,12 +59,13 @@ function Login() {
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
-          }}>
+          }}
+        >
           <Avatar sx={{ m: 1, bgcolor: "AppWorkspace" }}>
             <AccountCircleIcon fontSize="large" style={{ color: "#00917C" }} />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign in
+            S'identifier
           </Typography>
           <Box component="form" noValidate sx={{ mt: 1 }}>
             <TextField
@@ -69,6 +77,11 @@ function Login() {
               name="matricule"
               autoComplete="matricule"
               autoFocus
+              onChange={(e) =>
+                setUser((prev) => {
+                  return { ...prev, matricule: e.target.value };
+                })
+              }
             />
             <TextField
               margin="normal"
@@ -79,6 +92,11 @@ function Login() {
               type="password"
               id="password"
               autoComplete="current-password"
+              onChange={(e) =>
+                setUser((prev) => {
+                  return { ...prev, password: e.target.value };
+                })
+              }
             />
             <FormControl fullWidth margin="normal">
               <InputLabel id="demo-simple-select-label">Role</InputLabel>
@@ -86,11 +104,14 @@ function Login() {
                 required
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
-                value={roleValue}
+                value={user?.role || ""}
                 label="Role"
-                onChange={(event) => {
-                  setRoleValue(event.target.value);
-                }}>
+                onChange={(e) =>
+                  setUser((prev) => {
+                    return { ...prev, role: e.target.value };
+                  })
+                }
+              >
                 <MenuItem value={"admin"}>Admin</MenuItem>
                 <MenuItem value={"maire"}>Maire</MenuItem>
                 <MenuItem value={"officier"}>Officier</MenuItem>
@@ -99,25 +120,21 @@ function Login() {
             </FormControl>
             <FormControlLabel
               control={<Checkbox value="remember" color="success" />}
-              label="Remember me"
+              label="Se souvenir de moi"
             />
             <Button
-              type="submit"
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
-              style={{ backgroundColor: "#00917C" }}>
-              Sign In
+              style={{ backgroundColor: "#00917C" }}
+              onClick={() => loginUser()}
+            >
+              Se connecter
             </Button>
             <Grid container>
               <Grid item xs>
                 <Link href="#" variant="body2" underline="none">
-                  Forgot password?
-                </Link>
-              </Grid>
-              <Grid item>
-                <Link href="#" variant="body2" underline="none">
-                  {"Don't have an account? Sign Up"}
+                  Mot de passe oublier?
                 </Link>
               </Grid>
             </Grid>
@@ -127,6 +144,6 @@ function Login() {
       </Container>
     </ThemeProvider>
   );
-}
+};
 
 export default Login;
