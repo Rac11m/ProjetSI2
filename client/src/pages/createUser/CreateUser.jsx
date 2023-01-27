@@ -21,6 +21,13 @@ function CreateUser({ User }) {
   const [roleValue, setRoleValue] = useState(null);
   const [dateValue, setDateValue] = useState(null);
 
+  const token = localStorage.getItem("token");
+  const config = {
+    headers: {
+      Authorization: `${token}`,
+    },
+  };
+
   const userObjet = {
     matricule: "",
     email: "",
@@ -80,7 +87,7 @@ function CreateUser({ User }) {
   const [user, setUser] = useState(userObjet);
 
   const sendNewUser = async (user) => {
-    return await http.post("/api/users", user);
+    return await http.post("/api/users", user, config);
   };
 
   return (

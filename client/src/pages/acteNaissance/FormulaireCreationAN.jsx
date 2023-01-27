@@ -28,8 +28,15 @@ const FormulaireCreation = ({ user }) => {
   const [affiliationValue, setAffiliationValue] = useState(null);
   const [nindeclarant, setNindeclarant] = useState(null);
 
+  const token = localStorage.getItem("token");
+  const config = {
+    headers: {
+      Authorization: `${token}`,
+    },
+  };
+
   let nouveauNeObjet = {
-    num_identifiant_national: "1000000004",
+    num_identifiant_national: "",
     nom: "",
     prenom: "",
     sexe: "",
@@ -44,7 +51,17 @@ const FormulaireCreation = ({ user }) => {
     num_pere: "",
     num_mere: "",
   };
+
   const [nouveauNe, setNouveauNe] = useState(nouveauNeObjet);
+  const getNouveuNeeNIN = async () => {
+    let { data } = await http.get("api/personnes/", config);
+    let { count } = data;
+    count += 10000000000000000;
+    count = String(count);
+    setNouveauNe((prev) => {
+      return { ...prev, num_identifiant_national: count };
+    });
+  };
 
   const DeclarantVide = {
     commune_naissance: "",
@@ -90,11 +107,14 @@ const FormulaireCreation = ({ user }) => {
     acte.num_mere = nouveauNe.num_mere;
     acte.matricule = officierObjet.matricule;
     acte.num_bureau = officierObjet.num_bureau;
-    return await http.post("api/actesNaissance", acte);
+    return await http.post("api/actesNaissance", acte, config);
   };
 
   const sendNouveauNe = async () => {
-    const pere = await http.get(`api/personnes/${nouveauNeObjet.num_pere}`);
+    const pere = await http.get(
+      `api/personnes/${nouveauNeObjet.num_pere}`,
+      config
+    );
     nouveauNeObjet.commune_residence = pere.data.commune_residence;
     setNouveauNe((prevElement) => {
       return {
@@ -104,10 +124,10 @@ const FormulaireCreation = ({ user }) => {
     });
     nouveauNeObjet.pays_naissance = "Algerie";
     nouveauNeObjet.etat_matrimonial = " ";
-    return await http.post("api/personnes", nouveauNeObjet);
+    return await http.post("api/personnes", nouveauNeObjet, config);
   };
   const searchDeclarant = async (nin) => {
-    const result = await http.get(`api/personnes/${nin}`);
+    const result = await http.get(`api/personnes/${nin}`, config);
     setDeclarant(result.data);
     console.log(declarant);
   };
@@ -276,11 +296,20 @@ const FormulaireCreation = ({ user }) => {
                   required
                   fullWidth
                   id="nin_newborn"
-                  label="NIN"
+                  // label="NIN"
                   name="nin"
                   autoComplete="nin"
                   autoFocus
+                  value={nouveauNe.num_identifiant_national}
                 />
+                <Button
+                  type="button"
+                  variant="contained"
+                  style={{ backgroundColor: "#00917C", top: "15px" }}
+                  onClick={() => getNouveuNeeNIN()}
+                >
+                  Generer NIN
+                </Button>
                 <Grid container>
                   <TextField
                     margin="normal"

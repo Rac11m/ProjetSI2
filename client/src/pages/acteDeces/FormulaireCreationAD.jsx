@@ -60,13 +60,20 @@ function FormulaireCreation({ user }) {
 
   const [acte, setActe] = useState(acteDeces);
 
+  const token = localStorage.getItem("token");
+  const config = {
+    headers: {
+      Authorization: `${token}`,
+    },
+  };
+
   const sendActeDeces = async (acte) => {
-    return await http.post("api/actesDeces", acte);
+    return await http.post("api/actesDeces", acte, config);
   };
 
   const searchDeclarant = async (nin) => {
     try {
-      const result = await http.get(`api/personnes/${nin}`);
+      const result = await http.get(`api/personnes/${nin}`, config);
       setDeclarant(result.data);
     } catch (e) {
       console.log(e);
@@ -75,7 +82,7 @@ function FormulaireCreation({ user }) {
 
   const searchDefunt = async (nin) => {
     try {
-      const result = await http.get(`api/personnes/${nin}`);
+      const result = await http.get(`api/personnes/${nin}`, config);
       setDefunt(result.data);
       searchNumActeNaissanceDefunt(nin);
     } catch (e) {
@@ -85,7 +92,7 @@ function FormulaireCreation({ user }) {
 
   const searchNumActeNaissanceDefunt = async (nin) => {
     try {
-      const result = await http.get(`api/actesNaissance/${nin}`);
+      const result = await http.get(`api/actesNaissance/${nin}`, config);
       setActe((prevElement) => {
         return {
           ...prevElement,

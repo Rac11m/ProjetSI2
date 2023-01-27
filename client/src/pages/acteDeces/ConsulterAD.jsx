@@ -13,8 +13,15 @@ function ConsulterAD({ user }) {
     fonctionnaire: null,
   });
 
+  const token = localStorage.getItem("token");
+  const config = {
+    headers: {
+      Authorization: `${token}`,
+    },
+  };
+
   const searchActeDeces = async (nin) => {
-    const result = await http.get(`api/actesDeces/${nin}`);
+    const result = await http.get(`api/actesDeces/${nin}`, config);
     if (result) {
       setActe(result.data);
       getPersonnes(result);
@@ -24,10 +31,17 @@ function ConsulterAD({ user }) {
 
   const getPersonnes = async (result) => {
     const declarant = await http.get(
-      `api/personnes/${result.data.num_declarant}`
+      `api/personnes/${result.data.num_declarant}`,
+      config
     );
-    const defunt = await http.get(`api/personnes/${result.data.num_personne}`);
-    const fonctionnaire = await http.get(`api/users/${result.data.matricule}`);
+    const defunt = await http.get(
+      `api/personnes/${result.data.num_personne}`,
+      config
+    );
+    const fonctionnaire = await http.get(
+      `api/users/${result.data.matricule}`,
+      config
+    );
     // console.log({ declarant, defunt, fonctionnaire });
     setPersonnes({ declarant, defunt, fonctionnaire });
     console.log(personnes);

@@ -47,5 +47,4 @@ function validatePersonne(personne) {
 }
 
 exports.Personne = Personne;
-exports.personneSchema = personneSchema;
 exports.validatePersonne = validatePersonne;

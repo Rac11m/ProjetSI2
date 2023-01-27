@@ -15,6 +15,13 @@ router.get("/:id", auth, async (req, res) => {
   res.send(personne);
 });
 
+// Get Personnes COUNT
+
+router.get("/", auth, async (req, res) => {
+  let count = await Personne.count();
+  res.send({ count });
+});
+
 // POST Personne
 router.post("/", auth, async (req, res) => {
   const result = validatePersonne(req.body);

@@ -15,7 +15,6 @@ import {
 } from "@react-pdf/renderer";
 import moment from "moment";
 
-function ConsulterAN({ user }) {
 const styles = StyleSheet.create({
   body: {
     position: "absolute",
@@ -63,7 +62,7 @@ Font.register({
 
 // );
 
-function ConsulterAN() {
+function ConsulterAN({ user }) {
   let acteObjet = {
     date_declaration: "",
     num_personne: "",
@@ -125,7 +124,7 @@ function ConsulterAN() {
 
   const searchActeNaissance = async (nin) => {
     try {
-      const result = await http.get(`api/actesNaissance/${nin}`);
+      const result = await http.get(`api/actesNaissance/${nin}`, config);
       setActe(result.data);
       getPersonne(result);
       getOfficier(result.data.matricule);
@@ -138,7 +137,7 @@ function ConsulterAN() {
 
   const getNomCommune = async (numbureau) => {
     try {
-      const comm = await http.post(`api/bureauNationnal/${numbureau}`);
+      const comm = await http.post(`api/bureauNationnal/${numbureau}`, config);
       console.log(comm);
       //setCommune(comm.data);
     } catch (e) {
@@ -148,7 +147,7 @@ function ConsulterAN() {
 
   const getDeclarant = async (numDeclarant) => {
     try {
-      const declar = await http.get(`api/personnes/${numDeclarant}`);
+      const declar = await http.get(`api/personnes/${numDeclarant}`, config);
       setDeclarant(declar.data);
     } catch (e) {
       console.log(e);
@@ -157,7 +156,7 @@ function ConsulterAN() {
 
   const getOfficier = async (matricule) => {
     try {
-      const off = await http.get(`api/users/${matricule}`);
+      const off = await http.get(`api/users/${matricule}`, config);
       setOfficier(off.data);
     } catch (e) {
       console.log(e);
@@ -166,7 +165,7 @@ function ConsulterAN() {
 
   const getPere = async (result) => {
     try {
-      const pers = await http.get(`api/personnes/${result}`);
+      const pers = await http.get(`api/personnes/${result}`, config);
       setPere(pers.data);
     } catch (e) {
       console.log(e);
@@ -174,7 +173,7 @@ function ConsulterAN() {
   };
   const getMere = async (result) => {
     try {
-      const pers = await http.get(`api/personnes/${result}`);
+      const pers = await http.get(`api/personnes/${result}`, config);
       setMere(pers.data);
     } catch (e) {
       console.log(e);
@@ -182,7 +181,10 @@ function ConsulterAN() {
   };
   const getPersonne = async (result) => {
     try {
-      const pers = await http.get(`api/personnes/${result.data.num_personne}`);
+      const pers = await http.get(
+        `api/personnes/${result.data.num_personne}`,
+        config
+      );
       setPersonne(pers.data);
       getPere(pers.data.num_pere);
       getMere(pers.data.num_mere);
@@ -195,13 +197,15 @@ function ConsulterAN() {
     <>
       <Container
         className="cadre"
-        sx={{ padding: "10px", paddingBottom: "2%" }}>
+        sx={{ padding: "10px", paddingBottom: "2%" }}
+      >
         <Box
           sx={{
             "& .MuiTextField-root": { m: 1 },
           }}
           noValidate
-          autoComplete="off">
+          autoComplete="off"
+        >
           <TextField
             margin="normal"
             required
@@ -222,7 +226,8 @@ function ConsulterAN() {
             style={{ backgroundColor: "#00917C", top: "15px" }}
             onClick={() => {
               searchActeNaissance(nin);
-            }}>
+            }}
+          >
             Search
           </Button>
         </Box>
@@ -238,7 +243,8 @@ function ConsulterAN() {
             <br />
             <Text style={styles.subtitle}>
               <p
-                style={{ fontSize: "10px", position: "absolute", top: "40px" }}>
+                style={{ fontSize: "10px", position: "absolute", top: "40px" }}
+              >
                 MINISTERE DE l'INTERIEUR
                 <br />
                 DES COLLECTIVITTES LOCALES
@@ -335,7 +341,8 @@ function ConsulterAN() {
             </Text>
             <br />
             <div
-              style={{ position: "absolute", right: "10px", bottom: "10px" }}>
+              style={{ position: "absolute", right: "10px", bottom: "10px" }}
+            >
               <Text style={styles.text}>
                 Fait a : {acte.num_bureau} {commune} le{" "}
                 {moment(acte.date_declaration).format("DD-MM-YYYY")}

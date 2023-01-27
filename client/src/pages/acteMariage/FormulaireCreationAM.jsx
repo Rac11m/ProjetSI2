@@ -52,13 +52,20 @@ function FormulaireCreation({ user }) {
   const [dateValue, setDateValue] = useState(null);
   const [acte, setActe] = useState(acteMariage);
 
+  const token = localStorage.getItem("token");
+  const config = {
+    headers: {
+      Authorization: `${token}`,
+    },
+  };
+
   const sendActeMariage = async (acte) => {
-    return await http.post("api/actesMariage", acte);
+    return await http.post("api/actesMariage", acte, config);
   };
 
   const searchEpoux = async (nin) => {
     try {
-      const result = await http.get(`api/personnes/${nin}`);
+      const result = await http.get(`api/personnes/${nin}`, config);
       setEpoux(result.data);
     } catch (e) {
       console.log(e);
@@ -71,7 +78,7 @@ function FormulaireCreation({ user }) {
 
   const searchEpouse = async (nin) => {
     try {
-      const result = await http.get(`api/personnes/${nin}`);
+      const result = await http.get(`api/personnes/${nin}`, config);
       setEpouse(result.data);
     } catch (e) {
       console.log(e);
@@ -79,7 +86,7 @@ function FormulaireCreation({ user }) {
   };
   const searchTemoin = async (nin, temoinAChoisir) => {
     try {
-      const result = await http.get(`api/personnes/${nin}`);
+      const result = await http.get(`api/personnes/${nin}`, config);
       if (temoinAChoisir === "temoin1") {
         setTemoin1(result.data);
       } else {
