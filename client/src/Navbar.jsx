@@ -22,7 +22,8 @@ function Navbar({ user }) {
   return (
     <AppBar
       position="static"
-      sx={{ backgroundColor: "#00917C", marginBottom: "1.5em" }}>
+      sx={{ backgroundColor: "#00917C", marginBottom: "1.5em" }}
+    >
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Typography
@@ -38,7 +39,8 @@ function Navbar({ user }) {
               letterSpacing: ".3rem",
               color: "inherit",
               textDecoration: "none",
-            }}>
+            }}
+          >
             <HomeIcon />
           </Typography>
 
@@ -48,13 +50,14 @@ function Navbar({ user }) {
               aria-label="account of current user"
               aria-controls="menu-appbar"
               aria-haspopup="true"
-              color="inherit">
+              color="inherit"
+            >
               <MenuIcon />
             </IconButton>
           </Box>
           <Box sx={{ flexGrow: 1 }}>
             <Typography textAlign={"center"}>
-              Bienvenue officier num : {user.matricule}
+              Bienvenue {user.role} num : {user.matricule}
             </Typography>
           </Box>
 
@@ -63,7 +66,8 @@ function Navbar({ user }) {
               type="button"
               variant="contained"
               style={{ backgroundColor: "#bababa", left: "10px" }}
-              onClick={() => logOut()}>
+              onClick={() => logOut()}
+            >
               LOGOUT
             </Button>
           </Box>
