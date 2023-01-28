@@ -42,7 +42,8 @@ const Main = ({ user }) => {
                   key={2}
                   variant="contained"
                   size="large"
-                  sx={{ backgroundColor: "#00917C", height: "68.5px" }}>
+                  sx={{ backgroundColor: "#00917C", height: "68.5px" }}
+                  onClick={() => navigateHook("/updateAN")}>
                   Mise a jour acte de naissance
                 </Button>
               </ButtonGroup>
@@ -68,7 +69,8 @@ const Main = ({ user }) => {
                 <Button
                   variant="contained"
                   size="large"
-                  sx={{ backgroundColor: "#00917C", height: "68.5px" }}>
+                  sx={{ backgroundColor: "#00917C", height: "68.5px" }}
+                  onClick={() => navigateHook("/updateAM")}>
                   Mise a jour acte de mariage
                 </Button>{" "}
               </ButtonGroup>
@@ -94,7 +96,8 @@ const Main = ({ user }) => {
                 <Button
                   variant="contained"
                   size="large"
-                  sx={{ backgroundColor: "#00917C", height: "68.5px" }}>
+                  sx={{ backgroundColor: "#00917C", height: "68.5px" }}
+                  onClick={() => navigateHook("/updateAD")}>
                   Mise a jour acte de dÉcÈs
                 </Button>{" "}
               </ButtonGroup>

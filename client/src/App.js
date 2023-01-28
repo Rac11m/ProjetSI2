@@ -11,6 +11,9 @@ import jwtDecode from "jwt-decode";
 import ConsulterAN from "./pages/acteNaissance/ConsulterAN";
 import ConsulterAM from "./pages/acteMariage/ConsulterAM";
 import ConsulterAD from "./pages/acteDeces/ConsulterAD";
+import UpdateAN from "./pages/acteNaissance/UpdateAN";
+import UpdateAM from "./pages/acteMariage/UpdateAM";
+import UpdateAD from "./pages/acteDeces/UpdateAD";
 import NotFound from "./pages/notFound/NotFound";
 
 function App() {
@@ -33,6 +36,9 @@ function App() {
         <Route path="/ConsulterAN" element={<ConsulterAN user={user} />} />
         <Route path="/ConsulterAM" element={<ConsulterAM user={user} />} />
         <Route path="/ConsulterAD" element={<ConsulterAD user={user} />} />
+        <Route path="/updateAN" element={<UpdateAN user={user} />} />
+        <Route path="/updateAM" element={<UpdateAM user={user} />} />
+        <Route path="/updateAD" element={<UpdateAD user={user} />} />
         <Route
           path="/creationactenaissance"
           element={<FormulaireCreationAN user={user} />}

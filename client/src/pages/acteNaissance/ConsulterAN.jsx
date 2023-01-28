@@ -419,8 +419,7 @@ function ConsulterAN({ user }) {
                 </Text>
                 <br />
                 <Text style={styles.text}>
-                  L'officier de l'etat civil, {officier.nom} {"  "}{" "}
-                  {officier.prenom}
+                  L'officier de l'etat civil, {usr.nom} {"  "} {usr.prenom}
                 </Text>
                 <br />
               </div>
