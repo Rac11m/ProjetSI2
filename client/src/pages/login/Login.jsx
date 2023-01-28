@@ -53,9 +53,7 @@ const Login = () => {
       localStorage.setItem("token", jwt);
       window.location = "/";
     } catch (ex) {
-      if (ex.response && ex.response.status === 400) {
-        setError(ex.response.data);
-      }
+      setError(ex.response.data);
     }
   };
 

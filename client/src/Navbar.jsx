@@ -57,7 +57,7 @@ function Navbar({ user }) {
           </Box>
           <Box sx={{ flexGrow: 1 }}>
             <Typography textAlign={"center"}>
-              Bienvenue {user.role} num : {user.matricule}
+              Bienvenue {user.role} - num : {user.matricule}
             </Typography>
           </Box>
 

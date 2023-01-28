@@ -133,7 +133,7 @@ function CreateUser({ User }) {
     <>
       {User && (
         <>
-          <Navbar user={User} />
+          <Navbar user={user} />
           <Container
             component="form"
             className="cadre"
