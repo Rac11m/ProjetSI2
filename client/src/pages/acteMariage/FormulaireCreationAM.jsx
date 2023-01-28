@@ -57,6 +57,10 @@ function FormulaireCreation({ user }) {
   const [dateValue, setDateValue] = useState(null);
   const [acte, setActe] = useState(acteMariage);
   const [responseAM, setresponseAM] = useState(null);
+  const [openEpoux, setOpenEpoux] = useState(null);
+  const [openEpouse, setOpenEpouse] = useState(null);
+  const [openTemoin1, setOpenTemoin1] = useState(null);
+  const [openTemoin2, setOpenTemoin2] = useState(null);
 
   const sendActeMariage = async (acte) => {
     try {
@@ -80,6 +84,7 @@ function FormulaireCreation({ user }) {
     try {
       const result = await http.get(`api/personnes/${nin}`, config);
       setEpoux(result.data);
+      setOpenEpoux(true);
     } catch (e) {
       console.log(e);
     }
@@ -113,6 +118,7 @@ function FormulaireCreation({ user }) {
     try {
       const result = await http.get(`api/personnes/${nin}`, config);
       setEpouse(result.data);
+      setOpenEpouse(true);
     } catch (e) {
       console.log(e);
     }
@@ -122,8 +128,10 @@ function FormulaireCreation({ user }) {
       const result = await http.get(`api/personnes/${nin}`, config);
       if (temoinAChoisir === "temoin1") {
         setTemoin1(result.data);
+        setOpenTemoin1(true);
       } else {
         setTemoin2(result.data);
+        setOpenTemoin2(true);
       }
     } catch (e) {
       console.log(e);
@@ -137,18 +145,21 @@ function FormulaireCreation({ user }) {
           <Container
             component="form"
             className="cadre"
-            sx={{ padding: "10px" }}>
+            sx={{ padding: "10px" }}
+          >
             <Box
               sx={{
                 "& .MuiTextField-root": { m: 1, width: "25ch" },
               }}
               noValidate
-              autoComplete="off">
+              autoComplete="off"
+            >
               <div className="partie-mariage">
                 <Typography
                   variant="h5"
                   gutterBottom
-                  style={{ marginTop: "5px" }}>
+                  style={{ marginTop: "5px" }}
+                >
                   Partie Mariage
                 </Typography>
                 <Grid container>
@@ -199,7 +210,8 @@ function FormulaireCreation({ user }) {
                 <Typography
                   variant="h5"
                   gutterBottom
-                  style={{ marginTop: "5px" }}>
+                  style={{ marginTop: "5px" }}
+                >
                   Partie Mariées
                 </Typography>
                 <Grid container id={"Partie_epoux"}>
@@ -226,83 +238,92 @@ function FormulaireCreation({ user }) {
                   <Button
                     type="button"
                     variant="contained"
-                    style={{ backgroundColor: "#00917C", top: "1px" }}
-                    onClick={() => searchEpoux(acte.num_homme)}>
+                    style={{
+                      backgroundColor: "#00917C",
+                      top: "8px",
+                      height: 55,
+                    }}
+                    onClick={() => searchEpoux(acte.num_homme)}
+                  >
                     Search
                   </Button>
-                  <Grid>
-                    <TextField
-                      margin="normal"
-                      readOnly
-                      fullWidth
-                      id="nom_epoux"
-                      label="Nom époux"
-                      name="Nom_époux"
-                      autoFocus
-                      value={epoux.nom}
-                    />
-                    <TextField
-                      margin="normal"
-                      readOnly
-                      required
-                      fullWidth
-                      id="prenom_epoux"
-                      label="Prenom époux"
-                      name="Prenom_époux"
-                      autoFocus
-                      value={epoux.prenom}
-                    />
-                    <TextField
-                      margin="normal"
-                      required
-                      readOnly
-                      fullWidth
-                      id="profession_epoux"
-                      label="Profession"
-                      value={epoux.profession}
-                    />
-                    <TextField
-                      margin="normal"
-                      required
-                      readOnly
-                      fullWidth
-                      id="date_naiss_epoux"
-                      label="Date Naissance"
-                      value={moment(epoux.date_naissance).format("DD-MM-YYYY")}
-                    />
-                    <TextField
-                      margin="normal"
-                      readOnly
-                      fullWidth
-                      id="commune_naiss_epoux"
-                      label="Commune Naissance"
-                      value={epoux.commune_naissance}
-                    />
-                    <TextField
-                      margin="normal"
-                      readOnly
-                      fullWidth
-                      id="wilaya_naiss_epoux"
-                      label="Wilaya Naissance"
-                      value={epoux.wilaya_naissance}
-                    />
-                    <TextField
-                      margin="normal"
-                      readOnly
-                      fullWidth
-                      id="info_pere_epoux"
-                      label="Nom Prenom Pere"
-                      value={epoux.num_pere}
-                    />
-                    <TextField
-                      margin="normal"
-                      readOnly
-                      fullWidth
-                      id="info_mere_epoux"
-                      label="Nom Prenom Mere"
-                      value={epoux.num_mere}
-                    />
-                  </Grid>
+                  {openEpoux && (
+                    <Grid>
+                      <TextField
+                        margin="normal"
+                        readOnly
+                        fullWidth
+                        id="nom_epoux"
+                        label="Nom époux"
+                        name="Nom_époux"
+                        autoFocus
+                        value={epoux.nom}
+                      />
+                      <TextField
+                        margin="normal"
+                        readOnly
+                        required
+                        fullWidth
+                        id="prenom_epoux"
+                        label="Prenom époux"
+                        name="Prenom_époux"
+                        autoFocus
+                        value={epoux.prenom}
+                      />
+                      <TextField
+                        margin="normal"
+                        required
+                        readOnly
+                        fullWidth
+                        id="profession_epoux"
+                        label="Profession"
+                        value={epoux.profession}
+                      />
+                      <TextField
+                        margin="normal"
+                        required
+                        readOnly
+                        fullWidth
+                        id="date_naiss_epoux"
+                        label="Date Naissance"
+                        value={moment(epoux.date_naissance).format(
+                          "DD-MM-YYYY"
+                        )}
+                      />
+                      <TextField
+                        margin="normal"
+                        readOnly
+                        fullWidth
+                        id="commune_naiss_epoux"
+                        label="Commune Naissance"
+                        value={epoux.commune_naissance}
+                      />
+                      <TextField
+                        margin="normal"
+                        readOnly
+                        fullWidth
+                        id="wilaya_naiss_epoux"
+                        label="Wilaya Naissance"
+                        value={epoux.wilaya_naissance}
+                      />
+                      <TextField
+                        margin="normal"
+                        readOnly
+                        fullWidth
+                        id="info_pere_epoux"
+                        label="Nom Prenom Pere"
+                        value={epoux.num_pere}
+                      />
+                      <TextField
+                        margin="normal"
+                        readOnly
+                        fullWidth
+                        id="info_mere_epoux"
+                        label="Nom Prenom Mere"
+                        value={epoux.num_mere}
+                      />
+                    </Grid>
+                  )}
                 </Grid>
                 <Grid container id={"Partie Epouse"}>
                   <TextField
@@ -328,76 +349,85 @@ function FormulaireCreation({ user }) {
                   <Button
                     type="button"
                     variant="contained"
-                    style={{ backgroundColor: "#00917C", top: "1px" }}
-                    onClick={() => searchEpouse(acte.num_femme)}>
+                    style={{
+                      backgroundColor: "#00917C",
+                      top: "8px",
+                      height: 55,
+                    }}
+                    onClick={() => searchEpouse(acte.num_femme)}
+                  >
                     Search
                   </Button>
-                  <Grid>
-                    <TextField
-                      margin="normal"
-                      readOnly
-                      fullWidth
-                      id="nom_epouse"
-                      label="Nom épouse"
-                      value={epouse.nom}
-                    />
-                    <TextField
-                      margin="normal"
-                      readOnly
-                      fullWidth
-                      id="prenom_epouse"
-                      label="Prenom épouse"
-                      value={epouse.prenom}
-                    />
-                    <TextField
-                      margin="normal"
-                      readOnly
-                      fullWidth
-                      id="profession_epouse"
-                      label="Profession"
-                      value={epouse.profession}
-                    />
-                    <TextField
-                      margin="normal"
-                      required
-                      fullWidth
-                      id="date_naiss_epouse"
-                      label="Date Naissance"
-                      value={moment(epouse.date_naissance).format("DD-MM-YYYY")}
-                    />
-                    <TextField
-                      margin="normal"
-                      readOnly
-                      fullWidth
-                      id="comm_naiss_epouse"
-                      label="Commune Naissance"
-                      value={epouse.commune_naissance}
-                    />
-                    <TextField
-                      margin="normal"
-                      readOnly
-                      fullWidth
-                      id="wil_naiss_epouse"
-                      label="Wilaya Naissance"
-                      value={epouse.wilaya_naissance}
-                    />
-                    <TextField
-                      margin="normal"
-                      readOnly
-                      fullWidth
-                      id="pere_epouse"
-                      label="Nom Prenom Pere"
-                      value={epouse.num_pere}
-                    />
-                    <TextField
-                      margin="normal"
-                      readOnly
-                      fullWidth
-                      id="mere_epouse"
-                      label="Nom Prenom Mere"
-                      value={epouse.num_mere}
-                    />
-                  </Grid>
+                  {openEpouse && (
+                    <Grid>
+                      <TextField
+                        margin="normal"
+                        readOnly
+                        fullWidth
+                        id="nom_epouse"
+                        label="Nom épouse"
+                        value={epouse.nom}
+                      />
+                      <TextField
+                        margin="normal"
+                        readOnly
+                        fullWidth
+                        id="prenom_epouse"
+                        label="Prenom épouse"
+                        value={epouse.prenom}
+                      />
+                      <TextField
+                        margin="normal"
+                        readOnly
+                        fullWidth
+                        id="profession_epouse"
+                        label="Profession"
+                        value={epouse.profession}
+                      />
+                      <TextField
+                        margin="normal"
+                        required
+                        fullWidth
+                        id="date_naiss_epouse"
+                        label="Date Naissance"
+                        value={moment(epouse.date_naissance).format(
+                          "DD-MM-YYYY"
+                        )}
+                      />
+                      <TextField
+                        margin="normal"
+                        readOnly
+                        fullWidth
+                        id="comm_naiss_epouse"
+                        label="Commune Naissance"
+                        value={epouse.commune_naissance}
+                      />
+                      <TextField
+                        margin="normal"
+                        readOnly
+                        fullWidth
+                        id="wil_naiss_epouse"
+                        label="Wilaya Naissance"
+                        value={epouse.wilaya_naissance}
+                      />
+                      <TextField
+                        margin="normal"
+                        readOnly
+                        fullWidth
+                        id="pere_epouse"
+                        label="Nom Prenom Pere"
+                        value={epouse.num_pere}
+                      />
+                      <TextField
+                        margin="normal"
+                        readOnly
+                        fullWidth
+                        id="mere_epouse"
+                        label="Nom Prenom Mere"
+                        value={epouse.num_mere}
+                      />
+                    </Grid>
+                  )}
                 </Grid>
                 <hr />
               </div>
@@ -406,7 +436,8 @@ function FormulaireCreation({ user }) {
                 <Typography
                   variant="h5"
                   gutterBottom
-                  style={{ marginTop: "5px" }}>
+                  style={{ marginTop: "5px" }}
+                >
                   Partie Témoins
                 </Typography>
                 <Grid container id={"temoin1"}>
@@ -438,25 +469,30 @@ function FormulaireCreation({ user }) {
                       top: "10px",
                       height: "50px",
                     }}
-                    onClick={() => searchTemoin(acte.num_temoin1, "temoin1")}>
+                    onClick={() => searchTemoin(acte.num_temoin1, "temoin1")}
+                  >
                     Search
                   </Button>
-                  <TextField
-                    margin="normal"
-                    readOnly
-                    fullWidth
-                    id="nom_temoin1"
-                    label="Nom"
-                    value={temoin1.nom}
-                  />
-                  <TextField
-                    margin="normal"
-                    readOnly
-                    fullWidth
-                    id="prenom_temoin2"
-                    label="Prenom"
-                    value={temoin1.prenom}
-                  />
+                  {openTemoin1 && (
+                    <>
+                      <TextField
+                        margin="normal"
+                        readOnly
+                        fullWidth
+                        id="nom_temoin1"
+                        label="Nom"
+                        value={temoin1.nom}
+                      />
+                      <TextField
+                        margin="normal"
+                        readOnly
+                        fullWidth
+                        id="prenom_temoin2"
+                        label="Prenom"
+                        value={temoin1.prenom}
+                      />
+                    </>
+                  )}
                 </Grid>
                 <Grid container id={"temoin2"}>
                   <TextField
@@ -487,25 +523,30 @@ function FormulaireCreation({ user }) {
                       top: "10px",
                       height: "50px",
                     }}
-                    onClick={() => searchTemoin(acte.num_temoin2, "temoin2")}>
+                    onClick={() => searchTemoin(acte.num_temoin2, "temoin2")}
+                  >
                     Search
                   </Button>
-                  <TextField
-                    margin="normal"
-                    readOnly
-                    fullWidth
-                    id="nom_temoin2"
-                    label="Nom"
-                    value={temoin2.nom}
-                  />
-                  <TextField
-                    margin="normal"
-                    readOnly
-                    fullWidth
-                    id="prenom_temoin2"
-                    label="Prenom"
-                    value={temoin2.prenom}
-                  />
+                  {openTemoin2 && (
+                    <>
+                      <TextField
+                        margin="normal"
+                        readOnly
+                        fullWidth
+                        id="nom_temoin2"
+                        label="Nom"
+                        value={temoin2.nom}
+                      />
+                      <TextField
+                        margin="normal"
+                        readOnly
+                        fullWidth
+                        id="prenom_temoin2"
+                        label="Prenom"
+                        value={temoin2.prenom}
+                      />
+                    </>
+                  )}
                 </Grid>
                 <hr />
               </div>
@@ -514,7 +555,8 @@ function FormulaireCreation({ user }) {
                 <Typography
                   variant="h5"
                   gutterBottom
-                  style={{ marginTop: "5px" }}>
+                  style={{ marginTop: "5px" }}
+                >
                   Partie Administration
                 </Typography>
                 <TextField
@@ -547,7 +589,8 @@ function FormulaireCreation({ user }) {
                       float: "right",
                       right: "10px",
                     }}
-                    onClick={() => sendActeMariage(acte)}>
+                    onClick={() => sendActeMariage(acte)}
+                  >
                     Create
                   </Button>
                 </Box>

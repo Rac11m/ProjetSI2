@@ -32,6 +32,9 @@ const FormulaireCreation = ({ user }) => {
   const [nindeclarant, setNindeclarant] = useState(null);
   const [responseAN, setResponseAN] = useState(null);
   const [responseNouveaNe, setResponseNouveauNe] = useState(null);
+  const [openDeclarant, setOpenDeclarant] = useState(null);
+  const [openPere, setOpenPere] = useState(null);
+  const [openMere, setOpenMere] = useState(null);
 
   const parent = {
     num_identifiant_national: "",
@@ -90,7 +93,7 @@ const FormulaireCreation = ({ user }) => {
   const DeclarantVide = {
     commune_naissance: "",
     commune_residence: "",
-    date_naissance: "",
+    date_naissance: " ",
     etat_matrimonial: "",
     heure_naissance: "",
     lieu_naissance: "",
@@ -162,6 +165,7 @@ const FormulaireCreation = ({ user }) => {
   const searchDeclarant = async (nin) => {
     const result = await http.get(`api/personnes/${nin}`, config);
     setDeclarant(result.data);
+    setOpenDeclarant(true);
     console.log(declarant);
   };
   const searchParent = async (nin, affil) => {
@@ -171,10 +175,12 @@ const FormulaireCreation = ({ user }) => {
         setPere(result.data);
         searchParent(result.data.num_pere, "gperep");
         searchParent(result.data.num_mere, "gmerep");
+        setOpenPere(true);
       } else if (affil === "mere") {
         setMere(result.data);
         searchParent(result.data.num_pere, "gperem");
         searchParent(result.data.num_mere, "gmerem");
+        setOpenMere(true);
       } else if (affil === "gperep") {
         setGPerep(result.data);
       } else if (affil === "gmerep") {
@@ -197,18 +203,21 @@ const FormulaireCreation = ({ user }) => {
           <Container
             component="form"
             className="cadre"
-            sx={{ padding: "10px" }}>
+            sx={{ padding: "10px" }}
+          >
             <Box
               sx={{
                 "& .MuiTextField-root": { m: 1, width: "25ch" },
               }}
               noValidate
-              autoComplete="off">
+              autoComplete="off"
+            >
               <div className="partie-declarant">
                 <Typography
                   variant="h5"
                   gutterBottom
-                  style={{ marginTop: "5px" }}>
+                  style={{ marginTop: "5px" }}
+                >
                   Partie Declarant
                 </Typography>
                 <TextField
@@ -229,110 +238,124 @@ const FormulaireCreation = ({ user }) => {
                   type="button"
                   variant="contained"
                   style={{ backgroundColor: "#00917C", top: "15px" }}
-                  onClick={() => searchDeclarant(nindeclarant)}>
+                  onClick={() => searchDeclarant(nindeclarant)}
+                >
                   Search
                 </Button>
                 {/* </Box> */}
-                <Grid container>
-                  <TextField
-                    margin="normal"
-                    fullWidth
-                    readOnly
-                    id="nom_declarant"
-                    value={declarant.nom}
-                  />
-                  <TextField
-                    margin="normal"
-                    fullWidth
-                    readOnly
-                    id="prenom_declarant"
-                    //label="Prenom"
-                    value={declarant.prenom}
-                  />
-                  <TextField
-                    margin="normal"
-                    fullWidth
-                    readOnly
-                    id="sexe_declarant"
-                    //label="Sexe"
-                    value={declarant.sexe}
-                  />
-                  <TextField
-                    margin="normal"
-                    fullWidth
-                    readOnly
-                    id="etatM_declarant"
-                    //label="état matrimonial"
-                    value={declarant.etat_matrimonial}
-                  />
-                  <TextField
-                    margin="normal"
-                    fullWidth
-                    readOnly
-                    id="profession_declarant"
-                    //label="Profession"
-                    value={declarant.profession}
-                  />
-                  <TextField
-                    margin="normal"
-                    fullWidth
-                    readOnly
-                    id="dateN_declarant"
-                    //label="Date Naissance"
-                    value={moment(declarant.date_naissance).format(
-                      "DD-MM-YYYY"
-                    )}
-                  />
-                  <TextField
-                    margin="normal"
-                    fullWidth
-                    readOnly
-                    id="lieuN_declarant"
-                    // label="Lieu Naissance"
-                    value={declarant.lieu_naissance}
-                  />
-                  <TextField
-                    margin="normal"
-                    fullWidth
-                    readOnly
-                    id="communeN_declarant"
-                    //label="Commune Naissance"
-                    value={declarant.commune_naissance}
-                  />
-                  <TextField
-                    margin="normal"
-                    fullWidth
-                    readOnly
-                    id="wilayaN_declarant"
-                    // label="Wilaya Naissance"
-                    value={declarant.wilaya_naissance}
-                  />
-                  <TextField
-                    margin="normal"
-                    fullWidth
-                    readOnly
-                    id="CommuneR_declarant"
-                    // label="Commune Résidence"
-                    value={declarant.commune_residence}
-                  />
-                  <FormControl sx={{ m: 1, width: 260 }}>
-                    <InputLabel id="affiliation_label">
-                      Affiliation avec le nouveau né
-                    </InputLabel>
-                    <Select
-                      required
-                      labelId="affiliation_label"
-                      id="affliation_declarant"
-                      value={affiliationValue || ""}
-                      label="affiliation avec le nouveau né"
-                      onChange={(event) => {
-                        setAffiliationValue(event.target.value);
-                      }}>
-                      <MenuItem value={"parent"}>Parent</MenuItem>
-                      <MenuItem value={"tuteur"}>Tuteur</MenuItem>
-                    </Select>
-                  </FormControl>
-                </Grid>
+                {openDeclarant && (
+                  <Grid container>
+                    <TextField
+                      margin="normal"
+                      fullWidth
+                      readOnly
+                      disabled={true}
+                      id="nom_declarant"
+                      value={declarant.nom}
+                    />
+                    <TextField
+                      margin="normal"
+                      fullWidth
+                      readOnly
+                      disabled={true}
+                      id="prenom_declarant"
+                      //label="Prenom"
+                      value={declarant.prenom}
+                    />
+                    <TextField
+                      margin="normal"
+                      fullWidth
+                      readOnly
+                      disabled={true}
+                      id="sexe_declarant"
+                      //label="Sexe"
+                      value={declarant.sexe}
+                    />
+                    <TextField
+                      margin="normal"
+                      fullWidth
+                      readOnly
+                      disabled={true}
+                      id="etatM_declarant"
+                      //label="état matrimonial"
+                      value={declarant.etat_matrimonial}
+                    />
+                    <TextField
+                      margin="normal"
+                      fullWidth
+                      readOnly
+                      disabled={true}
+                      id="profession_declarant"
+                      //label="Profession"
+                      value={declarant.profession}
+                    />
+                    <TextField
+                      margin="normal"
+                      fullWidth
+                      readOnly
+                      disabled={true}
+                      id="dateN_declarant"
+                      // label="Date Naissance"
+                      value={moment(declarant.date_naissance).format(
+                        "DD-MM-YYYY"
+                      )}
+                    />
+                    <TextField
+                      margin="normal"
+                      fullWidth
+                      readOnly
+                      disabled={true}
+                      id="lieuN_declarant"
+                      // label="Lieu Naissance"
+                      value={declarant.lieu_naissance}
+                    />
+                    <TextField
+                      margin="normal"
+                      fullWidth
+                      readOnly
+                      disabled={true}
+                      id="communeN_declarant"
+                      //label="Commune Naissance"
+                      value={declarant.commune_naissance}
+                    />
+                    <TextField
+                      margin="normal"
+                      fullWidth
+                      readOnly
+                      disabled={true}
+                      id="wilayaN_declarant"
+                      // label="Wilaya Naissance"
+                      value={declarant.wilaya_naissance}
+                    />
+                    <TextField
+                      margin="normal"
+                      fullWidth
+                      readOnly
+                      disabled={true}
+                      id="CommuneR_declarant"
+                      // label="Commune Résidence"
+                      value={declarant.commune_residence}
+                    />
+                    <FormControl sx={{ m: 1, width: 260 }}>
+                      <InputLabel id="affiliation_label">
+                        Affiliation avec le nouveau né
+                      </InputLabel>
+                      <Select
+                        required
+                        labelId="affiliation_label"
+                        id="affliation_declarant"
+                        value={affiliationValue || ""}
+                        label="affiliation avec le nouveau né"
+                        onChange={(event) => {
+                          setAffiliationValue(event.target.value);
+                        }}
+                      >
+                        <MenuItem value={"parent"}>Parent</MenuItem>
+                        <MenuItem value={"tuteur"}>Tuteur</MenuItem>
+                      </Select>
+                    </FormControl>
+                  </Grid>
+                )}
 
                 <hr />
               </div>
@@ -341,7 +364,8 @@ const FormulaireCreation = ({ user }) => {
                 <Typography
                   variant="h5"
                   gutterBottom
-                  style={{ marginTop: "5px" }}>
+                  style={{ marginTop: "5px" }}
+                >
                   Partie Nouveau né
                 </Typography>
                 <TextField
@@ -360,169 +384,173 @@ const FormulaireCreation = ({ user }) => {
                   type="button"
                   variant="contained"
                   style={{ backgroundColor: "#00917C", top: "15px" }}
-                  onClick={() => getNouveuNeeNIN()}>
+                  onClick={() => getNouveuNeeNIN()}
+                >
                   Generer NIN
                 </Button>
                 <Grid container>
-                  <TextField
-                    margin="normal"
-                    required
-                    fullWidth
-                    id="nom_newborn"
-                    label="Nom"
-                    name="Nom"
-                    onChange={(e) => {
-                      nouveauNeObjet.nom = e.target.value;
-                      setNouveauNe((pervUser) => {
-                        return {
-                          ...pervUser,
-                          nom: nouveauNeObjet.nom,
-                        };
-                      });
-                      console.log(nouveauNeObjet.nom);
-                    }}
-                    autoFocus
-                  />
-                  <TextField
-                    margin="normal"
-                    required
-                    fullWidth
-                    id="prenom_newborn"
-                    label="Prenom"
-                    name="Prenom"
-                    autoFocus
-                    onChange={(e) => {
-                      nouveauNeObjet.prenom = e.target.value;
-                      setNouveauNe((pervUser) => {
-                        return {
-                          ...pervUser,
-                          prenom: nouveauNeObjet.prenom,
-                        };
-                      });
-                      console.log(nouveauNeObjet.prenom);
-                    }}
-                  />
-                  <FormControl sx={{ m: 1, width: 200 }}>
-                    <InputLabel id="sexe_label">Sexe</InputLabel>
-                    <Select
+                  <Grid>
+                    <TextField
+                      margin="normal"
                       required
-                      labelId="sexe_label"
-                      id="sexe_newborn"
-                      value={sexeValue || ""}
-                      label="Sexe"
+                      fullWidth
+                      id="nom_newborn"
+                      label="Nom"
+                      name="Nom"
                       onChange={(e) => {
-                        setSexeValue(e.target.value);
-                        nouveauNeObjet.sexe = e.target.value;
+                        nouveauNeObjet.nom = e.target.value;
                         setNouveauNe((pervUser) => {
                           return {
                             ...pervUser,
-                            sexe: nouveauNeObjet.sexe,
+                            nom: nouveauNeObjet.nom,
                           };
                         });
-                        console.log(nouveauNeObjet.sexe);
-                      }}>
-                      <MenuItem value={"homme"}>Homme</MenuItem>
-                      <MenuItem value={"femme"}>Femme</MenuItem>
-                    </Select>
-                  </FormControl>
+                        console.log(nouveauNeObjet.nom);
+                      }}
+                      autoFocus
+                    />
+                    <TextField
+                      margin="normal"
+                      required
+                      fullWidth
+                      id="prenom_newborn"
+                      label="Prenom"
+                      name="Prenom"
+                      autoFocus
+                      onChange={(e) => {
+                        nouveauNeObjet.prenom = e.target.value;
+                        setNouveauNe((pervUser) => {
+                          return {
+                            ...pervUser,
+                            prenom: nouveauNeObjet.prenom,
+                          };
+                        });
+                        console.log(nouveauNeObjet.prenom);
+                      }}
+                    />
+                    <FormControl sx={{ m: 1, width: 200 }}>
+                      <InputLabel id="sexe_label">Sexe</InputLabel>
+                      <Select
+                        required
+                        labelId="sexe_label"
+                        id="sexe_newborn"
+                        value={sexeValue || ""}
+                        label="Sexe"
+                        onChange={(e) => {
+                          setSexeValue(e.target.value);
+                          nouveauNeObjet.sexe = e.target.value;
+                          setNouveauNe((pervUser) => {
+                            return {
+                              ...pervUser,
+                              sexe: nouveauNeObjet.sexe,
+                            };
+                          });
+                          console.log(nouveauNeObjet.sexe);
+                        }}
+                      >
+                        <MenuItem value={"homme"}>Homme</MenuItem>
+                        <MenuItem value={"femme"}>Femme</MenuItem>
+                      </Select>
+                    </FormControl>
 
-                  <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DatePicker
-                      label="Date Naissance"
-                      value={dateValue || undefined}
-                      onChange={(date) => {
-                        setDateValue(date);
-                        nouveauNeObjet.date_naissance = moment(date.$d).format(
-                          "YYYY-MM-DD"
-                        );
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                      <DatePicker
+                        label="Date Naissance"
+                        value={dateValue}
+                        onChange={(date) => {
+                          setDateValue(date);
+                          nouveauNeObjet.date_naissance = moment(
+                            date.$d
+                          ).format("YYYY-MM-DD");
+                          setNouveauNe((pervUser) => {
+                            return {
+                              ...pervUser,
+                              date_naissance: nouveauNeObjet.date_naissance,
+                            };
+                          });
+                          console.log(nouveauNeObjet.date_naissance);
+                        }}
+                        renderInput={(params) => <TextField {...params} />}
+                      />
+                    </LocalizationProvider>
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                      <TimePicker
+                        label="Heure Naissance"
+                        value={timeValue}
+                        onChange={(time) => {
+                          setTimeValue(time);
+                          nouveauNeObjet.heure_naissance = moment(
+                            time.$d
+                          ).format("h:mm");
+                          setNouveauNe((pervUser) => {
+                            return {
+                              ...pervUser,
+                              heure_naissance: nouveauNeObjet.heure_naissance,
+                            };
+                          });
+                          console.log(nouveauNeObjet.heure_naissance);
+                        }}
+                        renderInput={(params) => <TextField {...params} />}
+                      />
+                    </LocalizationProvider>
+                    <TextField
+                      margin="normal"
+                      required
+                      fullWidth
+                      id="outlined-disabled"
+                      label="Lieu Naissance"
+                      name="Lieu Naissance"
+                      autoFocus
+                      onChange={(e) => {
+                        nouveauNeObjet.lieu_naissance = e.target.value;
                         setNouveauNe((pervUser) => {
                           return {
                             ...pervUser,
-                            date_naissance: nouveauNeObjet.date_naissance,
+                            lieu_naissance: nouveauNeObjet.lieu_naissance,
                           };
                         });
-                        console.log(nouveauNeObjet.date_naissance);
+                        console.log(nouveauNeObjet.lieu_naissance);
                       }}
-                      renderInput={(params) => <TextField {...params} />}
                     />
-                  </LocalizationProvider>
-                  <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <TimePicker
-                      label="Heure Naissance"
-                      value={timeValue || undefined}
-                      onChange={(time) => {
-                        setTimeValue(time);
-                        nouveauNeObjet.heure_naissance = moment(time.$d).format(
-                          "h:mm"
-                        );
+                    <TextField
+                      margin="normal"
+                      required
+                      fullWidth
+                      id="outlined-disabled"
+                      label="Commune Naissance"
+                      name="Commune Naissance"
+                      autoFocus
+                      onChange={(e) => {
+                        nouveauNeObjet.commune_naissance = e.target.value;
                         setNouveauNe((pervUser) => {
                           return {
                             ...pervUser,
-                            heure_naissance: nouveauNeObjet.heure_naissance,
+                            commune_naissance: nouveauNeObjet.commune_naissance,
                           };
                         });
-                        console.log(nouveauNeObjet.heure_naissance);
+                        console.log(nouveauNeObjet.commune_naissance);
                       }}
-                      renderInput={(params) => <TextField {...params} />}
                     />
-                  </LocalizationProvider>
-                  <TextField
-                    margin="normal"
-                    required
-                    fullWidth
-                    id="outlined-disabled"
-                    label="Lieu Naissance"
-                    name="Lieu Naissance"
-                    autoFocus
-                    onChange={(e) => {
-                      nouveauNeObjet.lieu_naissance = e.target.value;
-                      setNouveauNe((pervUser) => {
-                        return {
-                          ...pervUser,
-                          lieu_naissance: nouveauNeObjet.lieu_naissance,
-                        };
-                      });
-                      console.log(nouveauNeObjet.lieu_naissance);
-                    }}
-                  />
-                  <TextField
-                    margin="normal"
-                    required
-                    fullWidth
-                    id="outlined-disabled"
-                    label="Commune Naissance"
-                    name="Commune Naissance"
-                    autoFocus
-                    onChange={(e) => {
-                      nouveauNeObjet.commune_naissance = e.target.value;
-                      setNouveauNe((pervUser) => {
-                        return {
-                          ...pervUser,
-                          commune_naissance: nouveauNeObjet.commune_naissance,
-                        };
-                      });
-                      console.log(nouveauNeObjet.commune_naissance);
-                    }}
-                  />
-                  <TextField
-                    margin="normal"
-                    required
-                    fullWidth
-                    id="outlined-disabled"
-                    label="Wilaya Naissance"
-                    name="Wilaya Naissance"
-                    autoFocus
-                    onChange={(e) => {
-                      nouveauNeObjet.wilaya_naissance = e.target.value;
-                      setNouveauNe((pervUser) => {
-                        return {
-                          ...pervUser,
-                          wilaya_naissance: nouveauNeObjet.wilaya_naissance,
-                        };
-                      });
-                      console.log(nouveauNeObjet.wilaya_naissance);
-                    }}
-                  />
+                    <TextField
+                      margin="normal"
+                      required
+                      fullWidth
+                      id="outlined-disabled"
+                      label="Wilaya Naissance"
+                      name="Wilaya Naissance"
+                      autoFocus
+                      onChange={(e) => {
+                        nouveauNeObjet.wilaya_naissance = e.target.value;
+                        setNouveauNe((pervUser) => {
+                          return {
+                            ...pervUser,
+                            wilaya_naissance: nouveauNeObjet.wilaya_naissance,
+                          };
+                        });
+                        console.log(nouveauNeObjet.wilaya_naissance);
+                      }}
+                    />
+                  </Grid>
                   <Grid>
                     <TextField
                       margin="normal"
@@ -531,7 +559,6 @@ const FormulaireCreation = ({ user }) => {
                       id="nin_pere"
                       label="NIN Pere"
                       name="NIN Pere"
-                      autoFocus
                       onChange={(e) => {
                         nouveauNeObjet.num_pere = e.target.value;
                         setNouveauNe((pervUser) => {
@@ -555,49 +582,53 @@ const FormulaireCreation = ({ user }) => {
                         searchParent(nouveauNe.num_pere, "pere");
                         // searchParent(pere.num_pere, "gperep");
                         // searchParent(pere.num_mere, "gmerep");
-                      }}>
+                      }}
+                    >
                       Search
                     </Button>
-                    <Grid>
-                      <TextField
-                        margin="normal"
-                        required
-                        fullWidth
-                        id="nom_pere"
-                        label="Nom Pere"
-                        name="Nom Pere"
-                        value={pere.nom}
-                      />
-                      <TextField
-                        margin="normal"
-                        required
-                        fullWidth
-                        id="prenom_pere"
-                        label="Prenom Pere"
-                        name="Prenom Pere"
-                        value={pere.prenom}
-                      />
+                    {openPere && (
+                      <Grid>
+                        <TextField
+                          margin="normal"
+                          required
+                          fullWidth
+                          id="nom_pere"
+                          label="Nom Pere"
+                          name="Nom Pere"
+                          value={pere.nom}
+                        />
+                        <TextField
+                          margin="normal"
+                          required
+                          fullWidth
+                          id="prenom_pere"
+                          label="Prenom Pere"
+                          name="Prenom Pere"
+                          value={pere.prenom}
+                        />
 
-                      <TextField
-                        margin="normal"
-                        required
-                        fullWidth
-                        id="prenom_gperepaternel"
-                        label="Prenom Grand-Pere Paternel"
-                        name="Prenom Grand-Pere Paternel"
-                        value={Gperep.prenom}
-                      />
-                      <TextField
-                        margin="normal"
-                        required
-                        fullWidth
-                        id="prenom_gmerepaternel"
-                        label="Prenom Grand-Mere Paternel"
-                        name="Prenom Grand-Mere Paternel"
-                        value={`${Gmerep.nom} ${Gmerep.prenom}`}
-                      />
-                    </Grid>
+                        <TextField
+                          margin="normal"
+                          required
+                          fullWidth
+                          id="prenom_gperepaternel"
+                          label="Prenom Grand-Pere Paternel"
+                          name="Prenom Grand-Pere Paternel"
+                          value={Gperep.prenom}
+                        />
+                        <TextField
+                          margin="normal"
+                          required
+                          fullWidth
+                          id="prenom_gmerepaternel"
+                          // label="Grand-Mere Paternel"
+                          name="Grand-Mere Paternel"
+                          value={`${Gmerep.nom} ${Gmerep.prenom}`}
+                        />
+                      </Grid>
+                    )}
                   </Grid>
+                  <br />
                   <Grid>
                     <TextField
                       margin="normal"
@@ -606,7 +637,6 @@ const FormulaireCreation = ({ user }) => {
                       id="nin_mere"
                       label="NIN Mere"
                       name="NIN Mere"
-                      autoFocus
                       onChange={(e) => {
                         nouveauNeObjet.num_mere = e.target.value;
                         setNouveauNe((pervUser) => {
@@ -627,44 +657,49 @@ const FormulaireCreation = ({ user }) => {
                       }}
                       onClick={() => {
                         searchParent(nouveauNe.num_mere, "mere");
-                      }}>
+                      }}
+                    >
                       Search
                     </Button>
-                    <TextField
-                      margin="normal"
-                      required
-                      fullWidth
-                      id="nom_mere"
-                      label="Nom Mere"
-                      value={mere.nom}
-                    />
-                    <TextField
-                      margin="normal"
-                      required
-                      fullWidth
-                      id="prenom_mere"
-                      label="Prenom Mere"
-                      value={mere.prenom}
-                    />
+                    {openMere && (
+                      <Grid>
+                        <TextField
+                          margin="normal"
+                          required
+                          fullWidth
+                          id="nom_mere"
+                          label="Nom Mere"
+                          value={mere.nom}
+                        />
+                        <TextField
+                          margin="normal"
+                          required
+                          fullWidth
+                          id="prenom_mere"
+                          label="Prenom Mere"
+                          value={mere.prenom}
+                        />
 
-                    <TextField
-                      margin="normal"
-                      required
-                      fullWidth
-                      id="prenom_gperematernel"
-                      label="Prenom Grand-Pere Maternel"
-                      name="Prenom Grand-Pere Maternel"
-                      value={Gperem.nom}
-                    />
-                    <TextField
-                      margin="normal"
-                      required
-                      fullWidth
-                      id="prenom_gmerematernel"
-                      label="Prenom Grand-Mere Maternel"
-                      name="Prenom Grand-Mere Maternel"
-                      value={`${Gmerem.nom} ${Gmerem.prenom} `}
-                    />
+                        <TextField
+                          margin="normal"
+                          required
+                          fullWidth
+                          id="prenom_gperematernel"
+                          label="Prenom Grand-Pere Maternel"
+                          name="Prenom Grand-Pere Maternel"
+                          value={Gperem.nom}
+                        />
+                        <TextField
+                          margin="normal"
+                          required
+                          fullWidth
+                          id="prenom_gmerematernel"
+                          // label="Grand-Mere Maternel"
+                          name="Grand-Mere Maternel"
+                          value={`${Gmerem.nom} ${Gmerem.prenom} `}
+                        />
+                      </Grid>
+                    )}
                   </Grid>
                 </Grid>
                 <hr />
@@ -673,7 +708,8 @@ const FormulaireCreation = ({ user }) => {
                 <Typography
                   variant="h5"
                   gutterBottom
-                  style={{ marginTop: "5px" }}>
+                  style={{ marginTop: "5px" }}
+                >
                   Partie Administration
                 </Typography>
                 <TextField
@@ -710,7 +746,8 @@ const FormulaireCreation = ({ user }) => {
                       nouveauNeObjet = nouveauNe;
                       sendNouveauNe();
                       sendActeNaissance(ActeNaissObjet);
-                    }}>
+                    }}
+                  >
                     Create
                   </Button>
                 </Box>

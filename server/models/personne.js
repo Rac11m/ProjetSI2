@@ -15,8 +15,8 @@ const personneSchema = new mongoose.Schema({
   pays_naissance: { type: String, default: "Algerie", required: true },
   etat_matrimonial: { type: String, default: " " },
   commune_residence: { type: String, required: true },
-  num_pere: { type: String, required: true },
-  num_mere: { type: String, required: true },
+  num_pere: { type: String },
+  num_mere: { type: String },
   profession: { type: String, default: " " },
 });
 // NIN : starts from 100000000000000000
@@ -46,10 +46,10 @@ function validatePersonne(personne) {
     pays_naissance: Joi.string().min(5).max(255).required(),
     etat_matrimonial: Joi.string().max(255),
     commune_residence: Joi.string().min(3).max(255).required(),
-    num_pere: Joi.string().min(1).max(255).required(),
-    num_mere: Joi.string().min(1).max(255).required(),
+    num_pere: Joi.string().max(255),
+    num_mere: Joi.string().max(255),
     profession: Joi.string()
-      .regex(/^[a-zA-Z]+$/)
+      .regex(/^[a-zA-Z ]+$/)
       .max(255),
   });
 

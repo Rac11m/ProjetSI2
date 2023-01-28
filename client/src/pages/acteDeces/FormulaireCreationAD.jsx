@@ -34,6 +34,7 @@ function FormulaireCreation({ user }) {
   const [dateValue, setDateValue] = useState(null);
   const [timeValue, setTimeValue] = useState(null);
   const [affiliationValue, setAffiliationValue] = useState(null);
+  const [openDeclarant, setOpenDeclarant] = useState(null);
 
   const PersonneObjet = {
     commune_naissance: "",
@@ -89,6 +90,7 @@ function FormulaireCreation({ user }) {
     try {
       const result = await http.get(`api/personnes/${nin}`, config);
       setDeclarant(result.data);
+      setOpenDeclarant(true);
     } catch (e) {
       console.log(e);
     }
@@ -131,18 +133,21 @@ function FormulaireCreation({ user }) {
           <Container
             component="form"
             className="cadre"
-            sx={{ padding: "10px" }}>
+            sx={{ padding: "10px" }}
+          >
             <Box
               sx={{
                 "& .MuiTextField-root": { m: 1, width: "25ch" },
               }}
               noValidate
-              autoComplete="off">
+              autoComplete="off"
+            >
               <div className="partie-declarant">
                 <Typography
                   variant="h5"
                   gutterBottom
-                  style={{ marginTop: "5px" }}>
+                  style={{ marginTop: "5px" }}
+                >
                   Partie Declarant
                 </Typography>
                 <TextField
@@ -176,118 +181,122 @@ function FormulaireCreation({ user }) {
                   style={{ backgroundColor: "#00917C", top: "15px" }}
                   onClick={() =>
                     searchDeclarant(declarant.num_identifiant_national)
-                  }>
+                  }
+                >
                   Search
                 </Button>
                 {/* </Box> */}
-                <Grid container>
-                  <TextField
-                    margin="normal"
-                    fullWidth
-                    readOnly
-                    id="nom_declarant"
-                    value={declarant.nom}
-                  />
-                  <TextField
-                    margin="normal"
-                    fullWidth
-                    readOnly
-                    id="prenom_declarant"
-                    label="Prenom"
-                    value={declarant.prenom}
-                  />
-                  <TextField
-                    margin="normal"
-                    fullWidth
-                    readOnly
-                    id="sexe_declarant"
-                    label="Sexe"
-                    value={declarant.sexe}
-                  />
-                  <TextField
-                    margin="normal"
-                    fullWidth
-                    readOnly
-                    id="etatM_declarant"
-                    label="état matrimonial"
-                    value={declarant.etat_matrimonial}
-                  />
-                  <TextField
-                    margin="normal"
-                    fullWidth
-                    readOnly
-                    id="profession_declarant"
-                    label="Profession"
-                    value={declarant.profession}
-                  />
-                  <TextField
-                    margin="normal"
-                    fullWidth
-                    readOnly
-                    id="dateN_declarant"
-                    label="Date Naissance"
-                    value={moment(declarant.date_naissance).format(
-                      "DD-MM-YYYY"
-                    )}
-                  />
-                  <TextField
-                    margin="normal"
-                    fullWidth
-                    readOnly
-                    id="lieuN_declarant"
-                    label="Lieu Naissance"
-                    value={declarant.lieu_naissance}
-                  />
-                  <TextField
-                    margin="normal"
-                    fullWidth
-                    readOnly
-                    id="communeN_declarant"
-                    label="Commune Naissance"
-                    value={declarant.commune_naissance}
-                  />
-                  <TextField
-                    margin="normal"
-                    fullWidth
-                    readOnly
-                    id="wilayaN_declarant"
-                    abel="Wilaya Naissance"
-                    value={declarant.wilaya_naissance}
-                  />
-                  <TextField
-                    margin="normal"
-                    fullWidth
-                    readOnly
-                    id="CommuneR_declarant"
-                    label="Commune Résidence"
-                    value={declarant.commune_residence}
-                  />
-                  <FormControl sx={{ m: 1, width: 260 }}>
-                    <InputLabel id="affiliation_label">
-                      Affiliation avec le défunt
-                    </InputLabel>
-                    <Select
-                      required
-                      labelId="affiliation_label"
-                      id="affliation_declarant"
-                      value={affiliationValue || ""}
-                      label="affiliation avec le défunt"
-                      onChange={(event) => {
-                        setAffiliationValue(event.target.value);
-                      }}>
-                      <MenuItem value={"ascendant_direct"}>
-                        Ascendant direct
-                      </MenuItem>
-                      <MenuItem value={"descendant_direct"}>
-                        Descendant direct
-                      </MenuItem>
-                      <MenuItem value={"tuteur"}>Tuteur</MenuItem>
-                      <MenuItem value={"procureur"}>
-                        Procureur de la République
-                      </MenuItem>
-                    </Select>
-                  </FormControl>
-                </Grid>
+                {openDeclarant && (
+                  <Grid container>
+                    <TextField
+                      margin="normal"
+                      fullWidth
+                      readOnly
+                      id="nom_declarant"
+                      value={declarant.nom}
+                    />
+                    <TextField
+                      margin="normal"
+                      fullWidth
+                      readOnly
+                      id="prenom_declarant"
+                      label="Prenom"
+                      value={declarant.prenom}
+                    />
+                    <TextField
+                      margin="normal"
+                      fullWidth
+                      readOnly
+                      id="sexe_declarant"
+                      label="Sexe"
+                      value={declarant.sexe}
+                    />
+                    <TextField
+                      margin="normal"
+                      fullWidth
+                      readOnly
+                      id="etatM_declarant"
+                      label="état matrimonial"
+                      value={declarant.etat_matrimonial}
+                    />
+                    <TextField
+                      margin="normal"
+                      fullWidth
+                      readOnly
+                      id="profession_declarant"
+                      label="Profession"
+                      value={declarant.profession}
+                    />
+                    <TextField
+                      margin="normal"
+                      fullWidth
+                      readOnly
+                      id="dateN_declarant"
+                      label="Date Naissance"
+                      value={moment(declarant.date_naissance).format(
+                        "DD-MM-YYYY"
+                      )}
+                    />
+                    <TextField
+                      margin="normal"
+                      fullWidth
+                      readOnly
+                      id="lieuN_declarant"
+                      label="Lieu Naissance"
+                      value={declarant.lieu_naissance}
+                    />
+                    <TextField
+                      margin="normal"
+                      fullWidth
+                      readOnly
+                      id="communeN_declarant"
+                      label="Commune Naissance"
+                      value={declarant.commune_naissance}
+                    />
+                    <TextField
+                      margin="normal"
+                      fullWidth
+                      readOnly
+                      id="wilayaN_declarant"
+                      abel="Wilaya Naissance"
+                      value={declarant.wilaya_naissance}
+                    />
+                    <TextField
+                      margin="normal"
+                      fullWidth
+                      readOnly
+                      id="CommuneR_declarant"
+                      label="Commune Résidence"
+                      value={declarant.commune_residence}
+                    />
+                    <FormControl sx={{ m: 1, width: 260 }}>
+                      <InputLabel id="affiliation_label">
+                        Affiliation avec le défunt
+                      </InputLabel>
+                      <Select
+                        required
+                        labelId="affiliation_label"
+                        id="affliation_declarant"
+                        value={affiliationValue || ""}
+                        label="affiliation avec le défunt"
+                        onChange={(event) => {
+                          setAffiliationValue(event.target.value);
+                        }}
+                      >
+                        <MenuItem value={"ascendant_direct"}>
+                          Ascendant direct
+                        </MenuItem>
+                        <MenuItem value={"descendant_direct"}>
+                          Descendant direct
+                        </MenuItem>
+                        <MenuItem value={"tuteur"}>Tuteur</MenuItem>
+                        <MenuItem value={"procureur"}>
+                          Procureur de la République
+                        </MenuItem>
+                      </Select>
+                    </FormControl>
+                  </Grid>
+                )}
 
                 <hr />
               </div>
@@ -296,7 +305,8 @@ function FormulaireCreation({ user }) {
                 <Typography
                   variant="h5"
                   gutterBottom
-                  style={{ marginTop: "5px" }}>
+                  style={{ marginTop: "5px" }}
+                >
                   Partie Défunt
                 </Typography>
                 <TextField
@@ -329,7 +339,8 @@ function FormulaireCreation({ user }) {
                     top: "10px",
                     height: "50px",
                   }}
-                  onClick={() => searchDefunt(defunt.num_identifiant_national)}>
+                  onClick={() => searchDefunt(defunt.num_identifiant_national)}
+                >
                   Search
                 </Button>
                 <Grid container>
@@ -456,7 +467,8 @@ function FormulaireCreation({ user }) {
                 <Typography
                   variant="h5"
                   gutterBottom
-                  style={{ marginTop: "5px" }}>
+                  style={{ marginTop: "5px" }}
+                >
                   Partie Administration
                 </Typography>
                 <TextField
@@ -489,7 +501,8 @@ function FormulaireCreation({ user }) {
                       float: "right",
                       right: "10px",
                     }}
-                    onClick={() => sendActeDeces(acte)}>
+                    onClick={() => sendActeDeces(acte)}
+                  >
                     Create
                   </Button>
                 </Box>
