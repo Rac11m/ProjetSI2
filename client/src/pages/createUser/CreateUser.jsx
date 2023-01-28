@@ -9,6 +9,7 @@ import {
   InputLabel,
   Select,
   MenuItem,
+  Alert,
 } from "@mui/material";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
@@ -16,16 +17,50 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import React, { useState } from "react";
 import moment from "moment";
 import http from "../../services/httpService";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import jwtDecode from "jwt-decode";
+import Navbar from "../../Navbar";
 
 function CreateUser({ User }) {
   const [roleValue, setRoleValue] = useState(null);
   const [dateValue, setDateValue] = useState(null);
+  const [error, setError] = useState(null);
 
   const token = localStorage.getItem("token");
   const config = {
     headers: {
       Authorization: `${token}`,
     },
+  };
+
+  const navigate = useNavigate();
+  useEffect(() => {
+    try {
+      const jwt = localStorage.getItem("token");
+      const decoded = jwtDecode(jwt);
+      if (decoded.role !== "admin") navigate("/");
+    } catch (error) {}
+  }, []);
+
+  const [newUserMat, setNewUserMat] = useState(null);
+  const getNewUserMatricule = async () => {
+    try {
+      let { data } = await http.get("api/users/", config);
+      let { count } = data;
+      count += 202000000001;
+      count = String(count);
+      setNewUserMat(count);
+      userObjet.matricule = count;
+      setUser((pervUser) => {
+        return {
+          ...pervUser,
+          matricule: count,
+        };
+      });
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   const userObjet = {
@@ -57,7 +92,6 @@ function CreateUser({ User }) {
                 pays_de_rattachement: userObjet.pays_de_rattachement,
               };
             });
-            console.log(userObjet.pays_de_rattachement);
           }}
         />
       );
@@ -77,7 +111,6 @@ function CreateUser({ User }) {
                 num_bureau: userObjet.num_bureau,
               };
             });
-            console.log(userObjet.num_bureau);
           }}
         />
       );
@@ -87,20 +120,26 @@ function CreateUser({ User }) {
   const [user, setUser] = useState(userObjet);
 
   const sendNewUser = async (user) => {
-    return await http.post("/api/users", user, config);
+    try {
+      const { data } = await http.post("/api/users", user, config);
+    } catch (ex) {
+      if (ex.response && ex.response.status === 400) {
+        setError(ex.response.data);
+      }
+    }
   };
 
   return (
     <>
       {User && (
         <>
+          <Navbar user={User} />
           <Container
             component="form"
             className="cadre"
             sx={{ marginTop: "13%", padding: "2%" }}
           >
             <Box
-              component="form"
               sx={{
                 "& .MuiTextField-root": { m: 1 },
               }}
@@ -116,15 +155,23 @@ function CreateUser({ User }) {
               </Typography>
               <Grid container spacing={2} columns={16} className="partie-auth">
                 <Grid item xs={8}>
+                  <Button
+                    type="button"
+                    variant="contained"
+                    style={{ backgroundColor: "#00917C", left: "10px" }}
+                    onClick={() => getNewUserMatricule()}
+                  >
+                    Generer NIN
+                  </Button>
                   <TextField
                     margin="normal"
-                    required
                     fullWidth
                     id="matricule"
-                    label="Matricule"
+                    label={user?.matricule ? "" : "Matricule"}
                     name="matricule"
                     autoComplete="matricule"
-                    autoFocus
+                    value={user.matricule}
+                    disabled={true}
                     onChange={(e) => {
                       userObjet.matricule = e.target.value;
                       setUser((pervUser) => {
@@ -133,7 +180,6 @@ function CreateUser({ User }) {
                           matricule: userObjet.matricule,
                         };
                       });
-                      console.log(userObjet.matricule);
                     }}
                   />
                   <TextField
@@ -152,7 +198,6 @@ function CreateUser({ User }) {
                           password: userObjet.password,
                         };
                       });
-                      console.log(userObjet.password);
                     }}
                   />
                   <TextField
@@ -169,7 +214,6 @@ function CreateUser({ User }) {
                           nom: userObjet.nom,
                         };
                       });
-                      console.log(userObjet.nom);
                     }}
                   />
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -187,7 +231,6 @@ function CreateUser({ User }) {
                             date_prise_service: userObjet.date_prise_service,
                           };
                         });
-                        console.log(userObjet.date_prise_service);
                       }}
                       renderInput={(params) => (
                         <TextField fullWidth {...params} />
@@ -196,6 +239,14 @@ function CreateUser({ User }) {
                   </LocalizationProvider>
                 </Grid>
                 <Grid item xs={8}>
+                  <Button
+                    type="button"
+                    variant="contained"
+                    style={{ color: "white", backgroundColor: "white" }}
+                    disabled={true}
+                  >
+                    G
+                  </Button>
                   <TextField
                     margin="normal"
                     required
@@ -204,6 +255,7 @@ function CreateUser({ User }) {
                     label="email"
                     type="email"
                     placeholder="exemple@email.com"
+                    autoFocus
                     onChange={(e) => {
                       userObjet.email = e.target.value;
                       setUser((pervUser) => {
@@ -212,7 +264,6 @@ function CreateUser({ User }) {
                           email: userObjet.email,
                         };
                       });
-                      console.log(userObjet.email);
                     }}
                   />
                   <FormControl margin="normal" sx={{ m: 1, width: "100%" }}>
@@ -254,7 +305,6 @@ function CreateUser({ User }) {
                           prenom: userObjet.prenom,
                         };
                       });
-                      console.log(userObjet.prenom);
                     }}
                   />
                   {roleValue ? (
@@ -274,11 +324,37 @@ function CreateUser({ User }) {
                 fullWidth
                 type="button"
                 variant="contained"
-                style={{ backgroundColor: "#00917C", marginTop: 10 }}
+                style={{
+                  backgroundColor: "#00917C",
+                  marginTop: 10,
+                  height: "50px",
+                }}
                 onClick={(e) => sendNewUser(user)}
+                disabled={
+                  !(
+                    user.matricule &&
+                    user.email &&
+                    user.password &&
+                    user.nom &&
+                    user.prenom &&
+                    user.date_prise_service &&
+                    user.num_bureau &&
+                    userObjet.pays_de_rattachement &&
+                    user.role
+                  )
+                }
               >
                 Create
               </Button>
+              {error && (
+                <Alert
+                  variant="outlined"
+                  severity="warning"
+                  style={{ marginTop: "20px" }}
+                >
+                  {<p>{error}</p>}
+                </Alert>
+              )}
             </Box>
           </Container>
         </>

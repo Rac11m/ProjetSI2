@@ -45,7 +45,7 @@ function App() {
           path="/creationactedeces"
           element={<FormulaireCreationAD user={user} />}
         />
-        <Route path="/createUser" element={<CreateUser user={user} />} />
+        <Route path="/createUser" element={<CreateUser User={user} />} />
         <Route path="/login" element={<Login />} />
         <Route path="/settings" element={<Settings user={user} />} />
         <Route path="*" element={<NotFound />} />

@@ -22,8 +22,16 @@ function validateUser(user) {
     matricule: Joi.string().min(5).max(255).required(),
     email: Joi.string().min(5).max(255).required().email().trim(),
     password: Joi.string().min(5).max(255).required(),
-    nom: Joi.string().min(3).max(255).required(),
-    prenom: Joi.string().min(3).max(255).required(),
+    nom: Joi.string()
+      .min(3)
+      .max(255)
+      .regex(/^[a-zA-Z]+$/)
+      .required(),
+    prenom: Joi.string()
+      .min(3)
+      .max(255)
+      .regex(/^[a-zA-Z]+$/)
+      .required(),
     date_prise_service: Joi.date().required(),
     num_bureau: Joi.string().max(255),
     pays_de_rattachement: Joi.string().max(255),

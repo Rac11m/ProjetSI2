@@ -27,8 +27,16 @@ const Personne = mongoose.model("Personne", personneSchema);
 function validatePersonne(personne) {
   const schema = Joi.object({
     num_identifiant_national: Joi.string().min(5).max(255).required(),
-    nom: Joi.string().min(3).max(255).required(),
-    prenom: Joi.string().min(3).max(255).required(),
+    nom: Joi.string()
+      .min(3)
+      .max(255)
+      .regex(/^[a-zA-Z]+$/)
+      .required(),
+    prenom: Joi.string()
+      .min(3)
+      .max(255)
+      .regex(/^[a-zA-Z]+$/)
+      .required(),
     sexe: Joi.string().min(3).max(10).required(),
     date_naissance: Joi.date().required(),
     heure_naissance: Joi.string().max(255).required(),
@@ -40,7 +48,9 @@ function validatePersonne(personne) {
     commune_residence: Joi.string().min(3).max(255).required(),
     num_pere: Joi.string().min(1).max(255).required(),
     num_mere: Joi.string().min(1).max(255).required(),
-    profession: Joi.string().max(255),
+    profession: Joi.string()
+      .regex(/^[a-zA-Z]+$/)
+      .max(255),
   });
 
   return schema.validate(personne);

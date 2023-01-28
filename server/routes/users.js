@@ -42,6 +42,12 @@ router.post("/", async (req, res) => {
   });
 });
 
+// Get Users COUNT
+router.get("/", async (req, res) => {
+  let count = await User.count();
+  res.send({ count });
+});
+
 router.get("/:id", async (req, res) => {
   const { id: matricule } = req.params;
   const user = await User.findOne({
