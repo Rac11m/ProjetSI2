@@ -23,11 +23,11 @@ const Main = ({ user }) => {
               <ButtonGroup
                 sx={{ width: "304px" }}
                 orientation="vertical"
-                aria-label="">
+                aria-label="vertical outlined button group">
                 <Button
                   variant="contained"
                   size="large"
-                  sx={{ backgroundColor: "#00917C", height: "68.5px" }}
+                  sx={{ backgroundColor: "#00917C" }}
                   onClick={() => navigateHook("/consulterAN")}>
                   Consulter Les Actes de Naissances
                 </Button>
@@ -99,6 +99,33 @@ const Main = ({ user }) => {
                   sx={{ backgroundColor: "#00917C", height: "68.5px" }}
                   onClick={() => navigateHook("/updateAD")}>
                   Mise a jour acte de dÉcÈs
+                </Button>{" "}
+              </ButtonGroup>
+              <ButtonGroup
+                orientation="vertical"
+                aria-label="vertical outlined button group">
+                <Button
+                  variant="contained"
+                  size="large"
+                  sx={{ backgroundColor: "#00917C" }}
+                  onClick={() => navigateHook("/registreNaissance")}>
+                  Voir registre des Actes de Naissance
+                </Button>
+                <Button
+                  key={1}
+                  variant="contained"
+                  size="large"
+                  sx={{ backgroundColor: "#00917C" }}
+                  onClick={() => navigateHook("/registreMariage")}>
+                  Voir registre des Actes de Mariage
+                </Button>
+                <Button
+                  key={2}
+                  variant="contained"
+                  size="large"
+                  sx={{ backgroundColor: "#00917C" }}
+                  onClick={() => navigateHook("/registreDeces")}>
+                  Voir registre des Actes de Deces
                 </Button>{" "}
               </ButtonGroup>
             </Box>

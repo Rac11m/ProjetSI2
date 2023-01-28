@@ -15,6 +15,7 @@ import UpdateAN from "./pages/acteNaissance/UpdateAN";
 import UpdateAM from "./pages/acteMariage/UpdateAM";
 import UpdateAD from "./pages/acteDeces/UpdateAD";
 import NotFound from "./pages/notFound/NotFound";
+import Registres from "./pages/registres/Registres";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -53,6 +54,18 @@ function App() {
         />
         <Route path="/createUser" element={<CreateUser User={user} />} />
         <Route path="/login" element={<Login />} />
+        <Route
+          path="/registreNaissance"
+          element={<Registres user={user} num_registre="0" />}
+        />
+        <Route
+          path="/registreMariage"
+          element={<Registres user={user} num_registre="1" />}
+        />
+        <Route
+          path="/registreDeces"
+          element={<Registres user={user} num_registre="2" />}
+        />
         <Route path="/settings" element={<Settings user={user} />} />
         <Route path="*" element={<NotFound />} />
       </Routes>

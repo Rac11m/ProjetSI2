@@ -6,9 +6,9 @@ const { ActeMariage } = require("../models/acteMariage");
 const { ActeNaissance } = require("../models/acteNaissance");
 
 // GET 1 bureau
-router.get("/:id", auth, async (req, res) => {
-  const { id: num_registre } = req.params;
-  const year = parseInt(req.body.date_declaration);
+router.post("/", auth, async (req, res) => {
+  const num_registre = req.body.num_registre;
+  const year = req.body.date_declaration;
   const startDate = new Date(year, 0, 1);
   const endDate = new Date(year, 11, 31);
 
@@ -22,7 +22,7 @@ router.get("/:id", auth, async (req, res) => {
           { date_declaration: { $gte: startDate, $lt: endDate + 1 } },
         ],
       });
-      if (!registre) return res.status(404).send("Registre vide.");
+      if (registre.length === 0) return res.status(404).send("Registre vide.");
       res.send(registre);
 
       break;
@@ -34,7 +34,7 @@ router.get("/:id", auth, async (req, res) => {
           { date_declaration: { $gte: startDate, $lt: endDate + 1 } },
         ],
       });
-      if (!registre) return res.status(404).send("Registre vide.");
+      if (registre.length === 0) return res.status(404).send("Registre vide.");
       res.send(registre);
       break;
     case "2":
@@ -45,7 +45,7 @@ router.get("/:id", auth, async (req, res) => {
           { date_declaration: { $gte: startDate, $lt: endDate + 1 } },
         ],
       });
-      if (!registre) return res.status(404).send("Registre vide.");
+      if (registre.length === 0) return res.status(404).send("Registre vide.");
       res.send(registre);
       break;
 
