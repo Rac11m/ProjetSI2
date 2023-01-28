@@ -31,7 +31,7 @@ router.post("/", auth, async (req, res) => {
         $and: [
           { num_bureau: req.body.num_bureau },
           { num_registre: num_registre },
-          { date_declaration: { $gte: startDate, $lt: endDate + 1 } },
+          { date_mariage: { $gte: startDate, $lt: endDate + 1 } },
         ],
       });
       if (registre.length === 0) return res.status(404).send("Registre vide.");
