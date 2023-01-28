@@ -19,6 +19,7 @@ router.get("/:id", auth, async (req, res) => {
 
 router.get("/", auth, async (req, res) => {
   let count = await Personne.count();
+  count += 1;
   res.send({ count });
 });
 
