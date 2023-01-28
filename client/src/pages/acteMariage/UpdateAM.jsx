@@ -154,7 +154,7 @@ function UpdateAM({ user }) {
                 <TextField
                   margin="normal"
                   id="lieu_mariage"
-                  label="Lieu Deces"
+                  label="Lieu Mariage"
                   onChange={(e) => {
                     setLieumValue(e.target.value);
                   }}

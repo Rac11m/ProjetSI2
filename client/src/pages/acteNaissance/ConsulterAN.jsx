@@ -1,7 +1,7 @@
 import { Container } from "@mui/system";
 import { Box, Button, TextField } from "@mui/material";
 import React from "react";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import http from "../../services/httpService";
 import {
   Document,
@@ -10,6 +10,7 @@ import {
   StyleSheet,
   Font,
   View,
+  PDFDownloadLink,
   // PDFDownloadLink,
 } from "@react-pdf/renderer";
 import moment from "moment";
@@ -276,164 +277,169 @@ function ConsulterAN({ user }) {
         </Box>
       </Container>
       {acte._id ? (
-        <Document title="ActePdf">
-          <Page size={"A4"} style={styles.body} fixed>
-            <View>
-              <Text fixed>
-                <h6 style={{ textAlign: "center" }}>
-                  REPUBLIQUE ALGERIENNE DEMOCRATIQUE POPULAIRE
-                </h6>
-              </Text>
-              <br />
-              <Text style={styles.subtitle}>
-                <p
-                  style={{
-                    fontSize: "10px",
-                    position: "absolute",
-                    top: "40px",
-                  }}>
-                  MINISTERE DE l'INTERIEUR
+        <>
+          {/* <PDFDownloadLink fileName="acteNpdf.pdf">
+            {({ blob, url, loading, error }) =>
+              loading ? "Loading doc..." : "Download now!"
+            }
+          </PDFDownloadLink> */}
+          <Document>
+            <Page size={"A4"} style={styles.body} fixed>
+              <View>
+                <Text fixed>
+                  <h6 style={{ textAlign: "center" }}>
+                    REPUBLIQUE ALGERIENNE DEMOCRATIQUE POPULAIRE
+                  </h6>
+                </Text>
+                <br />
+                <Text style={styles.subtitle}>
+                  <p
+                    style={{
+                      fontSize: "10px",
+                      position: "absolute",
+                      top: "40px",
+                    }}>
+                    MINISTERE DE l'INTERIEUR
+                    <br />
+                    DES COLLECTIVITTES LOCALES
+                  </p>
+                </Text>
+                <br />
+                <div style={{ marginTop: "-15px", marginBottom: "10px" }}>
+                  <Text>Wilaya : {communeActuelle.wilaya}</Text>
                   <br />
-                  DES COLLECTIVITTES LOCALES
-                </p>
-              </Text>
-              <br />
-              <div style={{ marginTop: "-15px", marginBottom: "10px" }}>
-                <Text>Wilaya : {communeActuelle.wilaya}</Text>
+                  <Text>Daira : {communeActuelle.daira}</Text>
+                  <br />
+                  <Text>Commune : {communeActuelle.nom_commune}</Text>
+                  <br />
+                </div>
+                <Text style={styles.title}>
+                  <h4>Acte De Naissance</h4>
+                </Text>
+                <Text style={styles.author}>
+                  <p style={{ marginTop: "-30px" }}>Version Electronique</p>
+                </Text>
                 <br />
-                <Text>Daira : {communeActuelle.daira}</Text>
-                <br />
-                <Text>Commune : {communeActuelle.nom_commune}</Text>
-                <br />
-              </div>
-              <Text style={styles.title}>
-                <h4>Acte De Naissance</h4>
-              </Text>
-              <Text style={styles.author}>
-                <p style={{ marginTop: "-30px" }}>Version Electronique</p>
-              </Text>
-              <br />
-              <Text style={styles.text}>
-                Le : {moment(personne.date_naissance).format("DD-MM-YYYY")}
-              </Text>
-              <br />
-              <Text style={styles.text}>à : {personne.heure_naissance}</Text>,
-              <Text style={styles.text}>
-                <span style={{ position: "absolute", left: "50%" }}>
-                  est né à : {personne.lieu_naissance}
-                </span>
-              </Text>
-              <br />
-              <Text style={styles.text}>
-                Commune de : {personne.commune_naissance}
-              </Text>
-              <Text style={styles.text}>
-                <span style={{ position: "absolute", left: "50%" }}>
-                  Wilaya de : {personne.wilaya_naissance}
-                </span>
-              </Text>
-              <br />
-              <Text style={styles.text}>
-                Le/La Nommé(e) : {personne.nom} {personne.prenom}
-              </Text>
-              <br />
-              <Text style={styles.text}>Du sexe : {personne.sexe}</Text>
-              <br />
-              <Text style={styles.text}>
-                Fils/Fille de : {pere.nom} {pere.prenom}
-              </Text>
-              <Text style={styles.text}>
-                Agé de :{" "}
-                {new Date().getFullYear() - moment(pere.date_naissance).year()}
-              </Text>
-              <Text style={styles.text}>Profession : {pere.profession}</Text>
-              <br />
-              <Text style={styles.text}>
-                Et de : {mere.nom} {mere.prenom}
-              </Text>
-              <Text style={styles.text}>
-                Agé de :
-                {new Date().getFullYear() - moment(mere.date_naissance).year()}
-              </Text>
-              <Text style={styles.text}>Profession : {mere.profession}</Text>
-              <br />
-              <Text style={styles.text}>
-                Domiciliés a : {pere.commune_residence}
-              </Text>
-              <br />
-              <Text style={styles.text}>
-                Dressé le : {moment(acte.date_declaration).format("DD-MM-YYYY")}
-              </Text>
-              <Text style={styles.text}>
-                <span style={{ position: "absolute", left: "50%" }}>
-                  a : {commune.nom_commune}
-                </span>
-              </Text>
-              <br />
-              <Text style={styles.text}>
-                Sur declaration faite par Madame/Monsieur : {declarant.nom}{" "}
-                {declarant.prenom} {"   "}
-              </Text>
-              <br />
-              <Text style={styles.text}>
-                Lecture faite, on signes avec Nous :
-                {` ${officier.nom} ${officier.prenom}  `}
-                Officier d'Etat Civil a la commune, {commune.nom_commune}
-              </Text>
-              <br />
-              <Text style={styles.text}>
-                Mentions marginales :{" "}
-                {acteM ? (
-                  <>
-                    <br />
-                    <Text style={styles.text}>
-                      Marié(e) Le{" "}
-                      {moment(acteM.date_mariage).format("DD-MM-YYYY")}{" "}
-                    </Text>
-                  </>
-                ) : (
-                  <p></p>
-                )}
-                {acteD ? (
-                  <>
-                    <br />
-                    <Text style={styles.text}>
-                      Marié(e) Le{" "}
-                      {moment(acteD.date_deces).format("DD-MM-YYYY")}{" "}
-                    </Text>
-                  </>
-                ) : (
-                  <p></p>
-                )}
-              </Text>
-              <br />
-              <div
-                style={{
-                  position: "absolute",
-                  right: "10px",
-                  bottom: "10px",
-                }}>
                 <Text style={styles.text}>
-                  Fait a : {communeActuelle.nom_commune} {"  "} le{" "}
+                  Le : {moment(personne.date_naissance).format("DD-MM-YYYY")}
+                </Text>
+                <br />
+                <Text style={styles.text}>à : {personne.heure_naissance}</Text>,
+                <Text style={styles.text}>
+                  <span style={{ position: "absolute", left: "50%" }}>
+                    est né à : {personne.lieu_naissance}
+                  </span>
+                </Text>
+                <br />
+                <Text style={styles.text}>
+                  Commune de : {personne.commune_naissance}
+                </Text>
+                <Text style={styles.text}>
+                  <span style={{ position: "absolute", left: "50%" }}>
+                    Wilaya de : {personne.wilaya_naissance}
+                  </span>
+                </Text>
+                <br />
+                <Text style={styles.text}>
+                  Le/La Nommé(e) : {personne.nom} {personne.prenom}
+                </Text>
+                <br />
+                <Text style={styles.text}>Du sexe : {personne.sexe}</Text>
+                <br />
+                <Text style={styles.text}>
+                  Fils/Fille de : {pere.nom} {pere.prenom}
+                </Text>
+                <Text style={styles.text}>
+                  Agé de :{" "}
+                  {new Date().getFullYear() -
+                    moment(pere.date_naissance).year()}
+                </Text>
+                <Text style={styles.text}>Profession : {pere.profession}</Text>
+                <br />
+                <Text style={styles.text}>
+                  Et de : {mere.nom} {mere.prenom}
+                </Text>
+                <Text style={styles.text}>
+                  Agé de :
+                  {new Date().getFullYear() -
+                    moment(mere.date_naissance).year()}
+                </Text>
+                <Text style={styles.text}>Profession : {mere.profession}</Text>
+                <br />
+                <Text style={styles.text}>
+                  Domiciliés a : {pere.commune_residence}
+                </Text>
+                <br />
+                <Text style={styles.text}>
+                  Dressé le :{" "}
                   {moment(acte.date_declaration).format("DD-MM-YYYY")}
                 </Text>
-                <br />
                 <Text style={styles.text}>
-                  L'officier de l'etat civil, {usr.nom} {"  "} {usr.prenom}
+                  <span style={{ position: "absolute", left: "50%" }}>
+                    a : {commune.nom_commune}
+                  </span>
                 </Text>
                 <br />
-              </div>
-            </View>
-          </Page>
-        </Document>
+                <Text style={styles.text}>
+                  Sur declaration faite par Madame/Monsieur : {declarant.nom}{" "}
+                  {declarant.prenom} {"   "}
+                </Text>
+                <br />
+                <Text style={styles.text}>
+                  Lecture faite, on signes avec Nous :
+                  {` ${officier.nom} ${officier.prenom}  `}
+                  Officier d'Etat Civil a la commune, {commune.nom_commune}
+                </Text>
+                <br />
+                <Text style={styles.text}>
+                  Mentions marginales :{" "}
+                  {acteM ? (
+                    <>
+                      <br />
+                      <Text style={styles.text}>
+                        Marié(e) Le{" "}
+                        {moment(acteM.date_mariage).format("DD-MM-YYYY")}{" "}
+                      </Text>
+                    </>
+                  ) : (
+                    <p></p>
+                  )}
+                  {acteD ? (
+                    <>
+                      <br />
+                      <Text style={styles.text}>
+                        Marié(e) Le{" "}
+                        {moment(acteD.date_deces).format("DD-MM-YYYY")}{" "}
+                      </Text>
+                    </>
+                  ) : (
+                    <p></p>
+                  )}
+                </Text>
+                <br />
+                <div
+                  style={{
+                    position: "absolute",
+                    right: "10px",
+                    bottom: "10px",
+                  }}>
+                  <Text style={styles.text}>
+                    Fait a : {communeActuelle.nom_commune} {"  "} le{" "}
+                    {moment(acte.date_declaration).format("DD-MM-YYYY")}
+                  </Text>
+                  <br />
+                  <Text style={styles.text}>
+                    L'officier de l'etat civil, {usr.nom} {"  "} {usr.prenom}
+                  </Text>
+                  <br />
+                </div>
+              </View>
+            </Page>
+          </Document>
+        </>
       ) : (
         <p></p>
       )}
-      {/* <PDFDownloadLink
-        document={<Document title="ActePdf" />}
-        fileName="acte_naissance.pdf">
-        {({ loading }) => (loading ? "Loading" : "Download")}
-      </PDFDownloadLink> */}
     </>
   );
 }

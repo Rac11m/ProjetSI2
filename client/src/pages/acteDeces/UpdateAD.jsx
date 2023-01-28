@@ -199,6 +199,7 @@ function UpdateAD({ user }) {
                 <TextField
                   margin="normal"
                   fullWidth
+                  disabled
                   id="lieu_deces"
                   label="Lieu Deces"
                   value={acte.lieu_deces}
@@ -214,6 +215,7 @@ function UpdateAD({ user }) {
                 <TextField
                   margin="normal"
                   fullWidth
+                  disabled
                   id="raison_deces"
                   label="Raison Deces"
                   value={acte.raison}
