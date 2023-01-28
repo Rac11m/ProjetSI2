@@ -1,5 +1,5 @@
 import { Container } from "@mui/system";
-import { Box, Button, TextField } from "@mui/material";
+import { Alert, Box, Button, TextField } from "@mui/material";
 import React from "react";
 import { useState } from "react";
 import http from "../../services/httpService";
@@ -13,6 +13,7 @@ import {
   // PDFDownloadLink,
 } from "@react-pdf/renderer";
 import moment from "moment";
+import Navbar from "../../Navbar";
 
 const styles = StyleSheet.create({
   body: {
@@ -125,6 +126,7 @@ function ConsulterAN({ user }) {
   const [declarant, setDeclarant] = useState(personneObjet);
   const [officier, setOfficier] = useState(userObjet);
   const [usr, setUsr] = useState(userObjet);
+  const [error, setError] = useState(null);
 
   const token = localStorage.getItem("token");
   const config = {
@@ -152,8 +154,10 @@ function ConsulterAN({ user }) {
       ) {
         getActe(result.data.num_personne, "acted");
       }
+      setError(null);
     } catch (e) {
-      console.log(e);
+      setError(e.response.data);
+      setActe(null);
     }
   };
 
@@ -166,9 +170,7 @@ function ConsulterAN({ user }) {
         const acted = await http.get(`api/actesDeces/${nin}`, config);
         setActeD(acted.data);
       }
-    } catch (e) {
-      console.log(e);
-    }
+    } catch (e) {}
   };
 
   const getBureau = async (numbureau, lacomm) => {
@@ -179,18 +181,14 @@ function ConsulterAN({ user }) {
       } else {
         setCommune(comm.data);
       }
-    } catch (e) {
-      console.log(e);
-    }
+    } catch (e) {}
   };
 
   const getDeclarant = async (numDeclarant) => {
     try {
       const declar = await http.get(`api/personnes/${numDeclarant}`, config);
       setDeclarant(declar.data);
-    } catch (e) {
-      console.log(e);
-    }
+    } catch (e) {}
   };
 
   const getOfficier = async (matricule) => {
@@ -199,26 +197,20 @@ function ConsulterAN({ user }) {
       setOfficier(off.data);
       const usir = await http.get(`api/users/${user.matricule}`, config);
       setUsr(usir.data);
-    } catch (e) {
-      console.log(e);
-    }
+    } catch (e) {}
   };
 
   const getPere = async (result) => {
     try {
       const pers = await http.get(`api/personnes/${result}`, config);
       setPere(pers.data);
-    } catch (e) {
-      console.log(e);
-    }
+    } catch (e) {}
   };
   const getMere = async (result) => {
     try {
       const pers = await http.get(`api/personnes/${result}`, config);
       setMere(pers.data);
-    } catch (e) {
-      console.log(e);
-    }
+    } catch (e) {}
   };
   const getPersonne = async (result) => {
     try {
@@ -229,9 +221,7 @@ function ConsulterAN({ user }) {
       setPersonne(pers.data);
       getPere(pers.data.num_pere);
       getMere(pers.data.num_mere);
-    } catch (e) {
-      console.log(e);
-    }
+    } catch (e) {}
   };
 
   // const getEp = async (nin) => {
@@ -241,19 +231,23 @@ function ConsulterAN({ user }) {
 
   return (
     <>
+      <Navbar user={user} />
       <Container
         className="cadre"
-        sx={{ padding: "10px", paddingBottom: "2%" }}>
+        sx={{ padding: "10px", paddingBottom: "2%" }}
+      >
         <Box
           sx={{
             "& .MuiTextField-root": { m: 1 },
           }}
           noValidate
-          autoComplete="off">
+          autoComplete="off"
+        >
           <TextField
             margin="normal"
             required
             fullWidth
+            type="number"
             id="nin_declarant"
             label="NIN"
             name="matricule"
@@ -267,15 +261,26 @@ function ConsulterAN({ user }) {
             fullWidth
             type="button"
             variant="contained"
-            style={{ backgroundColor: "#00917C", top: "15px" }}
+            style={{ backgroundColor: "#00917C" }}
+            disabled={!nin}
             onClick={() => {
               searchActeNaissance(nin);
-            }}>
+            }}
+          >
             Search
           </Button>
+          {error && (
+            <Alert
+              variant="outlined"
+              severity="warning"
+              style={{ marginTop: "30px" }}
+            >
+              {<p>{error}</p>}
+            </Alert>
+          )}
         </Box>
       </Container>
-      {acte._id ? (
+      {acte?._id ? (
         <Document title="ActePdf">
           <Page size={"A4"} style={styles.body} fixed>
             <View>
@@ -291,7 +296,8 @@ function ConsulterAN({ user }) {
                     fontSize: "10px",
                     position: "absolute",
                     top: "40px",
-                  }}>
+                  }}
+                >
                   MINISTERE DE l'INTERIEUR
                   <br />
                   DES COLLECTIVITTES LOCALES
@@ -412,7 +418,8 @@ function ConsulterAN({ user }) {
                   position: "absolute",
                   right: "10px",
                   bottom: "10px",
-                }}>
+                }}
+              >
                 <Text style={styles.text}>
                   Fait a : {communeActuelle.nom_commune} {"  "} le{" "}
                   {moment(acte.date_declaration).format("DD-MM-YYYY")}

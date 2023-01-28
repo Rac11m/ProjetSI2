@@ -1,5 +1,5 @@
 import { Container } from "@mui/system";
-import { Box, Button, TextField } from "@mui/material";
+import { Alert, Box, Button, TextField } from "@mui/material";
 import React from "react";
 import { useState } from "react";
 import http from "../../services/httpService";
@@ -13,6 +13,7 @@ import {
   // PDFDownloadLink,
 } from "@react-pdf/renderer";
 import moment from "moment";
+import Navbar from "../../Navbar";
 
 const styles = StyleSheet.create({
   body: {
@@ -126,6 +127,7 @@ function ConsulterAM({ user }) {
     temoin2: null,
     fonctionnaire: null,
   });
+  const [error, setError] = useState(null);
 
   const token = localStorage.getItem("token");
   const config = {
@@ -141,8 +143,9 @@ function ConsulterAM({ user }) {
       setActe(result.data);
       getBureau(result.data.num_bureau, "comm");
       getBureau(user.num_bureau, "commA");
+      setError(null);
     } catch (e) {
-      console.log(e);
+      setError(e.response.data);
     }
   };
 
@@ -197,9 +200,7 @@ function ConsulterAM({ user }) {
         temoin2,
         fonctionnaire,
       });
-    } catch (e) {
-      console.log(e);
-    }
+    } catch (e) {}
   };
 
   const getBureau = async (numbureau, lacomm) => {
@@ -210,28 +211,30 @@ function ConsulterAM({ user }) {
       } else {
         setCommune(comm.data);
       }
-    } catch (e) {
-      console.log(e);
-    }
+    } catch (e) {}
   };
 
   return (
     <>
       {user && (
         <>
+          <Navbar user={user} />
           <Container
             className="cadre"
-            sx={{ padding: "10px", paddingBottom: "2%" }}>
+            sx={{ padding: "10px", paddingBottom: "2%" }}
+          >
             <Box
               sx={{
                 "& .MuiTextField-root": { m: 1 },
               }}
               noValidate
-              autoComplete="off">
+              autoComplete="off"
+            >
               <TextField
                 margin="normal"
                 required
                 fullWidth
+                type="number"
                 id="nin_declarant"
                 label="NIN"
                 name="matricule"
@@ -246,16 +249,25 @@ function ConsulterAM({ user }) {
                 fullWidth
                 type="button"
                 variant="contained"
-                style={{ backgroundColor: "#00917C", top: "15px" }}
+                style={{ backgroundColor: "#00917C" }}
+                disabled={!nin}
                 onClick={(e) => {
                   searchActeMariage(nin);
-                  console.log(acte);
-                }}>
+                }}
+              >
                 Search
               </Button>
+              {error && (
+                <Alert
+                  variant="outlined"
+                  severity="warning"
+                  style={{ marginTop: "30px" }}
+                >
+                  {<p>{error}</p>}
+                </Alert>
+              )}
             </Box>
           </Container>
-
           {acte._id && personnes.fonctionnaire ? (
             <Document title="ActePdf">
               <Page size={"A4"} style={styles.body} fixed>
@@ -272,7 +284,8 @@ function ConsulterAM({ user }) {
                         fontSize: "10px",
                         position: "absolute",
                         top: "40px",
-                      }}>
+                      }}
+                    >
                       MINISTERE DE l'INTERIEUR
                       <br />
                       DES COLLECTIVITTES LOCALES
@@ -408,7 +421,8 @@ function ConsulterAM({ user }) {
                       position: "absolute",
                       right: "10px",
                       bottom: "10px",
-                    }}>
+                    }}
+                  >
                     <Text style={styles.text}>
                       Fait a : {communeActuelle.nom_commune} {"  "} le{" "}
                       {moment(acte.date_declaration).format("DD-MM-YYYY")}

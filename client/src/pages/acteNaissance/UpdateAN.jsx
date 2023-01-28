@@ -1,6 +1,6 @@
 import React from "react";
 import { Container } from "@mui/system";
-import { Box, Button, TextField, Grid } from "@mui/material";
+import { Box, Button, TextField, Grid, Alert } from "@mui/material";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
@@ -9,6 +9,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import http from "../../services/httpService";
 import moment from "moment";
+import Navbar from "../../Navbar";
 
 function UpdateAN({ user }) {
   const navigateHook = useNavigate();
@@ -53,9 +54,11 @@ function UpdateAN({ user }) {
 
   const [nin, setNin] = useState(null);
   const [acte, setActe] = useState(acteObjet);
+  const [etatActe, setEtatActe] = useState(null);
   const [personne, setPersonne] = useState(personneObjet);
   const [dateValue, setDateValue] = useState(null);
   const [communeActuelle, setCommuneActuelle] = useState(bureauObjet);
+  const [error, setError] = useState(null);
 
   const searchActeNaissance = async (nin) => {
     try {
@@ -63,8 +66,10 @@ function UpdateAN({ user }) {
       setActe(result.data);
       getPersonne(nin);
       getBureau(user.num_bureau);
-      console.log(result.data);
+      setEtatActe(true);
+      setError(null);
     } catch (e) {
+      setError(e.response.data);
       console.log(e);
     }
   };
@@ -105,20 +110,24 @@ function UpdateAN({ user }) {
     <>
       {user && (
         <>
+          <Navbar user={user} />
           <Container
             component="form"
             className="cadre"
-            sx={{ padding: "10px", paddingBottom: "2%", marginBottom: "3%" }}>
+            sx={{ padding: "10px", paddingBottom: "2%", marginBottom: "3%" }}
+          >
             <Box
               sx={{
                 "& .MuiTextField-root": { m: 1 },
               }}
               noValidate
-              autoComplete="off">
+              autoComplete="off"
+            >
               <TextField
                 margin="normal"
                 required
                 fullWidth
+                type="number"
                 id="nin_declarant"
                 label="NIN"
                 name="matricule"
@@ -137,111 +146,125 @@ function UpdateAN({ user }) {
                   top: "15px",
                   marginBottom: "2rem",
                 }}
+                disabled={!nin}
                 onClick={() => {
                   searchActeNaissance(nin);
-                }}>
+                }}
+              >
                 Search
               </Button>
-              <hr />
-              <Grid>
-                <TextField
-                  margin="normal"
-                  disabled
-                  fullWidth
-                  id="date_mariage"
-                  label="Date Mariage"
-                  value={moment(acte.date_mariage).format("DD-MM-YYYY")}
-                />
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DatePicker
-                    label="Date Mariage"
-                    value={dateValue}
-                    onChange={(date) => {
-                      setDateValue(date);
-                    }}
-                    renderInput={(params) => <TextField required {...params} />}
-                  />
-                </LocalizationProvider>
-                <TextField
-                  margin="normal"
-                  disabled
-                  fullWidth
-                  id="lieu_mariage"
-                  label="Lieu Mariage"
-                  value={acte.lieu_mariage}
-                />
-                <TextField
-                  margin="normal"
-                  id="lieu_mariage"
-                  label="Lieu Deces"
-                  onChange={(e) => {
-                    //setLieumValue(e.target.value);
-                  }}
-                />
+              {error && (
+                <Alert variant="outlined" severity="warning">
+                  {<p>{error}</p>}
+                </Alert>
+              )}
+              {!error && etatActe && (
+                <>
+                  <hr />
+                  <Grid>
+                    <TextField
+                      margin="normal"
+                      disabled
+                      fullWidth
+                      id="date_mariage"
+                      label="Date Mariage"
+                      value={moment(acte.date_mariage).format("DD-MM-YYYY")}
+                    />
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                      <DatePicker
+                        label="Date Mariage"
+                        value={dateValue}
+                        onChange={(date) => {
+                          setDateValue(date);
+                        }}
+                        renderInput={(params) => (
+                          <TextField required {...params} />
+                        )}
+                      />
+                    </LocalizationProvider>
+                    <TextField
+                      margin="normal"
+                      disabled
+                      fullWidth
+                      id="lieu_mariage"
+                      label="Lieu Mariage"
+                      value={acte.lieu_mariage}
+                    />
+                    <TextField
+                      margin="normal"
+                      id="lieu_mariage"
+                      label="Lieu Deces"
+                      onChange={(e) => {
+                        //setLieumValue(e.target.value);
+                      }}
+                    />
 
-                <TextField
-                  margin="normal"
-                  disabled
-                  fullWidth
-                  id="nin_homme"
-                  label="NIN Homme"
-                  value={acte.num_homme}
-                />
-                <TextField
-                  margin="normal"
-                  disabled
-                  fullWidth
-                  id="nin_homme"
-                  label="NIN Femme"
-                  value={acte.num_femme}
-                />
-                <TextField
-                  margin="normal"
-                  disabled
-                  fullWidth
-                  id="nin_homme"
-                  label="NIN Temoin 1"
-                  value={acte.num_temoin1}
-                />
-                <TextField
-                  margin="normal"
-                  disabled
-                  fullWidth
-                  id="nin_homme"
-                  label="NIN Temoin 2"
-                  value={acte.num_temoin2}
-                />
-                <TextField
-                  margin="normal"
-                  disabled
-                  fullWidth
-                  id="matricule"
-                  label="Matricule"
-                  value={acte.matricule}
-                />
-                <TextField
-                  margin="normal"
-                  disabled
-                  fullWidth
-                  id="num_bureau"
-                  label="Num Bureau"
-                  value={acte.num_bureau}
-                />
-                <Button
-                  fullWidth
-                  type="button"
-                  variant="contained"
-                  style={{
-                    backgroundColor: "#00917C",
-                    top: "15px",
-                    marginBottom: "1rem",
-                  }}
-                  onClick={() => {
-                    updateActeN(nin);
-                  }}>
-                  Update
-                </Button>
-              </Grid>
+                    <TextField
+                      margin="normal"
+                      disabled
+                      fullWidth
+                      id="nin_homme"
+                      label="NIN Homme"
+                      value={acte.num_homme}
+                    />
+                    <TextField
+                      margin="normal"
+                      disabled
+                      fullWidth
+                      id="nin_homme"
+                      label="NIN Femme"
+                      value={acte.num_femme}
+                    />
+                    <TextField
+                      margin="normal"
+                      disabled
+                      fullWidth
+                      id="nin_homme"
+                      label="NIN Temoin 1"
+                      value={acte.num_temoin1}
+                    />
+                    <TextField
+                      margin="normal"
+                      disabled
+                      fullWidth
+                      id="nin_homme"
+                      label="NIN Temoin 2"
+                      value={acte.num_temoin2}
+                    />
+                    <TextField
+                      margin="normal"
+                      disabled
+                      fullWidth
+                      id="matricule"
+                      label="Matricule"
+                      value={acte.matricule}
+                    />
+                    <TextField
+                      margin="normal"
+                      disabled
+                      fullWidth
+                      id="num_bureau"
+                      label="Num Bureau"
+                      value={acte.num_bureau}
+                    />
+                    <Button
+                      fullWidth
+                      type="button"
+                      variant="contained"
+                      style={{
+                        backgroundColor: "#00917C",
+                        top: "15px",
+                        marginBottom: "1rem",
+                      }}
+                      onClick={() => {
+                        updateActeN(nin);
+                      }}
+                    >
+                      Update
+                    </Button>
+                  </Grid>
+                </>
+              )}
             </Box>
           </Container>
         </>
