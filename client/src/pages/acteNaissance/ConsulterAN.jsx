@@ -17,10 +17,10 @@ import moment from "moment";
 const styles = StyleSheet.create({
   body: {
     position: "absolute",
-    width: "50%",
+    width: "800px",
     height: "95%",
     marginTop: "5%",
-    left: "50ch",
+    left: "30%",
     border: "1px solid black",
   },
   title: {
@@ -40,6 +40,7 @@ const styles = StyleSheet.create({
   text: {
     margin: 12,
     fontSize: 20,
+    lineHeight: "2rem",
     textAlign: "justify",
     fontFamily: "Times-Roman",
   },
@@ -123,6 +124,7 @@ function ConsulterAN({ user }) {
   const [mere, setMere] = useState(personneObjet);
   const [declarant, setDeclarant] = useState(personneObjet);
   const [officier, setOfficier] = useState(userObjet);
+  const [usr, setUsr] = useState(userObjet);
 
   const token = localStorage.getItem("token");
   const config = {
@@ -195,6 +197,8 @@ function ConsulterAN({ user }) {
     try {
       const off = await http.get(`api/users/${matricule}`, config);
       setOfficier(off.data);
+      const usir = await http.get(`api/users/${user.matricule}`, config);
+      setUsr(usir.data);
     } catch (e) {
       console.log(e);
     }

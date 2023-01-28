@@ -40,6 +40,7 @@ const styles = StyleSheet.create({
   text: {
     margin: 12,
     fontSize: 20,
+    lineHeight: "2rem",
     textAlign: "justify",
     fontFamily: "Times-Roman",
   },
@@ -69,6 +70,7 @@ function ConsulterAM({ user }) {
     matricule: "",
   };
 
+  // eslint-disable-next-line no-unused-vars
   let personneObjet = {
     commune_naissance: "",
     commune_residence: "",
@@ -87,6 +89,7 @@ function ConsulterAM({ user }) {
     wilaya_naissance: "",
   };
 
+  // eslint-disable-next-line no-unused-vars
   let userObjet = {
     matricule: "",
     email: "",
@@ -111,6 +114,7 @@ function ConsulterAM({ user }) {
   const [acte, setActe] = useState(acteObjet);
   const [commune, setCommune] = useState(bureauObjet);
   const [communeActuelle, setCommuneActuelle] = useState(bureauObjet);
+  const [usr, setUsr] = useState(userObjet);
   const [personnes, setPersonnes] = useState({
     homme: null,
     pereh: null,
@@ -180,6 +184,8 @@ function ConsulterAM({ user }) {
         `api/users/${result.data.matricule}`,
         config
       );
+      const usir = await http.get(`api/users/${user.matricule}`, config);
+      setUsr(usir.data);
       setPersonnes({
         homme,
         pereh,
@@ -409,9 +415,7 @@ function ConsulterAM({ user }) {
                     </Text>
                     <br />
                     <Text style={styles.text}>
-                      L'officier de l'etat civil,{" "}
-                      {personnes.fonctionnaire.data.nom} {"  "}{" "}
-                      {personnes.fonctionnaire.data.prenom}
+                      L'officier de l'etat civil, {usr.nom} {"  "} {usr.prenom}
                     </Text>
                     <br />
                   </div>
