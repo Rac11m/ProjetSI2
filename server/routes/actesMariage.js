@@ -3,6 +3,12 @@ const router = express.Router();
 const auth = require("../middleware/auth");
 const { ActeMariage, validateActeMariage } = require("../models/acteMariage");
 
+// Get ActesMariage COUNT
+router.get("/", async (req, res) => {
+  let count = await ActeMariage.count();
+  res.send({ count });
+});
+
 // GET 1 Acte mariage
 router.get("/:id", auth, async (req, res) => {
   const { id } = req.params;

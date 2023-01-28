@@ -6,6 +6,12 @@ const {
   validateActeNaissance,
 } = require("../models/acteNaissance");
 
+// Get ActesNaissances COUNT
+router.get("/", async (req, res) => {
+  let count = await ActeNaissance.count();
+  res.send({ count });
+});
+
 // GET 1 Acte naissance
 router.get("/:id", auth, async (req, res) => {
   const { id: num_personne } = req.params;

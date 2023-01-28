@@ -10,6 +10,7 @@ const consulaires = require("../routes/Consulaires");
 const bureauxNationaux = require("../routes/bureauxNational");
 const bureauxConsulaires = require("../routes/bureauxConsulaire");
 const registres = require("../routes/registres");
+const statistiques = require("../routes/statistiques");
 
 module.exports = function (app) {
   app.use(express.json());
@@ -24,4 +25,5 @@ module.exports = function (app) {
   app.use("/api/bureauxNationaux", bureauxNationaux);
   app.use("/api/bureauxConsulaires", bureauxConsulaires);
   app.use("/api/registres", registres);
+  app.use("/api/statistiques", statistiques);
 };
