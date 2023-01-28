@@ -21,19 +21,20 @@ const Main = ({ user }) => {
                 },
               }}>
               <ButtonGroup
+                sx={{ width: "304px" }}
                 orientation="vertical"
-                aria-label="vertical outlined button group">
+                aria-label="">
                 <Button
                   variant="contained"
                   size="large"
-                  sx={{ backgroundColor: "#00917C" }}
+                  sx={{ backgroundColor: "#00917C", height: "68.5px" }}
                   onClick={() => navigateHook("/consulterAN")}>
                   Consulter Les Actes de Naissances
                 </Button>
                 <Button
                   variant="contained"
                   size="large"
-                  sx={{ backgroundColor: "#00917C" }}
+                  sx={{ backgroundColor: "#00917C", height: "68.5px" }}
                   onClick={() => navigateHook("/creationactenaissance")}>
                   Creation nouveau acte de naissance
                 </Button>
@@ -41,62 +42,59 @@ const Main = ({ user }) => {
                   key={2}
                   variant="contained"
                   size="large"
-                  sx={{ backgroundColor: "#00917C" }}>
+                  sx={{ backgroundColor: "#00917C", height: "68.5px" }}>
                   Mise a jour acte de naissance
                 </Button>
               </ButtonGroup>
 
               <ButtonGroup
+                sx={{ width: "304px" }}
                 orientation="vertical"
-                aria-label="vertical outlined button group">
+                aria-label="">
                 <Button
                   variant="contained"
                   size="large"
-                  sx={{ backgroundColor: "#00917C" }}
+                  sx={{ backgroundColor: "#00917C", height: "68.5px" }}
                   onClick={() => navigateHook("/consulterAM")}>
                   Consulter Les Actes de mariages
                 </Button>
                 <Button
-                  key={1}
                   variant="contained"
                   size="large"
-                  sx={{ backgroundColor: "#00917C" }}
+                  sx={{ backgroundColor: "#00917C", height: "68.5px" }}
                   onClick={() => navigateHook("/creationactemariage")}>
                   Creation Nouveau acte de mariage
                 </Button>
                 <Button
-                  key={2}
                   variant="contained"
                   size="large"
-                  sx={{ backgroundColor: "#00917C" }}>
+                  sx={{ backgroundColor: "#00917C", height: "68.5px" }}>
                   Mise a jour acte de mariage
                 </Button>{" "}
               </ButtonGroup>
 
               <ButtonGroup
+                sx={{ width: "304px" }}
                 orientation="vertical"
                 aria-label="vertical outlined button group">
                 <Button
-                  key={0}
                   variant="contained"
                   size="large"
-                  sx={{ backgroundColor: "#00917C" }}
+                  sx={{ backgroundColor: "#00917C", height: "68.5px" }}
                   onClick={() => navigateHook("/consulterAD")}>
                   Consulter Les Actes de dÉcÈs
                 </Button>
                 <Button
-                  key={1}
                   variant="contained"
                   size="large"
-                  sx={{ backgroundColor: "#00917C" }}
+                  sx={{ backgroundColor: "#00917C", height: "68.5px" }}
                   onClick={() => navigateHook("/creationactedeces")}>
                   Creation nouveau acte de dÉcÈs
                 </Button>
                 <Button
-                  key={2}
                   variant="contained"
                   size="large"
-                  sx={{ backgroundColor: "#00917C" }}>
+                  sx={{ backgroundColor: "#00917C", height: "68.5px" }}>
                   Mise a jour acte de dÉcÈs
                 </Button>{" "}
               </ButtonGroup>
