@@ -16,6 +16,7 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider/LocalizationProvider";
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "../acteNaissance/forms.css";
 import Navbar from "../../Navbar";
 import moment from "moment";
@@ -28,6 +29,8 @@ const config = {
   },
 };
 function FormulaireCreation({ user }) {
+  const navigateHook = useNavigate();
+
   const [dateValue, setDateValue] = useState(null);
   const [timeValue, setTimeValue] = useState(null);
   const [affiliationValue, setAffiliationValue] = useState(null);
@@ -57,6 +60,7 @@ function FormulaireCreation({ user }) {
     date_deces: "",
     heure_deces: "",
     lieu_deces: "",
+    raison: "",
     num_bureau: "",
     matricule: "",
   };
@@ -70,9 +74,12 @@ function FormulaireCreation({ user }) {
     try {
       acte.num_bureau = user.num_bureau;
       acte.matricule = user.matricule;
-      const res = await http.post("api/actesDeces", acte, config);
-      setresponseAD(res);
+      const resp = await http.post("api/actesDeces", acte, config);
+      setresponseAD(resp);
       searchNumActeNaissanceDefunt(acte.num_personne);
+      if (resp.status === 200) {
+        navigateHook("/consulterAD");
+      }
     } catch (e) {
       console.log(e);
     }
@@ -431,6 +438,16 @@ function FormulaireCreation({ user }) {
                     fullWidth
                     id="raison_dead"
                     label="Raison deces "
+                    onChange={(e) => {
+                      acteDeces.raison = e.target.value;
+                      setActe((prevElement) => {
+                        return {
+                          ...prevElement,
+                          raison: acteDeces.raison,
+                        };
+                      });
+                      console.log(acteDeces.raison);
+                    }}
                   />
                 </Grid>
                 <hr />

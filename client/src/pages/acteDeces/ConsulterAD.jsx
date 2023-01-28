@@ -67,6 +67,7 @@ function ConsulterAD({ user }) {
     date_deces: "",
     heure_deces: "",
     lieu_deces: "",
+    raison: "",
     num_bureau: "",
     matricule: "",
   };
@@ -284,6 +285,7 @@ function ConsulterAD({ user }) {
                       est décédé a : {` ${acte.lieu_deces} `}
                     </Text>
                     <br />
+                    <Text style={styles.text}>raison : {acte.raison}</Text>
                     <Text style={styles.text}>
                       Le nommé :{" "}
                       {` ${personnes.defunt.data.nom} ${personnes.defunt.data.prenom} `}

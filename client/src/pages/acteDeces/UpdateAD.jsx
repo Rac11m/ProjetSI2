@@ -1,8 +1,14 @@
 import { Container } from "@mui/system";
 import { Box, Button, TextField, Grid } from "@mui/material";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { TimePicker } from "@mui/x-date-pickers/TimePicker";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider/LocalizationProvider";
 import React from "react";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import http from "../../services/httpService";
+import moment from "moment";
 
 function UpdateAD({ user }) {
   const token = localStorage.getItem("token");
@@ -20,6 +26,7 @@ function UpdateAD({ user }) {
     date_deces: "",
     heure_deces: "",
     lieu_deces: "",
+    raison: "",
     num_bureau: "",
     matricule: "",
   };
@@ -32,8 +39,14 @@ function UpdateAD({ user }) {
     matricule_maire: "",
   };
 
+  const navigateHook = useNavigate();
+
   const [nin, setNin] = useState(null);
   const [acte, setActe] = useState(acteObjet);
+  const [dateValue, setDateValue] = useState(null);
+  const [timeValue, setTimeValue] = useState(null);
+  const [lieudValue, setLieudValue] = useState(null);
+  const [raisonValue, setRaisonValue] = useState(null);
   const [communeActuelle, setCommuneActuelle] = useState(bureauObjet);
 
   const searchActeDeces = async (nin) => {
@@ -54,6 +67,29 @@ function UpdateAD({ user }) {
       console.log(comm.data);
     } catch (e) {
       console.log(e);
+    }
+  };
+
+  const updateActeD = async (nin) => {
+    let acteEnvoi = acte;
+    if (lieudValue && lieudValue !== " ") {
+      acteEnvoi.lieu_deces = lieudValue;
+    }
+    if (dateValue) {
+      acteEnvoi.date_deces = moment(dateValue.$d).format("YYYY-MM-DD");
+    }
+    if (timeValue) {
+      acteEnvoi.heure_deces = moment(timeValue.$d).format("h:mm");
+    }
+    if (raisonValue) {
+      acteEnvoi.raison = raisonValue;
+    }
+    delete acteEnvoi._id;
+    delete acteEnvoi.__v;
+    delete acteEnvoi.num_registre;
+    const resp = await http.put(`api/actesDeces/${nin}`, acteEnvoi, config);
+    if (resp.status === 200) {
+      navigateHook("/consulterAD");
     }
   };
 
@@ -114,7 +150,7 @@ function UpdateAD({ user }) {
                   fullWidth
                   id="date_declaration"
                   label="Date Declaration"
-                  value={acte.date_declaration}
+                  value={moment(acte.date_declaration).format("DD-MM-YYYY")}
                 />
                 <TextField
                   margin="normal"
@@ -126,24 +162,69 @@ function UpdateAD({ user }) {
                 />
                 <TextField
                   margin="normal"
+                  disabled
                   fullWidth
                   id="date_deces"
                   label="Date Deces"
-                  value={acte.date_deces}
+                  value={moment(acte.date_deces).format("DD-MM-YYYY")}
                 />
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DatePicker
+                    label="Date Deces"
+                    value={dateValue}
+                    onChange={(date) => {
+                      setDateValue(date);
+                    }}
+                    renderInput={(params) => <TextField required {...params} />}
+                  />
+                </LocalizationProvider>
                 <TextField
                   margin="normal"
+                  disabled
                   fullWidth
                   id="heure_deces"
                   label="Heure Deces"
                   value={acte.heure_deces}
                 />
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <TimePicker
+                    label="Heure Deces"
+                    value={timeValue}
+                    onChange={(time) => {
+                      setTimeValue(time);
+                    }}
+                    renderInput={(params) => <TextField required {...params} />}
+                  />
+                </LocalizationProvider>
                 <TextField
                   margin="normal"
                   fullWidth
                   id="lieu_deces"
                   label="Lieu Deces"
                   value={acte.lieu_deces}
+                />
+                <TextField
+                  margin="normal"
+                  id="lieu_deces"
+                  label="Lieu Deces"
+                  onChange={(e) => {
+                    setLieudValue(e.target.value);
+                  }}
+                />
+                <TextField
+                  margin="normal"
+                  fullWidth
+                  id="raison_deces"
+                  label="Raison Deces"
+                  value={acte.raison}
+                />
+                <TextField
+                  margin="normal"
+                  id="raison_deces"
+                  label="Raison Deces"
+                  onChange={(e) => {
+                    setRaisonValue(e.target.value);
+                  }}
                 />
                 <TextField
                   margin="normal"
@@ -171,7 +252,7 @@ function UpdateAD({ user }) {
                     marginBottom: "1rem",
                   }}
                   onClick={() => {
-                    searchActeDeces(nin);
+                    updateActeD(nin);
                   }}>
                   Update
                 </Button>

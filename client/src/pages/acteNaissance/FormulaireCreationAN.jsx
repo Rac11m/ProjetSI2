@@ -16,12 +16,15 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider/LocalizationProvider";
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./forms.css";
 import Navbar from "../../Navbar";
 import http from "../../services/httpService";
 import moment from "moment";
 
 const FormulaireCreation = ({ user }) => {
+  const navigateHook = useNavigate();
+
   const [dateValue, setDateValue] = useState(null);
   const [timeValue, setTimeValue] = useState(null);
   const [sexeValue, setSexeValue] = useState("");
@@ -126,6 +129,9 @@ const FormulaireCreation = ({ user }) => {
       acte.num_bureau = user.num_bureau;
       const resp = await http.post("api/actesNaissance", acte, config);
       setResponseAN(resp);
+      if (resp.status === 200) {
+        navigateHook("/consulterAN");
+      }
     } catch (e) {
       console.log(e);
     }

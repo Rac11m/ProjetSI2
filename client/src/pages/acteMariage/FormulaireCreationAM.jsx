@@ -5,6 +5,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider/LocalizationProvider";
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "../acteNaissance/forms.css";
 import Navbar from "../../Navbar";
 import moment from "moment";
@@ -18,6 +19,8 @@ const config = {
 };
 
 function FormulaireCreation({ user }) {
+  const navigateHook = useNavigate();
+
   let acteMariage = {
     date_mariage: "",
     lieu_mariage: "",
@@ -65,6 +68,9 @@ function FormulaireCreation({ user }) {
       setresponseAM(resp);
       changerActeNaissanceMariage(epoux.num_identifiant_national);
       changerActeNaissanceMariage(epouse.num_identifiant_national);
+      if (resp.status === 200) {
+        navigateHook("/consulterAM");
+      }
     } catch (e) {
       console.log(e);
     }
