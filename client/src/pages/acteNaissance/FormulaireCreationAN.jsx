@@ -9,6 +9,7 @@ import {
   InputLabel,
   FormControl,
   Select,
+  Alert,
 } from "@mui/material";
 import { Container } from "@mui/system";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -35,6 +36,7 @@ const FormulaireCreation = ({ user }) => {
   const [openDeclarant, setOpenDeclarant] = useState(null);
   const [openPere, setOpenPere] = useState(null);
   const [openMere, setOpenMere] = useState(null);
+  const [error, setError] = useState(null);
 
   const parent = {
     num_identifiant_national: "",
@@ -135,7 +137,10 @@ const FormulaireCreation = ({ user }) => {
       if (resp.status === 200) {
         navigateHook("/consulterAN");
       }
+      setError(null);
     } catch (e) {
+      setError(e.response.data);
+
       console.log(e);
     }
   };
@@ -157,16 +162,23 @@ const FormulaireCreation = ({ user }) => {
       nouveauNeObjet.etat_matrimonial = " ";
       const resp = await http.post("api/personnes", nouveauNeObjet, config);
       setResponseNouveauNe(resp);
+      setError(null);
     } catch (e) {
+      setError(e.response.data);
       console.log(e);
     }
   };
 
   const searchDeclarant = async (nin) => {
-    const result = await http.get(`api/personnes/${nin}`, config);
-    setDeclarant(result.data);
-    setOpenDeclarant(true);
-    console.log(declarant);
+    try {
+      const result = await http.get(`api/personnes/${nin}`, config);
+      setDeclarant(result.data);
+      setOpenDeclarant(true);
+      console.log(declarant);
+      setError(null);
+    } catch (e) {
+      setError(e.response.data);
+    }
   };
   const searchParent = async (nin, affil) => {
     try {
@@ -191,6 +203,7 @@ const FormulaireCreation = ({ user }) => {
         setGmerem(result.data);
       }
     } catch (e) {
+      setError(e.response.data);
       console.log(e);
     }
   };
@@ -237,6 +250,7 @@ const FormulaireCreation = ({ user }) => {
                 <Button
                   type="button"
                   variant="contained"
+                  disabled={!nindeclarant}
                   style={{ backgroundColor: "#00917C", top: "15px" }}
                   onClick={() => searchDeclarant(nindeclarant)}
                 >
@@ -287,7 +301,7 @@ const FormulaireCreation = ({ user }) => {
                       disabled={true}
                       id="profession_declarant"
                       //label="Profession"
-                      value={declarant.profession}
+                      value={declarant.profession || "Profession"}
                     />
                     <TextField
                       margin="normal"
@@ -752,7 +766,15 @@ const FormulaireCreation = ({ user }) => {
                   </Button>
                 </Box>
               </div>
-              {responseAN && responseNouveaNe ? <p></p> : <p></p>}
+              {error && (
+                <Alert
+                  variant="outlined"
+                  severity="warning"
+                  style={{ marginTop: "30px" }}
+                >
+                  {<p>{error}</p>}
+                </Alert>
+              )}
             </Box>
           </Container>
         </>
