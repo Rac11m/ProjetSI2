@@ -234,15 +234,13 @@ function ConsulterAN({ user }) {
       <Navbar user={user} />
       <Container
         className="cadre"
-        sx={{ padding: "10px", paddingBottom: "2%" }}
-      >
+        sx={{ padding: "10px", paddingBottom: "2%" }}>
         <Box
           sx={{
             "& .MuiTextField-root": { m: 1 },
           }}
           noValidate
-          autoComplete="off"
-        >
+          autoComplete="off">
           <TextField
             margin="normal"
             required
@@ -265,16 +263,14 @@ function ConsulterAN({ user }) {
             disabled={!nin}
             onClick={() => {
               searchActeNaissance(nin);
-            }}
-          >
+            }}>
             Search
           </Button>
           {error && (
             <Alert
               variant="outlined"
               severity="warning"
-              style={{ marginTop: "30px" }}
-            >
+              style={{ marginTop: "30px" }}>
               {<p>{error}</p>}
             </Alert>
           )}
@@ -296,8 +292,7 @@ function ConsulterAN({ user }) {
                     fontSize: "10px",
                     position: "absolute",
                     top: "40px",
-                  }}
-                >
+                  }}>
                   MINISTERE DE l'INTERIEUR
                   <br />
                   DES COLLECTIVITTES LOCALES
@@ -418,8 +413,7 @@ function ConsulterAN({ user }) {
                   position: "absolute",
                   right: "10px",
                   bottom: "10px",
-                }}
-              >
+                }}>
                 <Text style={styles.text}>
                   Fait a : {communeActuelle.nom_commune} {"  "} le{" "}
                   {moment(acte.date_declaration).format("DD-MM-YYYY")}

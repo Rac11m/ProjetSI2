@@ -107,15 +107,13 @@ function UpdateAD({ user }) {
           <Container
             component="form"
             className="cadre"
-            sx={{ padding: "10px", paddingBottom: "2%", marginBottom: "3%" }}
-          >
+            sx={{ padding: "10px", paddingBottom: "2%", marginBottom: "3%" }}>
             <Box
               sx={{
                 "& .MuiTextField-root": { m: 1 },
               }}
               noValidate
-              autoComplete="off"
-            >
+              autoComplete="off">
               <TextField
                 margin="normal"
                 required
@@ -142,8 +140,7 @@ function UpdateAD({ user }) {
                 disabled={!nin}
                 onClick={() => {
                   searchActeDeces(nin);
-                }}
-              >
+                }}>
                 Search
               </Button>
               {error && (
@@ -276,8 +273,7 @@ function UpdateAD({ user }) {
                       }}
                       onClick={() => {
                         updateActeD(nin);
-                      }}
-                    >
+                      }}>
                       Update
                     </Button>
                   </Grid>

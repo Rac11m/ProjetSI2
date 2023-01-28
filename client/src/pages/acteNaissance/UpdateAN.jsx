@@ -1,10 +1,6 @@
 import React from "react";
 import { Container } from "@mui/system";
 import { Box, Button, TextField, Grid, Alert } from "@mui/material";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { TimePicker } from "@mui/x-date-pickers/TimePicker";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider/LocalizationProvider";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import http from "../../services/httpService";
@@ -56,8 +52,12 @@ function UpdateAN({ user }) {
   const [acte, setActe] = useState(acteObjet);
   const [etatActe, setEtatActe] = useState(null);
   const [personne, setPersonne] = useState(personneObjet);
-  const [dateValue, setDateValue] = useState(null);
-  const [communeActuelle, setCommuneActuelle] = useState(bureauObjet);
+  const [changerNom, setChangerNom] = useState(null);
+  const [changerPrenom, setChangerPrenom] = useState(null);
+  const [changerCommuneR, setChangerCommuneR] = useState(null);
+  const [changerEtatMatrimonial, setChangerEtatMatrimonial] = useState(null);
+  const [changerProfession, setChangerProfession] = useState(null);
+  const [commune, setCommune] = useState(bureauObjet);
   const [error, setError] = useState(null);
 
   const searchActeNaissance = async (nin) => {
@@ -65,7 +65,7 @@ function UpdateAN({ user }) {
       const result = await http.get(`api/actesNaissance/${nin}`, config);
       setActe(result.data);
       getPersonne(nin);
-      getBureau(user.num_bureau);
+      getBureau(result.data.num_bureau);
       setEtatActe(true);
       setError(null);
     } catch (e) {
@@ -86,7 +86,7 @@ function UpdateAN({ user }) {
   const getBureau = async (numbureau) => {
     try {
       const comm = await http.get(`api/bureauxNationaux/${numbureau}`, config);
-      setCommuneActuelle(comm.data);
+      setCommune(comm.data);
       console.log(comm.data);
     } catch (e) {
       console.log(e);
@@ -94,14 +94,27 @@ function UpdateAN({ user }) {
   };
 
   const updateActeN = async (nin) => {
-    let acteEnvoi = acte;
     let personneEnvoi = personne;
-    // delete acteEnvoi._id;
-    // delete acteEnvoi.__v;
-    // delete acteEnvoi.num_registre;
-    const resp = await http.put(`api/actesNaissance/${nin}`, acteEnvoi, config);
+    if (changerNom && String(changerNom).length > 3) {
+      personneEnvoi.nom = changerNom;
+    }
+    if (changerPrenom && String(changerPrenom).length > 3) {
+      personneEnvoi.prenom = changerPrenom;
+    }
+    if (changerCommuneR && String(changerCommuneR).length > 1) {
+      personneEnvoi.commune_residence = changerCommuneR;
+    }
+    if (changerEtatMatrimonial && String(changerEtatMatrimonial).length > 1) {
+      personneEnvoi.etat_matrimonial = changerEtatMatrimonial;
+    }
+    if (changerProfession && String(changerProfession).length > 1) {
+      personneEnvoi.profession = changerProfession;
+    }
+
+    delete personneEnvoi._id;
+    delete personneEnvoi.__v;
     const respp = await http.put(`api/personnes/${nin}`, personneEnvoi, config);
-    if (resp.status === 200 && respp.status === 200) {
+    if (respp.status === 200) {
       navigateHook("/consulterAN");
     }
   };
@@ -114,15 +127,13 @@ function UpdateAN({ user }) {
           <Container
             component="form"
             className="cadre"
-            sx={{ padding: "10px", paddingBottom: "2%", marginBottom: "3%" }}
-          >
+            sx={{ padding: "10px", paddingBottom: "2%", marginBottom: "3%" }}>
             <Box
               sx={{
                 "& .MuiTextField-root": { m: 1 },
               }}
               noValidate
-              autoComplete="off"
-            >
+              autoComplete="off">
               <TextField
                 margin="normal"
                 required
@@ -149,8 +160,7 @@ function UpdateAN({ user }) {
                 disabled={!nin}
                 onClick={() => {
                   searchActeNaissance(nin);
-                }}
-              >
+                }}>
                 Search
               </Button>
               {error && (
@@ -166,70 +176,96 @@ function UpdateAN({ user }) {
                       margin="normal"
                       disabled
                       fullWidth
-                      id="date_mariage"
-                      label="Date Mariage"
-                      value={moment(acte.date_mariage).format("DD-MM-YYYY")}
+                      id="nomP"
+                      label="Nom Prenom"
+                      value={`${personne.nom} ${personne.prenom}`}
                     />
-                    <LocalizationProvider dateAdapter={AdapterDayjs}>
-                      <DatePicker
-                        label="Date Mariage"
-                        value={dateValue}
-                        onChange={(date) => {
-                          setDateValue(date);
-                        }}
-                        renderInput={(params) => (
-                          <TextField required {...params} />
-                        )}
-                      />
-                    </LocalizationProvider>
                     <TextField
                       margin="normal"
-                      disabled
                       fullWidth
-                      id="lieu_mariage"
-                      label="Lieu Mariage"
-                      value={acte.lieu_mariage}
-                    />
-                    <TextField
-                      margin="normal"
-                      id="lieu_mariage"
-                      label="Lieu Deces"
+                      id="nomP"
+                      label="Nouveau Nom"
                       onChange={(e) => {
-                        //setLieumValue(e.target.value);
+                        setChangerNom(e.target.value);
                       }}
                     />
-
                     <TextField
                       margin="normal"
-                      disabled
                       fullWidth
-                      id="nin_homme"
-                      label="NIN Homme"
-                      value={acte.num_homme}
+                      id="nomP"
+                      label="Nouveau Prenom"
+                      onChange={(e) => {
+                        setChangerPrenom(e.target.value);
+                      }}
                     />
                     <TextField
                       margin="normal"
                       disabled
                       fullWidth
-                      id="nin_homme"
-                      label="NIN Femme"
-                      value={acte.num_femme}
+                      id="date_naissance"
+                      label="Date Naissance"
+                      value={moment(personne.date_naissance).format(
+                        "DD-MM-YYYY"
+                      )}
                     />
                     <TextField
                       margin="normal"
                       disabled
                       fullWidth
-                      id="nin_homme"
-                      label="NIN Temoin 1"
-                      value={acte.num_temoin1}
+                      id="lieu_naissance"
+                      label="Lieu Naissance"
+                      value={`${personne.lieu_naissance}, ${personne.commune_naissance}, ${personne.wilaya_naissance}`}
                     />
                     <TextField
                       margin="normal"
                       disabled
                       fullWidth
-                      id="nin_homme"
-                      label="NIN Temoin 2"
-                      value={acte.num_temoin2}
+                      id="commune_residence"
+                      label="Commune Residence"
+                      value={`${personne.commune_residence}`}
+                    />
+                    <TextField
+                      margin="normal"
+                      fullWidth
+                      id="commune_residence"
+                      label="Nouvelle Commune Residence"
+                      onChange={(e) => {
+                        setChangerCommuneR(e.target.value);
+                      }}
+                    />
+                    <TextField
+                      margin="normal"
+                      disabled
+                      fullWidth
+                      id="etat_matrimonial"
+                      label="Etat Matrimonial"
+                      value={`${personne.etat_matrimonial}`}
+                    />
+                    <TextField
+                      margin="normal"
+                      fullWidth
+                      id="etat_matrimonial"
+                      label="Nouveau Etat Matrimonial"
+                      onChange={(e) => {
+                        setChangerEtatMatrimonial(e.target.value);
+                      }}
+                    />
+                    <TextField
+                      margin="normal"
+                      disabled
+                      fullWidth
+                      id="profession"
+                      label="Profession"
+                      value={`${personne.profession}`}
+                    />
+                    <TextField
+                      margin="normal"
+                      fullWidth
+                      id="profession"
+                      label="Nouvelle Profession"
+                      onChange={(e) => {
+                        setChangerProfession(e.target.value);
+                      }}
                     />
                     <TextField
                       margin="normal"
@@ -244,8 +280,8 @@ function UpdateAN({ user }) {
                       disabled
                       fullWidth
                       id="num_bureau"
-                      label="Num Bureau"
-                      value={acte.num_bureau}
+                      label="Nom Commune"
+                      value={commune.nom_commune}
                     />
                     <Button
                       fullWidth
@@ -258,8 +294,7 @@ function UpdateAN({ user }) {
                       }}
                       onClick={() => {
                         updateActeN(nin);
-                      }}
-                    >
+                      }}>
                       Update
                     </Button>
                   </Grid>

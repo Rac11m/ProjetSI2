@@ -203,15 +203,13 @@ function ConsulterAD({ user }) {
           <Container
             component="form"
             className="cadre"
-            sx={{ padding: "10px", paddingBottom: "2%" }}
-          >
+            sx={{ padding: "10px", paddingBottom: "2%" }}>
             <Box
               sx={{
                 "& .MuiTextField-root": { m: 1 },
               }}
               noValidate
-              autoComplete="off"
-            >
+              autoComplete="off">
               <TextField
                 margin="normal"
                 required
@@ -234,16 +232,14 @@ function ConsulterAD({ user }) {
                 disabled={!nin}
                 onClick={(e) => {
                   searchActeDeces(nin);
-                }}
-              >
+                }}>
                 Search
               </Button>
               {error && (
                 <Alert
                   variant="outlined"
                   severity="warning"
-                  style={{ marginTop: "30px" }}
-                >
+                  style={{ marginTop: "30px" }}>
                   {<p>{error}</p>}
                 </Alert>
               )}
@@ -271,8 +267,7 @@ function ConsulterAD({ user }) {
                         fontSize: "10px",
                         position: "absolute",
                         top: "40px",
-                      }}
-                    >
+                      }}>
                       MINISTERE DE l'INTERIEUR
                       <br />
                       DES COLLECTIVITTES LOCALES
@@ -288,7 +283,7 @@ function ConsulterAD({ user }) {
                     <br />
                   </div>
                   <Text style={styles.title}>
-                    <h4>Acte De Mariage</h4>
+                    <h4>Acte De Décès</h4>
                   </Text>
                   <Text style={styles.author}>
                     <p style={{ marginTop: "-30px" }}>Version Electronique</p>
@@ -377,8 +372,7 @@ function ConsulterAD({ user }) {
                       position: "absolute",
                       right: "10px",
                       bottom: "10px",
-                    }}
-                  >
+                    }}>
                     <Text style={styles.text}>
                       Fait a : {communeActuelle.nom_commune} {"  "} le{" "}
                       {moment(acte.date_declaration).format("DD-MM-YYYY")}
