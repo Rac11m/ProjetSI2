@@ -96,15 +96,13 @@ function UpdateAM({ user }) {
           <Container
             component="form"
             className="cadre"
-            sx={{ padding: "10px", paddingBottom: "2%", marginBottom: "3%" }}
-          >
+            sx={{ padding: "10px", paddingBottom: "2%", marginBottom: "3%" }}>
             <Box
               sx={{
                 "& .MuiTextField-root": { m: 1 },
               }}
               noValidate
-              autoComplete="off"
-            >
+              autoComplete="off">
               <TextField
                 margin="normal"
                 required
@@ -131,8 +129,7 @@ function UpdateAM({ user }) {
                 disabled={!nin}
                 onClick={() => {
                   searchActeMariage(nin);
-                }}
-              >
+                }}>
                 Search
               </Button>
               <hr />
@@ -171,118 +168,118 @@ function UpdateAM({ user }) {
                     setLieumValue(e.target.value);
                   }}
                 />
-              {error && (
-                <Alert variant="outlined" severity="warning">
-                  {<p>{error}</p>}
-                </Alert>
-              )}
-              {!error && etatActe && (
-                <>
-                  <hr />
-                  <Grid>
-                    <TextField
-                      margin="normal"
-                      disabled
-                      fullWidth
-                      id="date_mariage"
-                      label="Date Mariage"
-                      value={moment(acte.date_mariage).format("DD-MM-YYYY")}
-                    />
-                    <LocalizationProvider dateAdapter={AdapterDayjs}>
-                      <DatePicker
+                {error && (
+                  <Alert variant="outlined" severity="warning">
+                    {<p>{error}</p>}
+                  </Alert>
+                )}
+                {!error && etatActe && (
+                  <>
+                    <hr />
+                    <Grid>
+                      <TextField
+                        margin="normal"
+                        disabled
+                        fullWidth
+                        id="date_mariage"
                         label="Date Mariage"
-                        value={dateValue}
-                        onChange={(date) => {
-                          setDateValue(date);
-                        }}
-                        renderInput={(params) => (
-                          <TextField required {...params} />
-                        )}
+                        value={moment(acte.date_mariage).format("DD-MM-YYYY")}
                       />
-                    </LocalizationProvider>
-                    <TextField
-                      margin="normal"
-                      disabled
-                      fullWidth
-                      id="lieu_mariage"
-                      label="Lieu Mariage"
-                      value={acte.lieu_mariage}
-                    />
-                    <TextField
-                      margin="normal"
-                      id="lieu_mariage"
-                      label="Lieu Deces"
-                      onChange={(e) => {
-                        setLieumValue(e.target.value);
-                      }}
-                    />
+                      <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        <DatePicker
+                          label="Date Mariage"
+                          value={dateValue}
+                          onChange={(date) => {
+                            setDateValue(date);
+                          }}
+                          renderInput={(params) => (
+                            <TextField required {...params} />
+                          )}
+                        />
+                      </LocalizationProvider>
+                      <TextField
+                        margin="normal"
+                        disabled
+                        fullWidth
+                        id="lieu_mariage"
+                        label="Lieu Mariage"
+                        value={acte.lieu_mariage}
+                      />
+                      <TextField
+                        margin="normal"
+                        id="lieu_mariage"
+                        label="Lieu Deces"
+                        onChange={(e) => {
+                          setLieumValue(e.target.value);
+                        }}
+                      />
 
-                    <TextField
-                      margin="normal"
-                      disabled
-                      fullWidth
-                      id="nin_homme"
-                      label="NIN Homme"
-                      value={acte.num_homme}
-                    />
-                    <TextField
-                      margin="normal"
-                      disabled
-                      fullWidth
-                      id="nin_homme"
-                      label="NIN Femme"
-                      value={acte.num_femme}
-                    />
-                    <TextField
-                      margin="normal"
-                      disabled
-                      fullWidth
-                      id="nin_homme"
-                      label="NIN Temoin 1"
-                      value={acte.num_temoin1}
-                    />
-                    <TextField
-                      margin="normal"
-                      disabled
-                      fullWidth
-                      id="nin_homme"
-                      label="NIN Temoin 2"
-                      value={acte.num_temoin2}
-                    />
-                    <TextField
-                      margin="normal"
-                      disabled
-                      fullWidth
-                      id="matricule"
-                      label="Matricule"
-                      value={acte.matricule}
-                    />
-                    <TextField
-                      margin="normal"
-                      disabled
-                      fullWidth
-                      id="num_bureau"
-                      label="Num Bureau"
-                      value={acte.num_bureau}
-                    />
-                    <Button
-                      fullWidth
-                      type="button"
-                      variant="contained"
-                      style={{
-                        backgroundColor: "#00917C",
-                        top: "15px",
-                        marginBottom: "1rem",
-                      }}
-                      onClick={() => {
-                        updateActeM(nin);
-                      }}
-                    >
-                      Update
-                    </Button>
-                  </Grid>
-                </>
-              )}
+                      <TextField
+                        margin="normal"
+                        disabled
+                        fullWidth
+                        id="nin_homme"
+                        label="NIN Homme"
+                        value={acte.num_homme}
+                      />
+                      <TextField
+                        margin="normal"
+                        disabled
+                        fullWidth
+                        id="nin_homme"
+                        label="NIN Femme"
+                        value={acte.num_femme}
+                      />
+                      <TextField
+                        margin="normal"
+                        disabled
+                        fullWidth
+                        id="nin_homme"
+                        label="NIN Temoin 1"
+                        value={acte.num_temoin1}
+                      />
+                      <TextField
+                        margin="normal"
+                        disabled
+                        fullWidth
+                        id="nin_homme"
+                        label="NIN Temoin 2"
+                        value={acte.num_temoin2}
+                      />
+                      <TextField
+                        margin="normal"
+                        disabled
+                        fullWidth
+                        id="matricule"
+                        label="Matricule"
+                        value={acte.matricule}
+                      />
+                      <TextField
+                        margin="normal"
+                        disabled
+                        fullWidth
+                        id="num_bureau"
+                        label="Num Bureau"
+                        value={acte.num_bureau}
+                      />
+                      <Button
+                        fullWidth
+                        type="button"
+                        variant="contained"
+                        style={{
+                          backgroundColor: "#00917C",
+                          top: "15px",
+                          marginBottom: "1rem",
+                        }}
+                        onClick={() => {
+                          updateActeM(nin);
+                        }}>
+                        Update
+                      </Button>
+                    </Grid>
+                  </>
+                )}
+              </Grid>
             </Box>
           </Container>
         </>
