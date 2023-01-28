@@ -320,7 +320,7 @@ const Main = ({ user }) => {
                   <>
                     <div style={{ marginLeft: 100, marginTop: 20 }}>
                       <Typography>Nombre de citoyens</Typography>
-                      <TextField disabled="true" value={nbrPersonnes} />
+                      <TextField disabled={true} value={nbrPersonnes} />
                     </div>
 
                     <Chart data={data} legend="Nombre des actes par an." />
