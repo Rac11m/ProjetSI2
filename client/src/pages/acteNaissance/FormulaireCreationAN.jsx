@@ -216,21 +216,18 @@ const FormulaireCreation = ({ user }) => {
           <Container
             component="form"
             className="cadre"
-            sx={{ padding: "10px" }}
-          >
+            sx={{ padding: "10px" }}>
             <Box
               sx={{
                 "& .MuiTextField-root": { m: 1, width: "25ch" },
               }}
               noValidate
-              autoComplete="off"
-            >
+              autoComplete="off">
               <div className="partie-declarant">
                 <Typography
                   variant="h5"
                   gutterBottom
-                  style={{ marginTop: "5px" }}
-                >
+                  style={{ marginTop: "5px" }}>
                   Partie Declarant
                 </Typography>
                 <TextField
@@ -252,8 +249,7 @@ const FormulaireCreation = ({ user }) => {
                   variant="contained"
                   disabled={!nindeclarant}
                   style={{ backgroundColor: "#00917C", top: "15px" }}
-                  onClick={() => searchDeclarant(nindeclarant)}
-                >
+                  onClick={() => searchDeclarant(nindeclarant)}>
                   Search
                 </Button>
                 {/* </Box> */}
@@ -362,8 +358,7 @@ const FormulaireCreation = ({ user }) => {
                         label="affiliation avec le nouveau né"
                         onChange={(event) => {
                           setAffiliationValue(event.target.value);
-                        }}
-                      >
+                        }}>
                         <MenuItem value={"parent"}>Parent</MenuItem>
                         <MenuItem value={"tuteur"}>Tuteur</MenuItem>
                       </Select>
@@ -378,8 +373,7 @@ const FormulaireCreation = ({ user }) => {
                 <Typography
                   variant="h5"
                   gutterBottom
-                  style={{ marginTop: "5px" }}
-                >
+                  style={{ marginTop: "5px" }}>
                   Partie Nouveau né
                 </Typography>
                 <TextField
@@ -398,8 +392,7 @@ const FormulaireCreation = ({ user }) => {
                   type="button"
                   variant="contained"
                   style={{ backgroundColor: "#00917C", top: "15px" }}
-                  onClick={() => getNouveuNeeNIN()}
-                >
+                  onClick={() => getNouveuNeeNIN()}>
                   Generer NIN
                 </Button>
                 <Grid container>
@@ -460,8 +453,7 @@ const FormulaireCreation = ({ user }) => {
                             };
                           });
                           console.log(nouveauNeObjet.sexe);
-                        }}
-                      >
+                        }}>
                         <MenuItem value={"homme"}>Homme</MenuItem>
                         <MenuItem value={"femme"}>Femme</MenuItem>
                       </Select>
@@ -594,10 +586,9 @@ const FormulaireCreation = ({ user }) => {
                       }}
                       onClick={() => {
                         searchParent(nouveauNe.num_pere, "pere");
-                        // searchParent(pere.num_pere, "gperep");
-                        // searchParent(pere.num_mere, "gmerep");
-                      }}
-                    >
+                        searchParent(pere.num_pere, "gperep");
+                        searchParent(pere.num_mere, "gmerep");
+                      }}>
                       Search
                     </Button>
                     {openPere && (
@@ -627,7 +618,6 @@ const FormulaireCreation = ({ user }) => {
                           fullWidth
                           id="prenom_gperepaternel"
                           label="Prenom Grand-Pere Paternel"
-                          name="Prenom Grand-Pere Paternel"
                           value={Gperep.prenom}
                         />
                         <TextField
@@ -635,8 +625,7 @@ const FormulaireCreation = ({ user }) => {
                           required
                           fullWidth
                           id="prenom_gmerepaternel"
-                          // label="Grand-Mere Paternel"
-                          name="Grand-Mere Paternel"
+                          label="Grand-Mere Paternel"
                           value={`${Gmerep.nom} ${Gmerep.prenom}`}
                         />
                       </Grid>
@@ -671,8 +660,9 @@ const FormulaireCreation = ({ user }) => {
                       }}
                       onClick={() => {
                         searchParent(nouveauNe.num_mere, "mere");
-                      }}
-                    >
+                        searchParent(mere.num_pere, "gperem");
+                        searchParent(mere.num_mere, "gmerem");
+                      }}>
                       Search
                     </Button>
                     {openMere && (
@@ -701,16 +691,19 @@ const FormulaireCreation = ({ user }) => {
                           id="prenom_gperematernel"
                           label="Prenom Grand-Pere Maternel"
                           name="Prenom Grand-Pere Maternel"
-                          value={Gperem.nom}
+                          value={Gperem.prenom}
                         />
                         <TextField
                           margin="normal"
                           required
                           fullWidth
                           id="prenom_gmerematernel"
-                          // label="Grand-Mere Maternel"
-                          name="Grand-Mere Maternel"
-                          value={`${Gmerem.nom} ${Gmerem.prenom} `}
+                          label="Grand-Mere Maternel"
+                          value={
+                            Gmerem.nom !== "undefined" && Gmerem.prenom
+                              ? `${Gmerem.nom} ${Gmerem.prenom}`
+                              : ""
+                          }
                         />
                       </Grid>
                     )}
@@ -722,8 +715,7 @@ const FormulaireCreation = ({ user }) => {
                 <Typography
                   variant="h5"
                   gutterBottom
-                  style={{ marginTop: "5px" }}
-                >
+                  style={{ marginTop: "5px" }}>
                   Partie Administration
                 </Typography>
                 <TextField
@@ -760,8 +752,7 @@ const FormulaireCreation = ({ user }) => {
                       nouveauNeObjet = nouveauNe;
                       sendNouveauNe();
                       sendActeNaissance(ActeNaissObjet);
-                    }}
-                  >
+                    }}>
                     Create
                   </Button>
                 </Box>
@@ -770,8 +761,7 @@ const FormulaireCreation = ({ user }) => {
                 <Alert
                   variant="outlined"
                   severity="warning"
-                  style={{ marginTop: "30px" }}
-                >
+                  style={{ marginTop: "30px" }}>
                   {<p>{error}</p>}
                 </Alert>
               )}

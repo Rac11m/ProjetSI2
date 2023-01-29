@@ -96,15 +96,13 @@ function UpdateAM({ user }) {
           <Container
             component="form"
             className="cadre"
-            sx={{ padding: "10px", paddingBottom: "2%", marginBottom: "3%" }}
-          >
+            sx={{ padding: "10px", paddingBottom: "2%", marginBottom: "3%" }}>
             <Box
               sx={{
                 "& .MuiTextField-root": { m: 1 },
               }}
               noValidate
-              autoComplete="off"
-            >
+              autoComplete="off">
               <TextField
                 margin="normal"
                 required
@@ -131,8 +129,7 @@ function UpdateAM({ user }) {
                 disabled={!nin}
                 onClick={() => {
                   searchActeMariage(nin);
-                }}
-              >
+                }}>
                 Search
               </Button>
               {error && (
@@ -175,7 +172,7 @@ function UpdateAM({ user }) {
                     <TextField
                       margin="normal"
                       id="lieu_mariage"
-                      label="Lieu Deces"
+                      label="Lieu Mariage"
                       onChange={(e) => {
                         setLieumValue(e.target.value);
                       }}
@@ -240,8 +237,7 @@ function UpdateAM({ user }) {
                       }}
                       onClick={() => {
                         updateActeM(nin);
-                      }}
-                    >
+                      }}>
                       Update
                     </Button>
                   </Grid>
