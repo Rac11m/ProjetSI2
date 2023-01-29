@@ -297,6 +297,22 @@ const Main = ({ user }) => {
                     </Button>{" "}
                   </ButtonGroup>
                 </Box>
+                <Button
+                  key={2}
+                  variant="contained"
+                  size="large"
+                  sx={{
+                    display: "flex",
+                    "& > *": {
+                      m: 6,
+                    },
+                    backgroundColor: "#00917C",
+                    marginLeft: 6,
+                  }}
+                  onClick={() => navigateHook("/createUser")}
+                >
+                  Cree un nouveau utilisateur
+                </Button>
                 <hr />
                 <Button variant="text">Partie Statistique</Button>
                 <br />
